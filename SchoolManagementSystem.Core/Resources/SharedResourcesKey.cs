@@ -25,5 +25,9 @@
         public const string ErrorImage = "ErrorImage";
         public const string SessionNotAvailable = "SessionNotAvailable";
         public const string TeacherNotAvailable = "TeacherNotAvailable";
+        public const string Used = "Used";
+        public const string PasswordErrorMatch = "PasswordErrorMatch";
+        public const string Incorrect = "Incorrect";
+        public const string SamePassword = "SamePassword";
     }
 }

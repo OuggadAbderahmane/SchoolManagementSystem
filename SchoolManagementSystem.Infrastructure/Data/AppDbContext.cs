@@ -7,9 +7,10 @@ using SchoolManagementSystem.Data.Responses;
 
 namespace SchoolManagementSystem.Infrastructure.Data
 {
-    public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int, IdentityUserClaim<int>, IdentityUserRole<int>, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
+    public class AppDbContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>, IdentityUserRole<int>, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public override DbSet<User> Users { get; set; }
+        public override DbSet<Role> Roles { get; set; }
         public DbSet<Person> People { get; set; }
         public DbSet<Level> Levels { get; set; }
         public DbSet<YearOfLevel> YearOfLevels { get; set; }

@@ -14,6 +14,10 @@ namespace SchoolManagementSystem.Infrastructure.Data.Configuration.Identity
             builder.Property(x => x.PasswordHash)
             .IsRequired();
 
+            builder.HasIndex(x => x.UserName).IsUnique();
+
+            builder.HasIndex(x => x.PersonId).IsUnique();
+
             builder.HasOne(x => x.Person)
                 .WithOne()
                 .HasForeignKey<User>(x => x.PersonId);

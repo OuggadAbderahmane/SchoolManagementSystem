@@ -141,6 +141,9 @@
   <data name="GuardianIdExist" xml:space="preserve">
     <value>Guardian Id already exists</value>
   </data>
+  <data name="Incorrect" xml:space="preserve">
+    <value>is Incorrect</value>
+  </data>
   <data name="ItExists" xml:space="preserve">
     <value>it already exists</value>
   </data>
@@ -159,11 +162,17 @@
   <data name="NotNull" xml:space="preserve">
     <value>can't be null</value>
   </data>
+  <data name="PasswordErrorMatch" xml:space="preserve">
+    <value>must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.</value>
+  </data>
   <data name="PersonIdNotExist" xml:space="preserve">
     <value>Person Id does not exist</value>
   </data>
   <data name="Required" xml:space="preserve">
     <value>This field is Required</value>
+  </data>
+  <data name="SamePassword" xml:space="preserve">
+    <value>it is the same password</value>
   </data>
   <data name="SessionNotAvailable" xml:space="preserve">
     <value>Session Not Available</value>
@@ -185,5 +194,8 @@
   </data>
   <data name="UpdatedSuccessfully" xml:space="preserve">
     <value>Updated Successfully</value>
+  </data>
+  <data name="Used" xml:space="preserve">
+    <value>already Used</value>
   </data>
 </root>

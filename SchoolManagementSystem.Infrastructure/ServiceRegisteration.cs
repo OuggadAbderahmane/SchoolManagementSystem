@@ -11,7 +11,7 @@ namespace SchoolManagementSystem.Infrastructure
         public static IServiceCollection AddServiceRegisteration(this IServiceCollection services, IConfiguration Configuration)
         {
             #region Identity
-            services.AddIdentity<User, IdentityRole<int>>(option =>
+            services.AddIdentity<User, Role>(option =>
             {
 
                 // Password Setting

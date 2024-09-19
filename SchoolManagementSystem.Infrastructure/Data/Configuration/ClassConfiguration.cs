@@ -29,10 +29,10 @@ namespace SchoolManagementSystem.Infrastructure.Data.Configuration
 
             builder.ToTable("Classes");
 
-            builder.HasData(_DataClasss());
+            builder.HasData(_DataClasses());
         }
 
-        private List<Class> _DataClasss()
+        private List<Class> _DataClasses()
         {
             return
             [
