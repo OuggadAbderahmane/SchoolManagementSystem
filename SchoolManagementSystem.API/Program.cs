@@ -24,8 +24,8 @@ builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlServer(builde
 #region Dependency injecctions
 builder.Services.AddInfrastructureDependencies()
                 .AddServiceDependencies()
-                .AddCoreDependencies();
-//.AddServiceRegisteration(builder.Configuration);
+                .AddCoreDependencies()
+                .AddServiceRegisteration(builder.Configuration);
 #endregion
 
 #region Localization
@@ -48,6 +48,21 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
     options.DefaultRequestCulture = new RequestCulture("ar-EG");
     options.SupportedCultures = SupportedCultures;
     options.SupportedUICultures = SupportedCultures;
+});
+#endregion
+
+#region AllowCORS
+string CORS = "_AllowAll";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(CORS,
+    builder =>
+    {
+        builder.AllowAnyOrigin();
+        builder.AllowAnyHeader();
+        builder.AllowAnyMethod();
+    });
+
 });
 #endregion
 
