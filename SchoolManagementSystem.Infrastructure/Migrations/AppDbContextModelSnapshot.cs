@@ -125,21 +125,6 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
-                {
-                    b.Property<int>("RolesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("RolesId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("RoleUser");
-                });
-
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Class", b =>
                 {
                     b.Property<int>("Id")
@@ -520,6 +505,32 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Identity.UserRefreshToken", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ExpireAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RefreshTokenString")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserRefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Job", b =>
@@ -957,21 +968,6 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
-                {
-                    b.HasOne("SchoolManagementSystem.Data.Entities.Identity.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SchoolManagementSystem.Data.Entities.Identity.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Class", b =>
                 {
                     b.HasOne("SchoolManagementSystem.Data.Entities.Level", "Level")
@@ -1033,6 +1029,17 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                         .HasForeignKey("SchoolManagementSystem.Data.Entities.Identity.User", "PersonId");
 
                     b.Navigation("Person");
+                });
+
+            modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Identity.UserRefreshToken", b =>
+                {
+                    b.HasOne("SchoolManagementSystem.Data.Entities.Identity.User", "User")
+                        .WithOne("UserRefreshToken")
+                        .HasForeignKey("SchoolManagementSystem.Data.Entities.Identity.UserRefreshToken", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.PartOfSchedule", b =>
@@ -1149,6 +1156,12 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                     b.Navigation("Sections");
 
                     b.Navigation("Subjects");
+                });
+
+            modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Identity.User", b =>
+                {
+                    b.Navigation("UserRefreshToken")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Job", b =>

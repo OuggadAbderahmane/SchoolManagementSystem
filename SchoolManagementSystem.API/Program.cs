@@ -86,7 +86,11 @@ app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
+app.UseCors(CORS);
+
 app.UseStaticFiles();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

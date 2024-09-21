@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using SchoolManagementSystem.Data.Entities.Identity;
+using SchoolManagementSystem.Data.Helper;
 using SchoolManagementSystem.Infrastructure.Data;
+using System.Text;
 
 namespace SchoolManagementSystem.Infrastructure
 {
@@ -38,45 +42,45 @@ namespace SchoolManagementSystem.Infrastructure
             #endregion
 
             #region Authentication
-            //var jwtOptions = Configuration.GetSection("Jwt").Get<JwtOptions>();
-            //services.AddSingleton(jwtOptions!);
-            //services.AddAuthentication(x =>
-            //{
-            //    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            //    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            //})
-            //    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-            //    {
-            //        //options.RequireHttpsMetadata = false;
-            //        options.SaveToken = true;
-            //        options.TokenValidationParameters = new TokenValidationParameters
-            //        {
-            //            ValidateIssuer = true,
-            //            ValidIssuer = jwtOptions!.Issuer,
-            //            ValidateAudience = true,
-            //            ValidAudience = jwtOptions.Audience,
-            //            ValidateIssuerSigningKey = true,
-            //            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SigningKey))
-            //        };
-            //    });
+            var jwtOptions = Configuration.GetSection("Jwt").Get<JwtOptions>();
+            services.AddSingleton(jwtOptions!);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                {
+                    //options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = jwtOptions!.Issuer,
+                        ValidateAudience = true,
+                        ValidAudience = jwtOptions.Audience,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SigningKey))
+                    };
+                });
             #endregion
 
             #region Authorization
-            //services.AddAuthorization(option =>
-            //{
-            //    option.AddPolicy("CreateStudent", policy =>
-            //    {
-            //        policy.RequireClaim("Create Student", "true");
-            //    });
-            //    option.AddPolicy("EditStudent", policy =>
-            //    {
-            //        policy.RequireClaim("Edit Student", "true");
-            //    });
-            //    option.AddPolicy("DeleteStudent", policy =>
-            //    {
-            //        policy.RequireClaim("Delete Student", "true");
-            //    });
-            //});
+            services.AddAuthorization(option =>
+            {
+                option.AddPolicy("StudentOnly", policy =>
+                {
+                    policy.RequireClaim("UserType", "Student");
+                });
+                option.AddPolicy("TeacherOnly", policy =>
+                {
+                    policy.RequireClaim("UserType", "Teacher");
+                });
+                option.AddPolicy("GuardianOnly", policy =>
+                {
+                    policy.RequireClaim("UserType", "Guardian");
+                });
+            });
             #endregion
 
             return services;

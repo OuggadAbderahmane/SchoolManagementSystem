@@ -32,6 +32,8 @@ namespace SchoolManagementSystem.Core.Features.Users.Commands.Validations
         public void ApplyCustuomValidationsRules()
         {
             RuleFor(x => x.UserName)
+                .MustAsync(async (model, Key, CancellationToken) => await _userService.IsUserNameMatchAsync(Key))
+                .WithMessage(_stringLocalizer[SharedResourcesKey.UserNameMatchError])
                 .MustAsync(async (Key, CancellationToken) => !await _userService.IsUserNameExistAsync(Key))
                 .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.Exists]);
 
@@ -66,7 +68,7 @@ namespace SchoolManagementSystem.Core.Features.Users.Commands.Validations
                 .NotNull().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotNull])
                 .NotEmpty().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEmpty])
                 .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#()\-+=$!%*?&])[A-Za-z\d@#()\-+=$!%*?&]{8,}$")
-                .WithMessage(_stringLocalizer[SharedResourcesKey.PasswordErrorMatch]);
+                .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.PasswordErrorMatch]);
 
             RuleFor(x => x.PersonId)
                 .NotNull().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotNull])

@@ -28,6 +28,7 @@ namespace SchoolManagementSystem.Infrastructure
             services.AddTransient<IFinalExamRepository, FinalExamRepository>();
             services.AddTransient<ISemesterRepository, SemesterRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
 
             return services;
         }

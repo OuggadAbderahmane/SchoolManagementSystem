@@ -4,6 +4,7 @@ using SchoolManagementSystem.Data.Entities.Identity;
 using SchoolManagementSystem.Data.Responses;
 using SchoolManagementSystem.Infrastructure.Abstracts;
 using SchoolManagementSystem.Service.Abstracts;
+using System.Text.RegularExpressions;
 
 namespace SchoolManagementSystem.Service.Implementations
 {
@@ -47,6 +48,13 @@ namespace SchoolManagementSystem.Service.Implementations
             return await _userRepository.GetTableAsNoTracking().AnyAsync(U => U.UserName.Equals(name));
         }
 
+        public Task<bool> IsUserNameMatchAsync(string name)
+        {
+            if (name == null)
+                return Task.FromResult(false);
+            return Task.FromResult(Regex.IsMatch(name, @"^[^\s]+$"));
+        }
+
         public async Task<bool> IsPersonIdExistAsync(int PersonId, int? Id = null)
         {
             if (Id != null)
@@ -80,6 +88,15 @@ namespace SchoolManagementSystem.Service.Implementations
         public async Task<bool> IsPasswordCorrectAsync(int Id, string password)
         {
             var User = await _userManager.FindByIdAsync(Id.ToString());
+            if (User == null) return false;
+
+            var PasswordHashed = await _userManager.CheckPasswordAsync(User, password);
+            return PasswordHashed;
+        }
+
+        public async Task<bool> IsPasswordCorrectAsync(string UserName, string password)
+        {
+            var User = await _userManager.FindByNameAsync(UserName);
             if (User == null) return false;
 
             var PasswordHashed = await _userManager.CheckPasswordAsync(User, password);

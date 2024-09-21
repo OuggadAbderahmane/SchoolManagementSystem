@@ -26,6 +26,7 @@ namespace SchoolManagementSystem.Service
             services.AddTransient<ISemesterService, SemesterService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();
+            services.AddTransient<IUserRefreshTokenService, UserRefreshTokenService>();
 
             return services;
         }

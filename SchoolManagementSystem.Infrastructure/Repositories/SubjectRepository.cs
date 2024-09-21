@@ -47,6 +47,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                 ClassInfo = _classRepository.GetClassInfo(x.ClassId).Result
             });
         }
+
         public async Task<List<GetSubjectResponse>> GetSubjectsListAsync()
         {
             return await _dbContext.Subjects.AsNoTracking().Select(x => new GetSubjectResponse

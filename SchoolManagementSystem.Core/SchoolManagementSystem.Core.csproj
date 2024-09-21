@@ -19,4 +19,9 @@
     <ProjectReference Include="..\SchoolManagementSystem.Service\SchoolManagementSystem.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Authentication\Queries\Handlers\" />
+    <Folder Include="Features\Authentication\Queries\Models\" />
+  </ItemGroup>
+
 </Project>

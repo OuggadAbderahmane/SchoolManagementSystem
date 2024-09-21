@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SchoolManagementSystem.Data.Entities.Identity;
 
@@ -17,6 +18,10 @@ namespace SchoolManagementSystem.Infrastructure.Data.Configuration.Identity
             builder.HasIndex(x => x.UserName).IsUnique();
 
             builder.HasIndex(x => x.PersonId).IsUnique();
+
+
+            builder.HasMany(x => x.Roles)
+                .WithMany(x => x.Users).UsingEntity<IdentityUserRole<int>>();
 
             builder.HasOne(x => x.Person)
                 .WithOne()

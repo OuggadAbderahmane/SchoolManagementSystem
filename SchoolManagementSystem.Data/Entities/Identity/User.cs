@@ -9,6 +9,7 @@ namespace SchoolManagementSystem.Data.Entities.Identity
         public int? PersonId { get; set; }
         public Person? Person { get; set; }
 
+        public UserRefreshToken UserRefreshToken { get; set; }
         public ICollection<Role> Roles { get; set; } = new HashSet<Role>();
     }
 }

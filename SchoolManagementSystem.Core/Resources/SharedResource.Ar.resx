@@ -198,4 +198,7 @@
   <data name="Used" xml:space="preserve">
     <value>مستعمل بالفعل</value>
   </data>
+  <data name="UserNameMatchError" xml:space="preserve">
+    <value>يجب أن يحتوي اسم المستخدم على حرف واحد على الأقل وبدون مسافات</value>
+  </data>
 </root>

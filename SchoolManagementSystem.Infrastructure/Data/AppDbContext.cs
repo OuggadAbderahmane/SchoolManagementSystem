@@ -27,6 +27,7 @@ namespace SchoolManagementSystem.Infrastructure.Data
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<FinalExam> FinalExams { get; set; }
         public DbSet<GetPartsOfScheduleView> GetPartsOfScheduleResponses { get; set; }
+        public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
 
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)

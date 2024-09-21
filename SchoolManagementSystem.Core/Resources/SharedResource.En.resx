@@ -198,4 +198,7 @@
   <data name="Used" xml:space="preserve">
     <value>already Used</value>
   </data>
+  <data name="UserNameMatchError" xml:space="preserve">
+    <value>The user name must contain at least one letter and no spaces</value>
+  </data>
 </root>

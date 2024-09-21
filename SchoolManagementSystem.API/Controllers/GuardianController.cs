@@ -17,7 +17,6 @@ namespace SchoolManagementSystem.API.Controllers
         #endregion
 
         #region Handle Functions
-
         [HttpGet]
         public async Task<IActionResult> GetGuardiansPaginatedList(int? pageNumber, int? pageSize)
         {

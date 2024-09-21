@@ -41,7 +41,15 @@ namespace SchoolManagementSystem.Core.Features.Users.Commands.Validations
                                                                 return true;
 
                                                             })
-                .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.Exists]);
+                .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.Exists])
+                .MustAsync(async (model, Key, CancellationToken) =>
+                                                             {
+                                                                 if (Key != null)
+                                                                     return await _userService.IsUserNameMatchAsync(Key);
+                                                                 return true;
+
+                                                             }).
+                 WithMessage(_stringLocalizer[SharedResourcesKey.UserNameMatchError]);
 
             RuleFor(x => x.PersonId)
                 .MustAsync(async (model, Key, CancellationToken) =>
