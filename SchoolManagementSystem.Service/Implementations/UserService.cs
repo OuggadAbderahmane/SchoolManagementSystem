@@ -36,6 +36,18 @@ namespace SchoolManagementSystem.Service.Implementations
                                         .FirstOrDefaultAsync(S => S.Id == Id))!;
         }
 
+        public async Task<GetUserResponse> GetUserByNameAsync(string userName)
+        {
+            return (await _userRepository.GetTableAsNoTracking()
+                                        .Select(S => new GetUserResponse()
+                                        {
+                                            Id = S.Id,
+                                            UserName = S.UserName,
+                                            PersonId = S.PersonId
+                                        })
+                                        .FirstOrDefaultAsync(S => S.UserName == userName))!;
+        }
+
         public IQueryable<User> GetUsersListQueryable()
         {
             return _userRepository.GetTableAsNoTracking();

@@ -47,6 +47,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                                 PermanentWork = S.PermanentWork
                                             }).FirstOrDefaultAsync())!;
         }
+
         public IQueryable<GetTeacherResponse> GetTeachersListResponse()
         {
             var url = _helperClass.GetSchemeHost() + '/';
@@ -61,10 +62,12 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                                 ImagePath = S.ImagePath != null ? url + S.ImagePath : null
                                             });
         }
+
         public IQueryable<Teacher> GetTeachersListIQueryable()
         {
             return _dbContext.Teachers.AsNoTracking();
         }
+
         public bool UpdateTeacherByQuery(int PersonId, decimal? Salary = null, bool? IsPermanentWorkAvtive = null)
         {
             if (Salary == null && IsPermanentWorkAvtive == null)
@@ -100,6 +103,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                 return false;
             }
         }
+
         public Task<bool> AddNewTeacherByPerson(int PersonId, decimal Salary, bool IsPermanentWorkAvtive)
         {
             try

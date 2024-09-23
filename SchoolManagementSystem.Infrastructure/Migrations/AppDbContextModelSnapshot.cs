@@ -348,43 +348,6 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SchoolManagementSystem.Data.Entities.FinalExam", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("FinalExamNote")
-                        .HasColumnType("decimal(2, 2)");
-
-                    b.Property<int>("SemesterId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SubjectId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("YearId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SemesterId");
-
-                    b.HasIndex("SubjectId");
-
-                    b.HasIndex("YearId");
-
-                    b.HasIndex("StudentId", "SubjectId", "SemesterId", "YearId")
-                        .IsUnique();
-
-                    b.ToTable("FinalExams", (string)null);
-                });
-
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Identity.Role", b =>
                 {
                     b.Property<int>("Id")
@@ -726,6 +689,52 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("SchoolManagementSystem.Data.Entities.StudentEvaluation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double?>("ContinuousAssessment")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Exam")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("FirstTest")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("SecondTest")
+                        .HasColumnType("float");
+
+                    b.Property<int>("SemesterId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("YearId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SemesterId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.HasIndex("YearId");
+
+                    b.HasIndex("StudentId", "SubjectId", "SemesterId", "YearId")
+                        .IsUnique();
+
+                    b.ToTable("StudentsEvaluations", (string)null);
+                });
+
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Subject", b =>
                 {
                     b.Property<int>("Id")
@@ -987,41 +996,6 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                     b.Navigation("YearOfLevel");
                 });
 
-            modelBuilder.Entity("SchoolManagementSystem.Data.Entities.FinalExam", b =>
-                {
-                    b.HasOne("SchoolManagementSystem.Data.Entities.Semester", "Semester")
-                        .WithMany()
-                        .HasForeignKey("SemesterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SchoolManagementSystem.Data.Entities.Student", "Student")
-                        .WithMany("FinalExams")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SchoolManagementSystem.Data.Entities.Subject", "Subject")
-                        .WithMany()
-                        .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SchoolManagementSystem.Data.Entities.Year", "Year")
-                        .WithMany()
-                        .HasForeignKey("YearId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Semester");
-
-                    b.Navigation("Student");
-
-                    b.Navigation("Subject");
-
-                    b.Navigation("Year");
-                });
-
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Identity.User", b =>
                 {
                     b.HasOne("SchoolManagementSystem.Data.Entities.Person", "Person")
@@ -1070,6 +1044,41 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Class");
+                });
+
+            modelBuilder.Entity("SchoolManagementSystem.Data.Entities.StudentEvaluation", b =>
+                {
+                    b.HasOne("SchoolManagementSystem.Data.Entities.Semester", "Semester")
+                        .WithMany()
+                        .HasForeignKey("SemesterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SchoolManagementSystem.Data.Entities.Student", "Student")
+                        .WithMany("StudentEvaluations")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SchoolManagementSystem.Data.Entities.Subject", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SchoolManagementSystem.Data.Entities.Year", "Year")
+                        .WithMany()
+                        .HasForeignKey("YearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Semester");
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Subject");
+
+                    b.Navigation("Year");
                 });
 
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Subject", b =>
@@ -1196,7 +1205,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Student", b =>
                 {
-                    b.Navigation("FinalExams");
+                    b.Navigation("StudentEvaluations");
                 });
 #pragma warning restore 612, 618
         }

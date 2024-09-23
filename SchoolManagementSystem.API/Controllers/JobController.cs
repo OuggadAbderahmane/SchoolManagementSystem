@@ -1,10 +1,12 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagementSystem.Core.Features.Jobs.Queries.Models;
 
 namespace SchoolManagementSystem.API.Controllers
 {
     [Route("[controller]s")]
+    [Authorize(Roles = "admin")]
     [ApiController]
     public class JobController(IMediator mediator) : ControllerBase
     {

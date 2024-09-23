@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Features.Students.Commands.Models;
@@ -18,13 +19,15 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
 
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<IActionResult> GetStudentsPaginatedList(int? pageNumber, int? pageSize)
         {
             return Ok(await _mediator.Send(new GetStudentsPaginatedListQuery(pageNumber, pageSize)));
         }
 
-        [HttpGet("{Id}")]
+        [Authorize(Roles = "admin")]
+        [HttpGet("GetStudentById/{Id}")]
         public async Task<IActionResult> GetStudentById(int Id)
         {
             var response = await _mediator.Send(new GetStudentByIdQuery(Id));
@@ -32,6 +35,20 @@ namespace SchoolManagementSystem.API.Controllers
                 return Ok(response);
             return NotFound(response);
         }
+
+        [Authorize(policy: "StudentOnly")]
+        [Authorize(Roles = "user")]
+        [HttpGet("GetStudent")]
+        public async Task<IActionResult> GetStudent()
+        {
+            var Id = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "PersonId").Value);
+            var response = await _mediator.Send(new GetStudentByIdQuery(Id));
+            if (response.Succeeded)
+                return Ok(response);
+            return NotFound(response);
+        }
+
+        [Authorize(Roles = "admin")]
         [HttpPost("Add")]
         public async Task<IActionResult> AddStudent(AddStudentCommand addStudent)
         {
@@ -40,6 +57,8 @@ namespace SchoolManagementSystem.API.Controllers
                 return Created(_stringLocalizer[SharedResourcesKey.Created], response);
             return BadRequest(response);
         }
+
+        [Authorize(Roles = "admin")]
         [HttpPost("AddByExistPerson")]
         public async Task<IActionResult> AddStudentByExistPerson(AddStudentByPersonCommand addStudent)
         {
@@ -48,6 +67,8 @@ namespace SchoolManagementSystem.API.Controllers
                 return Created(_stringLocalizer[SharedResourcesKey.Created], response);
             return BadRequest(response);
         }
+
+        [Authorize(Roles = "admin")]
         [HttpPut("Update")]
         public async Task<IActionResult> UpdateStudent(UpdateStudentCommand updateStudent)
         {

@@ -10,7 +10,7 @@ using SchoolManagementSystem.Service.Abstracts;
 namespace SchoolManagementSystem.Core.Features.SubjectTeachers.Queries.Handlers
 {
     public class SubjectTeacherQueryHandler : ResponseHandler, IRequestHandler<GetSubjectTeacherByIdQuery, Response<GetSubjectTeacherResponse>>
-                                                      , IRequestHandler<GetSubjectTeachersPaginatedListQuery, Response<PaginatedResult<GetSubjectTeacherResponse>>>
+                                                             , IRequestHandler<GetSubjectTeachersPaginatedListQuery, Response<PaginatedResult<GetSubjectTeacherResponse>>>
     {
         #region Fields
         private readonly ISubjectTeacherService _SubjectTeacherService;

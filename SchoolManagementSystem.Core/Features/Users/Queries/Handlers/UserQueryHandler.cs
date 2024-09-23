@@ -12,16 +12,21 @@ using System.Linq.Expressions;
 namespace SchoolManagementSystem.Core.Features.Users.Queries.Handlers
 {
     public class UserQueryHandler : ResponseHandler, IRequestHandler<GetUsersPaginatedListQuery, Response<PaginatedResult<GetUserResponse>>>
-                                                   , IRequestHandler<GetUserByIdQuery, Response<GetUserResponse>>
+                                                   , IRequestHandler<GetUserByNameOrIdQuery, Response<GetUserResponse>>
     //, IRequestHandler<GetUsersListQuery, Response<List<GetDepartmentsListResponse>>>
     {
+        #region Fields
         private readonly IUserService _userService;
+        #endregion
 
+        #region Constructors
         public UserQueryHandler(IUserService userService, IStringLocalizer<SharedResource> stringLocalizer) : base(stringLocalizer)
         {
             _userService = userService;
         }
+        #endregion
 
+        #region Handle Functions
         //public async Task<Response<List<GetDepartmentsListResponse>>> Handle(GetDepartmentsListQuery request, CancellationToken cancellationToken)
         //{
         //    return Success(await _departmentService.GetDepartmentsListResponseAsync());
@@ -33,10 +38,15 @@ namespace SchoolManagementSystem.Core.Features.Users.Queries.Handlers
             return Success(await _userService.GetUsersListQueryable().Select(exception).ToPaginatedListAsync(request.pageNumber, request.pageSize));
         }
 
-        public async Task<Response<GetUserResponse>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Response<GetUserResponse>> Handle(GetUserByNameOrIdQuery request, CancellationToken cancellationToken)
         {
-            var Response = await _userService.GetUserByIdAsync(request.Id);
+            GetUserResponse Response;
+            if (int.TryParse(request.UserNameOrId.Trim(), out var userId))
+                Response = await _userService.GetUserByIdAsync(userId);
+            else
+                Response = await _userService.GetUserByNameAsync(request.UserNameOrId);
             return Response != null ? Success(Response) : NotFound<GetUserResponse>(_stringLocalizer[SharedResourcesKey.NotFound]);
         }
+        #endregion
     }
 }

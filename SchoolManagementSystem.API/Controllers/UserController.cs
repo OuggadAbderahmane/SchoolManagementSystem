@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagementSystem.Core.Features.Users.Commands.Models;
 using SchoolManagementSystem.Core.Features.Users.Queries.Models;
@@ -14,18 +15,35 @@ namespace SchoolManagementSystem.API.Controllers
         #endregion
 
         #region Handle Functions
+
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<IActionResult> GetUsersList(int? pageNumber, int? pageSize)
         {
             return Ok(await _mediator.Send(new GetUsersPaginatedListQuery(pageNumber, pageSize)));
         }
 
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> GetUserById(int Id)
+        [Authorize(Roles = "admin")]
+        [HttpGet("GetUserByNameOrId")]
+        public async Task<IActionResult> GetUserByNameOrId(string UserNameOrId)
         {
-            return Ok(await _mediator.Send(new GetUserByIdQuery(Id)));
+            var response = await _mediator.Send(new GetUserByNameOrIdQuery(UserNameOrId));
+            if (response.Succeeded)
+                return Ok(response);
+            return NotFound(response);
         }
 
+        [Authorize(Roles = "user")]
+        [HttpGet("GetUser")]
+        public async Task<IActionResult> GetUser()
+        {
+            var response = await _mediator.Send(new GetUserByNameOrIdQuery(HttpContext.User.Claims.First(claim => claim.Type == "UserName").Value));
+            if (response.Succeeded)
+                return Ok(response);
+            return NotFound(response);
+        }
+
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> AddUser(AddUserCommand addUser)
         {
@@ -35,6 +53,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut]
         public async Task<IActionResult> UpdateUser(UpdateUserCommand updateUser)
         {
@@ -44,6 +63,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut("ChangePassword")]
         public async Task<IActionResult> ChangePassword(ChangePasswordCommand changePassword)
         {

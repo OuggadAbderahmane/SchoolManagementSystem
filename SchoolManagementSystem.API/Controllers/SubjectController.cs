@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Features.Subjects.Commands.Models;
@@ -8,6 +9,7 @@ using SchoolManagementSystem.Core.Resources;
 namespace SchoolManagementSystem.API.Controllers
 {
     [Route("[controller]s")]
+    [Authorize(Roles = "admin")]
     [ApiController]
     public class SubjectController(IMediator mediator, IStringLocalizer<SharedResource> stringLocalizer) : ControllerBase
     {

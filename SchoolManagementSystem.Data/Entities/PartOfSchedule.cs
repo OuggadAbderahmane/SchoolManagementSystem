@@ -8,6 +8,18 @@
         public sbyte Session { get; set; }
         public int SubjectTeacherId { get; set; }
 
+        public PartOfSchedule()
+        {
+
+        }
+        public PartOfSchedule(int sectionId, sbyte day, sbyte session, int subjectTeacherId)
+        {
+            SectionId = sectionId;
+            Day = day;
+            Session = session;
+            SubjectTeacherId = subjectTeacherId;
+        }
+
         public SubjectTeacher SubjectTeacher { get; set; }
         public Section Section { get; set; }
     }

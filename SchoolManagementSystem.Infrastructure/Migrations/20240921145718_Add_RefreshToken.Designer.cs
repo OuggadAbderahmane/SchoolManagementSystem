@@ -366,7 +366,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SchoolManagementSystem.Data.Entities.FinalExam", b =>
+            modelBuilder.Entity("SchoolManagementSystem.Data.Entities.StudentEvaluation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -374,7 +374,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("FinalExamNote")
+                    b.Property<decimal>("StudentEvaluationNote")
                         .HasColumnType("decimal(2, 2)");
 
                     b.Property<int>("SemesterId")
@@ -400,7 +400,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                     b.HasIndex("StudentId", "SubjectId", "SemesterId", "YearId")
                         .IsUnique();
 
-                    b.ToTable("FinalExams", (string)null);
+                    b.ToTable("StudentEvaluations", (string)null);
                 });
 
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Identity.Role", b =>
@@ -1020,7 +1020,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                     b.Navigation("YearOfLevel");
                 });
 
-            modelBuilder.Entity("SchoolManagementSystem.Data.Entities.FinalExam", b =>
+            modelBuilder.Entity("SchoolManagementSystem.Data.Entities.StudentEvaluation", b =>
                 {
                     b.HasOne("SchoolManagementSystem.Data.Entities.Semester", "Semester")
                         .WithMany()
@@ -1029,7 +1029,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("SchoolManagementSystem.Data.Entities.Student", "Student")
-                        .WithMany("FinalExams")
+                        .WithMany("StudentEvaluations")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1229,7 +1229,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Student", b =>
                 {
-                    b.Navigation("FinalExams");
+                    b.Navigation("StudentEvaluations");
                 });
 #pragma warning restore 612, 618
         }

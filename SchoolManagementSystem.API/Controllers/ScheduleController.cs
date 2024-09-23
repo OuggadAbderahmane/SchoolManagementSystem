@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Features.Schedules.Commands.Models;
@@ -17,8 +18,10 @@ namespace SchoolManagementSystem.API.Controllers
         #endregion
 
         #region Handle Functions
-        [HttpGet("{Id}")]
-        public async Task<IActionResult> GetScheduleById(int Id)
+
+        [Authorize(Roles = "admin")]
+        [HttpGet("GetScheduleBySectionId/{Id}")]
+        public async Task<IActionResult> GetScheduleBySectionId(int Id)
         {
             var response = await _mediator.Send(new GetScheduleByIdQuery(Id));
             if (response.Succeeded)
@@ -26,39 +29,49 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
+        [Authorize(policy: "StudentOnly")]
+        [Authorize(Roles = "user")]
+        [HttpGet("GetSchedule")]
+        public async Task<IActionResult> GetSchedule()
+        {
+            var Id = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "PersonId").Value);
+            var response = await _mediator.Send(new GetScheduleByStudentIdQuery(Id));
+            if (response.Succeeded)
+                return Ok(response);
+            return NotFound(response);
+        }
+
+        [Authorize(Roles = "admin")]
         [HttpGet("IsSessionAvailable")]
         public async Task<IActionResult> IsSessionAvailable(int sectionId, sbyte day, sbyte session)
         {
-            if (sectionId <= 0 || day <= 0 || session <= 0)
-                return BadRequest("subjectTeacherId and day and session must be bigger than 0");
             var response = await _mediator.Send(new IsSessionAvailableQuery(sectionId, day, session));
             if (response.Succeeded)
                 return Ok(response);
             return NotFound(response);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet("IsTeacherAvailable")]
         public async Task<IActionResult> IsTeacherAvailable(int teacherId, sbyte day, sbyte session)
         {
-            if (teacherId <= 0 || day <= 0 || session <= 0)
-                return BadRequest("subjectTeacherId and day and session must be bigger than 0");
             var response = await _mediator.Send(new IsTeacherAvailableQuery(teacherId, day, session));
             if (response.Succeeded)
                 return Ok(response);
             return NotFound(response);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet("IsSubjectTeacherAvailable")]
         public async Task<IActionResult> IsSubjectTeacherAvailable(int subjectTeacherId, sbyte day, sbyte session)
         {
-            if (subjectTeacherId <= 0 || day <= 0 || session <= 0)
-                return BadRequest("subjectTeacherId and day and session must be bigger than 0");
             var response = await _mediator.Send(new IsSubjectTeacherAvailableQuery(subjectTeacherId, day, session));
             if (response.Succeeded)
                 return Ok(response);
             return NotFound(response);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost("AddPart")]
         public async Task<IActionResult> AddPartOfSchedule(AddPartOfScheduleCommand addPartOfSchedule)
         {
@@ -68,7 +81,8 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        [HttpPut]
+        [Authorize(Roles = "admin")]
+        [HttpPut("UpdatePart")]
         public async Task<IActionResult> UpdatePartOfSchedule(UpdatePartOfScheduleCommand updatePartOfSchedule)
         {
             var response = await _mediator.Send(updatePartOfSchedule);

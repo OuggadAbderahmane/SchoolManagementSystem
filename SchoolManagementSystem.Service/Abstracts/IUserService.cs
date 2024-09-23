@@ -6,6 +6,7 @@ namespace SchoolManagementSystem.Service.Abstracts
     public interface IUserService
     {
         public Task<GetUserResponse> GetUserByIdAsync(int Id);
+        public Task<GetUserResponse> GetUserByNameAsync(string userName);
         public IQueryable<User> GetUsersListQueryable();
         public Task<bool> IsUserNameExistAsync(string name, int? Id = null);
         public Task<bool> IsUserNameMatchAsync(string name);

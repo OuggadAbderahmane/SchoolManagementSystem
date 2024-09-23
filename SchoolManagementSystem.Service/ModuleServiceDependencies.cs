@@ -22,7 +22,7 @@ namespace SchoolManagementSystem.Service
             services.AddTransient<ISubjectService, SubjectService>();
             services.AddTransient<IPartOfScheduleService, PartOfScheduleService>();
             services.AddTransient<ISubjectTeacherService, SubjectTeacherService>();
-            services.AddTransient<IFinalExamService, FinalExamService>();
+            services.AddTransient<IStudentEvaluationService, StudentEvaluationService>();
             services.AddTransient<ISemesterService, SemesterService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IAuthorizationService, AuthorizationService>();

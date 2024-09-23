@@ -14,6 +14,7 @@ namespace SchoolManagementSystem.API.Controllers
         private readonly IMediator _mediator = mediator;
         #endregion
 
+
         [HttpGet("getUserClaims")]
         public async Task<IActionResult> getUserClaimsById(string UserNameOrId)
         {
@@ -24,3 +25,5 @@ namespace SchoolManagementSystem.API.Controllers
         }
     }
 }
+
+// var Id = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "PersonId").Value);

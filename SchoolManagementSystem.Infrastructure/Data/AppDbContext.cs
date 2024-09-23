@@ -25,7 +25,7 @@ namespace SchoolManagementSystem.Infrastructure.Data
         public DbSet<SubjectTeacher> SubjectTeachers { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
-        public DbSet<FinalExam> FinalExams { get; set; }
+        public DbSet<StudentEvaluation> StudentsEvaluations { get; set; }
         public DbSet<GetPartsOfScheduleView> GetPartsOfScheduleResponses { get; set; }
         public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
 

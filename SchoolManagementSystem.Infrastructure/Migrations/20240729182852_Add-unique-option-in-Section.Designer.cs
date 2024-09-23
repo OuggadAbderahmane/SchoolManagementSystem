@@ -248,7 +248,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SchoolManagementSystem.Data.Entities.FinalExam", b =>
+            modelBuilder.Entity("SchoolManagementSystem.Data.Entities.StudentEvaluation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -256,7 +256,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<decimal>("FinalExamNote")
+                    b.Property<decimal>("StudentEvaluationNote")
                         .HasColumnType("decimal(2, 2)");
 
                     b.Property<int>("SemesterId")
@@ -281,7 +281,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
 
                     b.HasIndex("YearId");
 
-                    b.ToTable("FinalExams", (string)null);
+                    b.ToTable("StudentEvaluations", (string)null);
                 });
 
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Job", b =>
@@ -642,28 +642,28 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                     b.Navigation("YearOfLevel");
                 });
 
-            modelBuilder.Entity("SchoolManagementSystem.Data.Entities.FinalExam", b =>
+            modelBuilder.Entity("SchoolManagementSystem.Data.Entities.StudentEvaluation", b =>
                 {
                     b.HasOne("SchoolManagementSystem.Data.Entities.Semester", "Semester")
-                        .WithMany("FinalExams")
+                        .WithMany("StudentEvaluations")
                         .HasForeignKey("SemesterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SchoolManagementSystem.Data.Entities.Student", "Student")
-                        .WithMany("FinalExams")
+                        .WithMany("StudentEvaluations")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SchoolManagementSystem.Data.Entities.Subject", "Subject")
-                        .WithMany("FinalExams")
+                        .WithMany("StudentEvaluations")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SchoolManagementSystem.Data.Entities.Year", "Year")
-                        .WithMany("FinalExams")
+                        .WithMany("StudentEvaluations")
                         .HasForeignKey("YearId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -829,17 +829,17 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Semester", b =>
                 {
-                    b.Navigation("FinalExams");
+                    b.Navigation("StudentEvaluations");
                 });
 
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Subject", b =>
                 {
-                    b.Navigation("FinalExams");
+                    b.Navigation("StudentEvaluations");
                 });
 
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Year", b =>
                 {
-                    b.Navigation("FinalExams");
+                    b.Navigation("StudentEvaluations");
                 });
 
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.YearOfLevel", b =>
@@ -854,7 +854,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Student", b =>
                 {
-                    b.Navigation("FinalExams");
+                    b.Navigation("StudentEvaluations");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Features.Guardians.Commands.Models;
@@ -17,13 +18,16 @@ namespace SchoolManagementSystem.API.Controllers
         #endregion
 
         #region Handle Functions
+
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<IActionResult> GetGuardiansPaginatedList(int? pageNumber, int? pageSize)
         {
             return Ok(await _mediator.Send(new GetGuardiansPaginatedListQuery(pageNumber, pageSize)));
         }
 
-        [HttpGet("{Id}")]
+        [Authorize(Roles = "admin")]
+        [HttpGet("GetGuardianById/{Id}")]
         public async Task<IActionResult> GetGuardianById(int Id)
         {
             var response = await _mediator.Send(new GetGuardianByIdQuery(Id));
@@ -31,6 +35,20 @@ namespace SchoolManagementSystem.API.Controllers
                 return Ok(response);
             return NotFound(response);
         }
+
+        [Authorize(policy: "GuardianOnly")]
+        [Authorize(Roles = "user")]
+        [HttpGet("GetGuardian")]
+        public async Task<IActionResult> GetGuardian()
+        {
+            var Id = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "PersonId").Value);
+            var response = await _mediator.Send(new GetGuardianByIdQuery(Id));
+            if (response.Succeeded)
+                return Ok(response);
+            return NotFound(response);
+        }
+
+        [Authorize(Roles = "admin")]
         [HttpPost("Add")]
         public async Task<IActionResult> AddGuardian(AddGuardianCommand addGuardian)
         {
@@ -39,6 +57,8 @@ namespace SchoolManagementSystem.API.Controllers
                 return Created(_stringLocalizer[SharedResourcesKey.Created], response);
             return BadRequest(response);
         }
+
+        [Authorize(Roles = "admin")]
         [HttpPost("AddByExistPerson")]
         public async Task<IActionResult> AddGuardianByExistPerson(AddGuardianByPersonCommand addGuardian)
         {
@@ -47,6 +67,8 @@ namespace SchoolManagementSystem.API.Controllers
                 return Created(_stringLocalizer[SharedResourcesKey.Created], response);
             return BadRequest(response);
         }
+
+        [Authorize(Roles = "admin")]
         [HttpPut("Update")]
         public async Task<IActionResult> UpdateGuardian(UpdateGuardianCommand updateGuardian)
         {
