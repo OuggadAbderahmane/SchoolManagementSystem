@@ -75,7 +75,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                 query.Append("JobId = @JobId, ");
                 parameters.Add(new SqlParameter("@JobId", JobId));
             }
-            // Remove the trailing comma and space
+            //Remove the trailing comma and space
             if (query[query.Length - 2] == ',')
             {
                 query.Remove(query.Length - 2, 2);

@@ -23,7 +23,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
         #region Handles Functions
         public async Task<GetSemesterResponse> GetSemesterByIdAsync(int Id)
         {
-            return (await _dbContext.Semesters.AsNoTracking().Select(x => new GetSemesterResponse() { Id = x.Id, Name = x.Name }).FirstOrDefaultAsync(x => x.Id == Id))!;
+            return await _dbContext.Semesters.AsNoTracking().Select(x => new GetSemesterResponse() { Id = x.Id, Name = x.Name }).FirstAsync(x => x.Id == Id);
         }
 
         public async Task<List<GetSemesterResponse>> GetSemestersListAsync()

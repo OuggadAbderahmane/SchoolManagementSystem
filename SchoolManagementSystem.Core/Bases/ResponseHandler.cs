@@ -50,7 +50,7 @@ namespace SchoolManagementSystem.Core.Bases
                 Message = message == null ? _stringLocalizer[SharedResourcesKey.Failed] : message
             };
         }
-        public Response<T> Authenticated<T>()
+        public Response<T> Unauthenticated<T>()
         {
             return new Response<T>()
             {

@@ -23,7 +23,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
         #region Handles Functions
         public async Task<GetClassResponse> GetClassByIdAsync(int Id)
         {
-            return (await _dbContext.Classes.AsNoTracking().Select(x => new GetClassResponse() { Id = x.Id, ClassInfo = GetClassInfo(x.Id).Result }).FirstOrDefaultAsync(x => x.Id == Id))!;
+            return (await _dbContext.Classes.AsNoTracking().Select(x => new GetClassResponse() { Id = x.Id, ClassInfo = _dbContext.GetClassInfo(x.Id) }).FirstOrDefaultAsync(x => x.Id == Id))!;
         }
 
         public async Task<List<GetClassResponse>> GetClassesListAsync()

@@ -5,6 +5,7 @@ using SchoolManagementSystem.Data.Responses;
 using SchoolManagementSystem.Infrastructure.Abstracts;
 using SchoolManagementSystem.Infrastructure.Bases;
 using SchoolManagementSystem.Infrastructure.Data;
+using SchoolManagementSystem.Infrastructure.HelperClass;
 using System.Text;
 
 namespace SchoolManagementSystem.Infrastructure.Repositories
@@ -13,13 +14,15 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
     {
         #region Fields
         private readonly AppDbContext _dbContext;
+        private readonly IHelperClass _helperClass;
         #endregion
 
         #region Constructors
-        public PersonRepository(AppDbContext dbContext)
+        public PersonRepository(AppDbContext dbContext, IHelperClass helperClass)
             : base(dbContext)
         {
             _dbContext = dbContext;
+            _helperClass = helperClass;
         }
         #endregion
 
@@ -31,7 +34,8 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
 
         public async Task<List<GetPersonResponse>> GetPeopleListResponseAsync()
         {
-            return await _dbContext.Students.AsNoTracking().Include(x => x.Section).Select(S =>
+            var url = _helperClass.GetSchemeHost() + '/';
+            return await _dbContext.People.AsNoTracking().Select(S =>
                                             new GetPersonResponse
                                             {
                                                 Id = S.Id,
@@ -39,13 +43,14 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                                 FirstName = S.FirstName,
                                                 LastName = S.LastName,
                                                 Gender = S.Gender ? "Male" : "Female",
-                                                ImagePath = S.ImagePath,
+                                                ImagePath = S.ImagePath != null ? url + S.ImagePath : null,
                                             }).ToListAsync();
         }
 
         public async Task<GetPersonResponse> GetPersonByIdAsync(int Id)
         {
-            return (await _dbContext.People.AsNoTracking().Where(S => S.Id == Id).Select(S =>
+            var url = _helperClass.GetSchemeHost() + '/';
+            return await _dbContext.People.AsNoTracking().Where(S => S.Id == Id).Select(S =>
                                             new GetPersonResponse
                                             {
                                                 Id = S.Id,
@@ -53,8 +58,8 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                                 FirstName = S.FirstName,
                                                 LastName = S.LastName,
                                                 Gender = S.Gender ? "Male" : "Female",
-                                                ImagePath = S.ImagePath,
-                                            }).FirstOrDefaultAsync())!;
+                                                ImagePath = S.ImagePath != null ? url + S.ImagePath : null,
+                                            }).FirstAsync();
         }
 
         public bool UpdatePersonByQuery(int PersonId, string? NationalCardNumber = null, string? FirstName = null, string? LastName = null, bool? Gender = null,

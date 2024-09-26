@@ -27,24 +27,13 @@ namespace SchoolManagementSystem.Core.Features.Subjects.Commands.Handlers
         #region Handle Functions
         public async Task<Response<IdResponse>> Handle(AddSubjectCommand request, CancellationToken cancellationToken)
         {
-            var Result = await _subjectService.CreateSubjectAsync(
-                                                            new Subject()
-                                                            {
-                                                                Name = request.SubjectName,
-                                                                ClassId = request.ClassId
-                                                            });
+            var Result = await _subjectService.CreateSubjectAsync(new Subject(request.SubjectName, request.ClassId));
             return Result != -1 ? Created<IdResponse>(new IdResponse { Id = Result }) : Failed<IdResponse>();
         }
 
         public async Task<Response<string>> Handle(UpdateSubjectCommand request, CancellationToken cancellationToken)
         {
-            var Result = await _subjectService.UpdateSubjectAsync(
-                                                            new Subject()
-                                                            {
-                                                                Id = request.Id,
-                                                                Name = request.SubjectName!,
-                                                                ClassId = request.ClassId == null ? 0 : (int)request.ClassId
-                                                            });
+            var Result = await _subjectService.UpdateSubjectAsync(new Subject(request.Id, request.SubjectName!, request.ClassId == null ? 0 : (int)request.ClassId));
             return Result ? Updated<string>() : Failed<string>();
         }
 

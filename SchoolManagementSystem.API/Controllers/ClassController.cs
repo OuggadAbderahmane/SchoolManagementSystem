@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagementSystem.Core.Features.Classes.Queries.Models;
 
@@ -14,12 +15,14 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
 
+        [Authorize(Roles = "admin")]
         [HttpGet("List")]
         public async Task<IActionResult> GetClassesList()
         {
             return Ok(await _mediator.Send(new GetClassesListQuery()));
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetClassById(int Id)
         {

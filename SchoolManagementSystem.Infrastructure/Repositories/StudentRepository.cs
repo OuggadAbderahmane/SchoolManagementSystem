@@ -42,7 +42,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                                 Gender = S.Gender ? "Male" : "Female",
                                                 SectionName = S.Section == null ? null : S.Section.Name,
                                                 classInfo = S.Section == null ? null : _classRepository.GetClassInfo(S.Section.ClassId).Result,
-                                                ImagePath = url + S.ImagePath,
+                                                ImagePath = S.ImagePath != null ? url + S.ImagePath : null,
                                                 Address = S.Address,
                                                 DateOfBirth = S.DateOfBirth,
                                                 IsAvtive = S.IsAvtive

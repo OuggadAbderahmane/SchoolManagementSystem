@@ -27,24 +27,13 @@ namespace SchoolManagementSystem.Core.Features.Sections.Commands.Handlers
         #region Handle Functions
         public async Task<Response<IdResponse>> Handle(AddSectionCommand request, CancellationToken cancellationToken)
         {
-            var Result = await _sectionService.CreateSectionAsync(
-                                                            new Section()
-                                                            {
-                                                                Name = request.SectionName,
-                                                                ClassId = request.ClassId
-                                                            });
+            var Result = await _sectionService.CreateSectionAsync(new Section(request.SectionName, request.ClassId));
             return Result != -1 ? Created<IdResponse>(new IdResponse { Id = Result }) : Failed<IdResponse>();
         }
 
         public async Task<Response<string>> Handle(UpdateSectionCommand request, CancellationToken cancellationToken)
         {
-            var Result = await _sectionService.UpdateSectionAsync(
-                                                            new Section()
-                                                            {
-                                                                Id = request.Id,
-                                                                Name = request.SectionName!,
-                                                                ClassId = request.ClassId == null ? 0 : (int)request.ClassId
-                                                            });
+            var Result = await _sectionService.UpdateSectionAsync(new Section(request.Id, request.SectionName!, request.ClassId == null ? 0 : (int)request.ClassId));
             return Result ? Updated<string>() : Failed<string>();
         }
 

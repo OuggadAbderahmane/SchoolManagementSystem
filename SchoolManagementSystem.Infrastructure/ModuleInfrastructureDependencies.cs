@@ -10,6 +10,7 @@ namespace SchoolManagementSystem.Infrastructure
     {
         public static IServiceCollection AddInfrastructureDependencies(this IServiceCollection services)
         {
+            services.AddSingleton<IHelperClass, helperClass>();
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddTransient<IPersonRepository, PersonRepository>();
             services.AddTransient<IStudentRepository, StudentRepository>();
@@ -21,12 +22,13 @@ namespace SchoolManagementSystem.Infrastructure
             services.AddTransient<IJobRepository, JobRepository>();
             services.AddTransient<IGuardianRepository, GuardianRepository>();
             services.AddTransient<ITeacherRepository, TeacherRepository>();
-            services.AddTransient(typeof(IHelperClass), typeof(helperClass));
             services.AddTransient<ISubjectRepository, SubjectRepository>();
             services.AddTransient<IPartOfScheduleRepository, PartOfScheduleRepository>();
             services.AddTransient<ISubjectTeacherRepository, SubjectTeacherRepository>();
-            services.AddTransient<IFinalExamRepository, FinalExamRepository>();
+            services.AddTransient<IStudentEvaluationRepository, StudentEvaluationRepository>();
             services.AddTransient<ISemesterRepository, SemesterRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IUserRefreshTokenRepository, UserRefreshTokenRepository>();
 
             return services;
         }

@@ -25,27 +25,13 @@ namespace SchoolManagementSystem.Core.Features.Schedules.Commands.Handlers
         #region Handle Functions
         public async Task<Response<string>> Handle(AddPartOfScheduleCommand request, CancellationToken cancellationToken)
         {
-            var Result = await _PartOfScheduleService.CreatePartOfScheduleAsync(
-                                                            new PartOfSchedule()
-                                                            {
-                                                                SectionId = request.SectionId,
-                                                                Day = request.Day,
-                                                                Session = request.Session,
-                                                                SubjectTeacherId = request.SubjectTeacherId,
-                                                            });
+            var Result = await _PartOfScheduleService.CreatePartOfScheduleAsync(new PartOfSchedule(request.SectionId, request.Day, request.Session, request.SubjectTeacherId));
             return Result != -1 ? Created<string>() : Failed<string>();
         }
 
         public async Task<Response<string>> Handle(UpdatePartOfScheduleCommand request, CancellationToken cancellationToken)
         {
-            var Result = await _PartOfScheduleService.UpdatePartOfScheduleAsync(
-                                                            new PartOfSchedule()
-                                                            {
-                                                                SectionId = request.SectionId,
-                                                                Day = request.Day,
-                                                                Session = request.Session,
-                                                                SubjectTeacherId = request.SubjectTeacherId
-                                                            });
+            var Result = await _PartOfScheduleService.UpdatePartOfScheduleAsync(new PartOfSchedule(request.SectionId, request.Day, request.Session, request.SubjectTeacherId));
             return Result ? Updated<string>() : Failed<string>();
         }
         #endregion

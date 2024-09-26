@@ -29,16 +29,16 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
         public async Task<List<GetPartsOfScheduleResponse>> GetScheduleBySectionIdAsync(int Id)
         {
             return await fromPartsOfScheduleViewToResponse(await _dbContext.GetPartsOfScheduleResponses.FromSql($"Exec dbo.GetScheduleBySectionId {Id}").ToArrayAsync());
-
         }
-        private async Task<List<GetPartsOfScheduleResponse>> fromPartsOfScheduleViewToResponse(GetPartsOfScheduleView[] view)
+
+        private Task<List<GetPartsOfScheduleResponse>> fromPartsOfScheduleViewToResponse(GetPartsOfScheduleView[] view)
         {
             List<GetPartsOfScheduleResponse> getPartsOfScheduleResponses = new List<GetPartsOfScheduleResponse>();
             foreach (var item in view)
             {
                 getPartsOfScheduleResponses.Add(new GetPartsOfScheduleResponse
                 {
-                    Day = int.Parse(item.Day),
+                    Day = int.Parse(item.Day!),
                     Session1 = toSession(item.Session1),
                     Session2 = toSession(item.Session2),
                     Session3 = toSession(item.Session3),
@@ -48,8 +48,9 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                     Session7 = toSession(item.Session7)
                 });
             }
-            return getPartsOfScheduleResponses;
+            return Task.FromResult(getPartsOfScheduleResponses);
         }
+
         private Session? toSession(string? session)
         {
             if (session == null)

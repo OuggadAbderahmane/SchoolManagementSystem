@@ -29,7 +29,7 @@ namespace SchoolManagementSystem.Core.Features.SubjectTeachers.Commands.Handlers
         public async Task<Response<IdResponse>> Handle(AddSubjectTeacherCommand request, CancellationToken cancellationToken)
         {
 
-            var Result = await _SubjectTeacherService.CreateSubjectTeacherAsync(new SubjectTeacher() { SubjectId = request.SubjectId, TeacherId = request.TeacherId });
+            var Result = await _SubjectTeacherService.CreateSubjectTeacherAsync(new SubjectTeacher(request.SubjectId, request.TeacherId));
             return Result != -1 ? Created<IdResponse>(new IdResponse { Id = Result }) : Failed<IdResponse>();
         }
         #endregion

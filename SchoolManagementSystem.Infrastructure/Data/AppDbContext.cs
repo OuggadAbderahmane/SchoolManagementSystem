@@ -1,12 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SchoolManagementSystem.Data.Entities;
+using SchoolManagementSystem.Data.Entities.Identity;
 using SchoolManagementSystem.Data.Responses;
 
 namespace SchoolManagementSystem.Infrastructure.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User, Role, int, IdentityUserClaim<int>, IdentityUserRole<int>, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
-
+        public override DbSet<User> Users { get; set; }
+        public override DbSet<Role> Roles { get; set; }
         public DbSet<Person> People { get; set; }
         public DbSet<Level> Levels { get; set; }
         public DbSet<YearOfLevel> YearOfLevels { get; set; }
@@ -21,8 +25,9 @@ namespace SchoolManagementSystem.Infrastructure.Data
         public DbSet<SubjectTeacher> SubjectTeachers { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
-        public DbSet<FinalExam> FinalExams { get; set; }
+        public DbSet<StudentEvaluation> StudentsEvaluations { get; set; }
         public DbSet<GetPartsOfScheduleView> GetPartsOfScheduleResponses { get; set; }
+        public DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
 
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
@@ -32,6 +37,7 @@ namespace SchoolManagementSystem.Infrastructure.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Ignore<GetPartsOfScheduleView>();
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }
@@ -43,36 +49,3 @@ namespace SchoolManagementSystem.Infrastructure.Data
         }
     }
 }
-
-
-/*
- 
- 
-        public Task<bool> AddNewTeacherByPerson(int PersonId, decimal Salary, bool PermanentWork = false)
-        {
-            var newTeacherId = new SqlParameter
-            {
-                ParameterName = "@NewTeacherId",
-                SqlDbType = System.Data.SqlDbType.Int,
-                Direction = System.Data.ParameterDirection.Output
-            };
-
-            var idParameter = new SqlParameter("@Id", PersonId);
-
-            try
-            {
-                _dbContext.Database.ExecuteSqlRaw(
-                "EXEC AddNewTeacher @Id, @Salary, @PermanentWork, @NewTeacherId OUTPUT",
-                new SqlParameter("@Salary", Salary),
-                new SqlParameter("@PermanentWork", PermanentWork),
-                newTeacherId);
-            }
-            catch
-            {
-                return Task.FromResult(false);
-            }
-
-            return Task.FromResult(true);
-        }
- 
- */

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Features.Sections.Commands.Models;
@@ -18,17 +19,21 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
 
+        [Authorize(Roles = "admin")]
         [HttpGet("List")]
         public async Task<IActionResult> GetSectionsList()
         {
             return Ok(await _mediator.Send(new GetSectionsListQuery()));
         }
+
+        [Authorize(Roles = "admin")]
         [HttpGet("PaginatedList")]
         public async Task<IActionResult> GetSectionsPaginatedList(int? pageNumber, int? pageSize)
         {
             return Ok(await _mediator.Send(new GetSectionsPaginatedListQuery(pageNumber, pageSize)));
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetSectionById(int Id)
         {
@@ -37,6 +42,8 @@ namespace SchoolManagementSystem.API.Controllers
                 return Ok(response);
             return NotFound(response);
         }
+
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> AddSection(AddSectionCommand addSection)
         {
@@ -45,6 +52,8 @@ namespace SchoolManagementSystem.API.Controllers
                 return Created(_stringLocalizer[SharedResourcesKey.Created], response);
             return BadRequest(response);
         }
+
+        [Authorize(Roles = "admin")]
         [HttpPut]
         public async Task<IActionResult> UpdateSection(UpdateSectionCommand updateSection)
         {
