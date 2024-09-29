@@ -23,14 +23,14 @@ namespace SchoolManagementSystem.Service.Implementations
         #endregion
 
         #region Handles Functions
-        public Task<GetAllGuardianInfoResponse> GetGuardianByIdAsync(int Id)
+        public async Task<GetAllGuardianInfoResponse> GetGuardianByIdAsync(int Id)
         {
-            return _guardianRepository.GetGuardianByIdAsync(Id);
+            return await _guardianRepository.GetGuardianByIdAsync(Id);
         }
 
         public IQueryable<GetGuardianResponse> GetGuardiansListResponse()
         {
-            return _guardianRepository.GetGuardiansListResponseAsync();
+            return _guardianRepository.GetGuardiansListResponse();
         }
 
         public IQueryable<Guardian> GetGuardiansListIQueryable()
@@ -47,7 +47,7 @@ namespace SchoolManagementSystem.Service.Implementations
         {
             try
             {
-                return _guardianRepository.AddNewGuardianByPerson(PersonId, JobId);
+                return _guardianRepository.AddNewGuardianByPersonAsync(PersonId, JobId);
             }
             catch
             {
@@ -67,6 +67,12 @@ namespace SchoolManagementSystem.Service.Implementations
                 return -1;
             }
         }
+
+        public async Task<bool> DeleteGuardianAsync(int Id)
+        {
+            return await _guardianRepository.DeleteGuardianAsync(Id);
+        }
+
         public async Task<bool> UpdateGuardianAsync(int PersonId, int? JobId = null, string? NationalCardNumber = null, string? FirstName = null, string? LastName = null, bool? Gender = null,
                                          DateTime? DateOfBirth = null, string? Address = null, string? ImagePath = null, string? Email = null, string? Phone = null)
         {

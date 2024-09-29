@@ -26,39 +26,74 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
             return _dbContext.partsOfSchedules.AsNoTracking();
         }
 
-        public async Task<List<GetPartsOfScheduleResponse>> GetScheduleBySectionIdAsync(int Id)
+        public async Task<List<GetPartsOfStudentScheduleResponse>> GetSectionScheduleBydAsync(int Id)
         {
-            return await fromPartsOfScheduleViewToResponse(await _dbContext.GetPartsOfScheduleResponses.FromSql($"Exec dbo.GetScheduleBySectionId {Id}").ToArrayAsync());
+            return await fromPartsOfScheduleViewToStudentScheduleResponseAsync(await _dbContext.GetPartsOfScheduleResponses.FromSql($"Exec dbo.GetScheduleBySectionId {Id}").ToArrayAsync());
+
         }
 
-        private Task<List<GetPartsOfScheduleResponse>> fromPartsOfScheduleViewToResponse(GetPartsOfScheduleView[] view)
+        public async Task<List<GetPartsOfTeacherScheduleResponse>> GetTeacherScheduleByIdAsync(int Id)
         {
-            List<GetPartsOfScheduleResponse> getPartsOfScheduleResponses = new List<GetPartsOfScheduleResponse>();
+            return await fromPartsOfScheduleViewToTeacherScheduleResponseAsync(await _dbContext.GetPartsOfScheduleResponses.FromSql($"Exec dbo.GetScheduleByTeacherId {Id}").ToArrayAsync());
+
+        }
+
+        private async Task<List<GetPartsOfStudentScheduleResponse>> fromPartsOfScheduleViewToStudentScheduleResponseAsync(GetPartsOfScheduleView[] view)
+        {
+            List<GetPartsOfStudentScheduleResponse> getPartsOfScheduleResponses = new List<GetPartsOfStudentScheduleResponse>();
             foreach (var item in view)
             {
-                getPartsOfScheduleResponses.Add(new GetPartsOfScheduleResponse
+                getPartsOfScheduleResponses.Add(new GetPartsOfStudentScheduleResponse
                 {
-                    Day = int.Parse(item.Day!),
-                    Session1 = toSession(item.Session1),
-                    Session2 = toSession(item.Session2),
-                    Session3 = toSession(item.Session3),
-                    Session4 = toSession(item.Session4),
-                    Session5 = toSession(item.Session5),
-                    Session6 = toSession(item.Session6),
-                    Session7 = toSession(item.Session7)
+                    Day = int.Parse(item.Day),
+                    Session1 = toStudentSession(item.Session1),
+                    Session2 = toStudentSession(item.Session2),
+                    Session3 = toStudentSession(item.Session3),
+                    Session4 = toStudentSession(item.Session4),
+                    Session5 = toStudentSession(item.Session5),
+                    Session6 = toStudentSession(item.Session6),
+                    Session7 = toStudentSession(item.Session7)
                 });
             }
-            return Task.FromResult(getPartsOfScheduleResponses);
+            return await Task.FromResult(getPartsOfScheduleResponses);
         }
-
-        private Session? toSession(string? session)
+        private StudentSession? toStudentSession(string? session)
         {
             if (session == null)
                 return null;
             int Id;
             int indexofpoint = session.IndexOf('.');
             int.TryParse(session.Substring(0, indexofpoint), out Id);
-            return new Session { SubjectTeacherId = Id, Info = session.Substring(indexofpoint + 1, session.Length - 1 - indexofpoint) };
+            return new StudentSession { SubjectTeacherId = Id, Info = session.Substring(indexofpoint + 1, session.Length - 1 - indexofpoint) };
+        }
+
+        private async Task<List<GetPartsOfTeacherScheduleResponse>> fromPartsOfScheduleViewToTeacherScheduleResponseAsync(GetPartsOfScheduleView[] view)
+        {
+            List<GetPartsOfTeacherScheduleResponse> getPartsOfScheduleResponses = new List<GetPartsOfTeacherScheduleResponse>();
+            foreach (var item in view)
+            {
+                getPartsOfScheduleResponses.Add(new GetPartsOfTeacherScheduleResponse
+                {
+                    Day = int.Parse(item.Day),
+                    Session1 = toTeacherSession(item.Session1),
+                    Session2 = toTeacherSession(item.Session2),
+                    Session3 = toTeacherSession(item.Session3),
+                    Session4 = toTeacherSession(item.Session4),
+                    Session5 = toTeacherSession(item.Session5),
+                    Session6 = toTeacherSession(item.Session6),
+                    Session7 = toTeacherSession(item.Session7)
+                });
+            }
+            return await Task.FromResult(getPartsOfScheduleResponses);
+        }
+        private TeacherSession? toTeacherSession(string? session)
+        {
+            if (session == null)
+                return null;
+            int Id;
+            int indexofpoint = session.IndexOf('.');
+            int.TryParse(session.Substring(0, indexofpoint), out Id);
+            return new TeacherSession { SectionId = Id, Info = session.Substring(indexofpoint + 1, session.Length - 1 - indexofpoint) };
         }
         #endregion
     }

@@ -10,8 +10,8 @@ using SchoolManagementSystem.Service.Abstracts;
 namespace SchoolManagementSystem.Core.Features.Years.Commands.Handlers
 {
     public class YearCommandHandler : ResponseHandler, IRequestHandler<AddYearCommand, Response<IdResponse>>
-                                                        , IRequestHandler<UpdateYearCommand, Response<string>>
-    //, IRequestHandler<DeleteYearCommand, Response<string>>
+                                                     , IRequestHandler<UpdateYearCommand, Response<string>>
+                                                     , IRequestHandler<DeleteYearCommand, Response<string>>
     {
         #region Fields
         private readonly IYearService _yearService;
@@ -47,14 +47,14 @@ namespace SchoolManagementSystem.Core.Features.Years.Commands.Handlers
             return Result ? Updated<string>() : Failed<string>();
         }
 
-        //public async Task<Response<string>> Handle(DeleteYearCommand request, CancellationToken cancellationToken)
-        //{
-        //    var Deleted = await _yearService.DeleteByIdAsync(request.Id);
-        //    if (Deleted == 0)
-        //        return Failed<string>();
+        public async Task<Response<string>> Handle(DeleteYearCommand request, CancellationToken cancellationToken)
+        {
+            var Deleted = await _yearService.DeleteByIdAsync(request.Id);
+            if (Deleted == 0)
+                return Failed<string>(_stringLocalizer[SharedResourcesKey.DeleteError]);
 
-        //    return Deleted<string>();
-        //}
+            return Deleted<string>();
+        }
         #endregion
     }
 }

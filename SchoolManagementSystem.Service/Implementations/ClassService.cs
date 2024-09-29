@@ -40,9 +40,9 @@ namespace SchoolManagementSystem.Service.Implementations
             return _ClassRepository.GetClassesListIQueryable();
         }
 
-        public Task<string> GetClassInfo(int Id)
+        public async Task<string> GetClassInfo(int Id)
         {
-            return _ClassRepository.GetClassInfo(Id);
+            return (await _ClassRepository.GetClassInfoIQueryable().Where(x => x.Id == Id).FirstAsync()).ClassInfo;
         }
         #endregion
     }

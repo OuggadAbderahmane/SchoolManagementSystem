@@ -57,6 +57,11 @@ namespace SchoolManagementSystem.Service.Implementations
                 return -1;
             }
         }
+
+        public async Task<int> DeleteByIdAsync(int Id)
+        {
+            return await _SubjectTeacherRepository.GetTableAsNoTracking().Where(x => x.Id == Id).ExecuteDeleteAsync();
+        }
         #endregion
     }
 }

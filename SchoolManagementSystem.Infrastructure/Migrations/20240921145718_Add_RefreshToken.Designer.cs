@@ -590,17 +590,17 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "الابتدائي"
+                            Name = "ابتدائي"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "المتوسط"
+                            Name = "متوسط"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "الثانوي"
+                            Name = "ثانوي"
                         });
                 });
 

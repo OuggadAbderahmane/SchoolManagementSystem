@@ -7,8 +7,8 @@ namespace SchoolManagementSystem.Infrastructure.Abstracts
     public interface IClassRepository : IGenericRepository<Class>
     {
         public Task<GetClassResponse> GetClassByIdAsync(int Id);
+        public IQueryable<GetClassResponse> GetClassInfoIQueryable();
         public Task<List<GetClassResponse>> GetClassesListAsync();
         public IQueryable<Class> GetClassesListIQueryable();
-        public Task<string> GetClassInfo(int Id);
     }
 }

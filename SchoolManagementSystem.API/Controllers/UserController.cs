@@ -73,14 +73,14 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        //[HttpDelete("{Id}")]
-        //public async Task<IActionResult> DeleteUser(int Id)
-        //{
-        //    var response = await _mediator.Send(new DeleteUserCommand(Id));
-        //    if (response.Succeeded)
-        //        return Ok(response);
-        //    return BadRequest(response);
-        //}
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteUser(int Id)
+        {
+            var response = await _mediator.Send(new DeleteUserCommand(Id));
+            if (response.Succeeded)
+                return Ok(response);
+            return BadRequest(response);
+        }
         #endregion
     }
 }

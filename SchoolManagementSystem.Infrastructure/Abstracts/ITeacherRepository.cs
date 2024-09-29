@@ -10,6 +10,7 @@ namespace SchoolManagementSystem.Infrastructure.Abstracts
         public IQueryable<GetTeacherResponse> GetTeachersListResponse();
         public IQueryable<Teacher> GetTeachersListIQueryable();
         public bool UpdateTeacherByQuery(int PersonId, decimal? Salary = null, bool? IsPermanentWorkAvtive = null);
-        public Task<bool> AddNewTeacherByPerson(int PersonId, decimal Salary, bool IsPermanentWorkAvtive);
+        public Task<bool> AddNewTeacherByPersonAsync(int PersonId, decimal Salary, bool IsPermanentWorkAvtive);
+        public Task<bool> DeleteTeacherAsync(int Id);
     }
 }

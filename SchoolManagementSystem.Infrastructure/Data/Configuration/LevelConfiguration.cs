@@ -25,9 +25,9 @@ namespace SchoolManagementSystem.Infrastructure.Data.Configuration
         {
             return
             [
-                new() { Id = 1 ,Name = "الابتدائي" },
-                new() { Id = 2 ,Name = "المتوسط" },
-                new() { Id = 3 ,Name = "الثانوي" }
+                new() { Id = 1 ,Name = "ابتدائي" },
+                new() { Id = 2 ,Name = "متوسط" },
+                new() { Id = 3 ,Name = "ثانوي" }
             ];
         }
     }

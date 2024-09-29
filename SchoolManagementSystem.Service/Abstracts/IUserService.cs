@@ -16,7 +16,7 @@ namespace SchoolManagementSystem.Service.Abstracts
         public Task<bool> IsPasswordCorrectAsync(int Id, string password);
         public Task<bool> IsPasswordCorrectAsync(string UserName, string password);
         public Task<bool?> UpdateUserPasswordAsync(int userId, string Newpassword, string Currentpassword);
-        //public Task<int> DeleteByIdAsync(int Id);
+        public Task<int> DeleteByIdAsync(int Id);
         public Task<bool> IsIdExistAsync(int Id);
     }
 }

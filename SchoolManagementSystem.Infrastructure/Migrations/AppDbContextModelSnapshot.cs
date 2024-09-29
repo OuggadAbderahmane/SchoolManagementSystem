@@ -535,17 +535,17 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "الابتدائي"
+                            Name = "ابتدائي"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "المتوسط"
+                            Name = "متوسط"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "الثانوي"
+                            Name = "ثانوي"
                         });
                 });
 
@@ -1040,7 +1040,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                     b.HasOne("SchoolManagementSystem.Data.Entities.Class", "Class")
                         .WithMany("Sections")
                         .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Class");
@@ -1051,25 +1051,25 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                     b.HasOne("SchoolManagementSystem.Data.Entities.Semester", "Semester")
                         .WithMany()
                         .HasForeignKey("SemesterId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SchoolManagementSystem.Data.Entities.Student", "Student")
                         .WithMany("StudentEvaluations")
                         .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SchoolManagementSystem.Data.Entities.Subject", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SchoolManagementSystem.Data.Entities.Year", "Year")
                         .WithMany()
                         .HasForeignKey("YearId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Semester");
@@ -1086,7 +1086,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                     b.HasOne("SchoolManagementSystem.Data.Entities.Class", "Class")
                         .WithMany("Subjects")
                         .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Class");

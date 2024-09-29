@@ -65,6 +65,11 @@ namespace SchoolManagementSystem.Service.Implementations
             return await _yearRepository.GetTableAsNoTracking().AnyAsync(S => S.Id == Id);
         }
 
+        public async Task<int> DeleteByIdAsync(int Id)
+        {
+            return await _yearRepository.GetTableAsNoTracking().Where(D => D.Id == Id).ExecuteDeleteAsync();
+        }
+
         public async Task<bool> IsExistAsync(string value)
         {
             return await _yearRepository.GetTableAsNoTracking().AnyAsync(S => S.Value == value);

@@ -12,6 +12,7 @@ namespace SchoolManagementSystem.Core.Features.Teachers.Commands.Handlers
     public class TeacherCommandHandler : ResponseHandler, IRequestHandler<AddTeacherCommand, Response<IdResponse>>
                                                         , IRequestHandler<AddTeacherByPersonCommand, Response<string>>
                                                         , IRequestHandler<UpdateTeacherCommand, Response<string>>
+                                                        , IRequestHandler<DeleteTeacherCommand, Response<string>>
     {
         #region Fields
         private readonly ITeacherService _teacherService;
@@ -84,6 +85,15 @@ namespace SchoolManagementSystem.Core.Features.Teachers.Commands.Handlers
                                                                      request.Email,
                                                                      request.Phone);
             return Result ? Updated<string>() : Failed<string>();
+        }
+
+        public async Task<Response<string>> Handle(DeleteTeacherCommand request, CancellationToken cancellationToken)
+        {
+            var Deleted = await _teacherService.DeleteTeacherAsync(request.Id);
+            if (!Deleted)
+                return Failed<string>(_stringLocalizer[SharedResourcesKey.DeleteError]);
+
+            return Deleted<string>();
         }
         #endregion
     }

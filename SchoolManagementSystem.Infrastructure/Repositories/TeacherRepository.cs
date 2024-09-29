@@ -104,18 +104,32 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
             }
         }
 
-        public Task<bool> AddNewTeacherByPerson(int PersonId, decimal Salary, bool IsPermanentWorkAvtive)
+        public async Task<bool> AddNewTeacherByPersonAsync(int PersonId, decimal Salary, bool IsPermanentWorkAvtive)
         {
             try
             {
-                _dbContext.Database.ExecuteSql($"DECLARE @NewTeacherId INT;EXEC AddNewTeacherBaseOnPerson {PersonId}, {(Salary)} ,{(IsPermanentWorkAvtive)} , @NewTeacherId = @NewTeacherId OUTPUT");
+                await _dbContext.Database.ExecuteSqlAsync($"DECLARE @NewTeacherId INT;EXEC AddNewTeacherBaseOnPerson {PersonId}, {Salary} ,{IsPermanentWorkAvtive} , @NewTeacherId = @NewTeacherId OUTPUT");
             }
             catch
             {
-                return Task.FromResult(false);
+                return false;
             }
 
-            return Task.FromResult(true);
+            return true;
+        }
+
+        public async Task<bool> DeleteTeacherAsync(int Id)
+        {
+            try
+            {
+                await _dbContext.Database.ExecuteSqlAsync($"Exec dbo.DeleteTeacher {Id}");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
         }
         #endregion
     }

@@ -11,7 +11,7 @@ namespace SchoolManagementSystem.Core.Features.Sections.Commands.Handlers
 {
     public class SectionCommandHandler : ResponseHandler, IRequestHandler<AddSectionCommand, Response<IdResponse>>
                                                         , IRequestHandler<UpdateSectionCommand, Response<string>>
-    //, IRequestHandler<DeleteSectionCommand, Response<string>>
+                                                        , IRequestHandler<DeleteSectionCommand, Response<string>>
     {
         #region Fields
         private readonly ISectionService _sectionService;
@@ -37,14 +37,14 @@ namespace SchoolManagementSystem.Core.Features.Sections.Commands.Handlers
             return Result ? Updated<string>() : Failed<string>();
         }
 
-        //public async Task<Response<string>> Handle(DeleteSectionCommand request, CancellationToken cancellationToken)
-        //{
-        //    var Deleted = await _sectionService.DeleteByIdAsync(request.Id);
-        //    if (Deleted == 0)
-        //        return Failed<string>();
+        public async Task<Response<string>> Handle(DeleteSectionCommand request, CancellationToken cancellationToken)
+        {
+            var Deleted = await _sectionService.DeleteByIdAsync(request.Id);
+            if (Deleted == 0)
+                return Failed<string>(_stringLocalizer[SharedResourcesKey.DeleteError]);
 
-        //    return Deleted<string>();
-        //}
+            return Deleted<string>();
+        }
         #endregion
     }
 }

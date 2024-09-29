@@ -13,5 +13,6 @@ namespace SchoolManagementSystem.Service.Abstracts
         public Task<bool> UpdateGuardianAsync(int PersonId, int? JobId = null, string? NationalCardNumber = null, string? FirstName = null, string? LastName = null, bool? Gender = null,
                                          DateTime? DateOfBirth = null, string? Address = null, string? ImagePath = null, string? Email = null, string? Phone = null);
         public Task<int> CreateGuardianAsync(Guardian guardian);
+        public Task<bool> DeleteGuardianAsync(int Id);
     }
 }

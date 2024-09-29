@@ -126,6 +126,9 @@
   <data name="DeletedSuccessfully" xml:space="preserve">
     <value>Deleted Successfully</value>
   </data>
+  <data name="DeleteError" xml:space="preserve">
+    <value>You cannot delete it because it has data associated with it</value>
+  </data>
   <data name="DoesNotExist" xml:space="preserve">
     <value>does not exist</value>
   </data>

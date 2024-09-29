@@ -10,6 +10,8 @@ namespace SchoolManagementSystem.Core.Features.Schedules.Commands.Handlers
 {
     public class ScheduleCommandHandler : ResponseHandler, IRequestHandler<AddPartOfScheduleCommand, Response<string>>
                                                          , IRequestHandler<UpdatePartOfScheduleCommand, Response<string>>
+                                                         , IRequestHandler<DeletePartOfScheduleCommand, Response<string>>
+                                                         , IRequestHandler<DeleteScheduleBySectionIdCommand, Response<string>>
     {
         #region Fields
         private readonly IPartOfScheduleService _PartOfScheduleService;
@@ -33,6 +35,24 @@ namespace SchoolManagementSystem.Core.Features.Schedules.Commands.Handlers
         {
             var Result = await _PartOfScheduleService.UpdatePartOfScheduleAsync(new PartOfSchedule(request.SectionId, request.Day, request.Session, request.SubjectTeacherId));
             return Result ? Updated<string>() : Failed<string>();
+        }
+
+        public async Task<Response<string>> Handle(DeletePartOfScheduleCommand request, CancellationToken cancellationToken)
+        {
+            var Deleted = await _PartOfScheduleService.DeletePartOfScheduleAsync(request.SectionId, request.Day, request.Session);
+            if (Deleted == 0)
+                return Failed<string>();
+
+            return Deleted<string>();
+        }
+
+        public async Task<Response<string>> Handle(DeleteScheduleBySectionIdCommand request, CancellationToken cancellationToken)
+        {
+            var Deleted = await _PartOfScheduleService.DeleteScheduleBySectionIdAsync(request.SectionId);
+            if (Deleted == 0)
+                return Failed<string>();
+
+            return Deleted<string>();
         }
         #endregion
     }

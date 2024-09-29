@@ -21,7 +21,8 @@ namespace SchoolManagementSystem.Infrastructure.Data.Configuration.Identity
 
 
             builder.HasMany(x => x.Roles)
-                .WithMany(x => x.Users).UsingEntity<IdentityUserRole<int>>();
+                .WithMany(x => x.Users)
+                .UsingEntity<IdentityUserRole<int>>();
 
             builder.HasOne(x => x.Person)
                 .WithOne()

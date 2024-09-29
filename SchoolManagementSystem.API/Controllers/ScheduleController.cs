@@ -20,8 +20,8 @@ namespace SchoolManagementSystem.API.Controllers
         #region Handle Functions
 
         [Authorize(Roles = "admin")]
-        [HttpGet("GetScheduleBySectionId/{Id}")]
-        public async Task<IActionResult> GetScheduleBySectionId(int Id)
+        [HttpGet("GetSectionScheduleById/{Id}")]
+        public async Task<IActionResult> GetSectionScheduleById(int Id)
         {
             var response = await _mediator.Send(new GetScheduleByIdQuery(Id));
             if (response.Succeeded)
@@ -31,11 +31,33 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(policy: "StudentOnly")]
         [Authorize(Roles = "user")]
-        [HttpGet("GetSchedule")]
-        public async Task<IActionResult> GetSchedule()
+        [HttpGet("GetStudentSchedule")]
+        public async Task<IActionResult> GetStudentSchedule()
         {
             var Id = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "PersonId").Value);
             var response = await _mediator.Send(new GetScheduleByStudentIdQuery(Id));
+            if (response.Succeeded)
+                return Ok(response);
+            return NotFound(response);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpGet("GetTeacherScheduleById/{Id}")]
+        public async Task<IActionResult> GetTeacherScheduleById(int Id)
+        {
+            var response = await _mediator.Send(new GetScheduleByTeacherIdQuery(Id));
+            if (response.Succeeded)
+                return Ok(response);
+            return NotFound(response);
+        }
+
+        [Authorize(policy: "TeacherOnly")]
+        [Authorize(Roles = "user")]
+        [HttpGet("GetTeacherSchedule")]
+        public async Task<IActionResult> GetTeacherSchedule()
+        {
+            var Id = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "PersonId").Value);
+            var response = await _mediator.Send(new GetScheduleByTeacherIdQuery(Id));
             if (response.Succeeded)
                 return Ok(response);
             return NotFound(response);
@@ -86,6 +108,26 @@ namespace SchoolManagementSystem.API.Controllers
         public async Task<IActionResult> UpdatePartOfSchedule(UpdatePartOfScheduleCommand updatePartOfSchedule)
         {
             var response = await _mediator.Send(updatePartOfSchedule);
+            if (response.Succeeded)
+                return Ok(response);
+            return BadRequest(response);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("DeleteSchedule/{SectionId}")]
+        public async Task<IActionResult> DeleteSchedule(int SectionId)
+        {
+            var response = await _mediator.Send(new DeleteScheduleBySectionIdCommand(SectionId));
+            if (response.Succeeded)
+                return Ok(response);
+            return BadRequest(response);
+        }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("DeletePartOfSchedule")]
+        public async Task<IActionResult> DeleteSchedule(int SectionId, sbyte Day, sbyte Session)
+        {
+            var response = await _mediator.Send(new DeletePartOfScheduleCommand(SectionId, Day, Session));
             if (response.Succeeded)
                 return Ok(response);
             return BadRequest(response);

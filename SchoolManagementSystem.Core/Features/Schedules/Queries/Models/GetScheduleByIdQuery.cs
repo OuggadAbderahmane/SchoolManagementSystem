@@ -4,7 +4,7 @@ using SchoolManagementSystem.Data.Responses;
 
 namespace SchoolManagementSystem.Core.Features.Schedules.Queries.Models
 {
-    public class GetScheduleByIdQuery : IRequest<Response<List<GetPartsOfScheduleResponse>>>
+    public class GetScheduleByIdQuery : IRequest<Response<List<GetPartsOfStudentScheduleResponse>>>
     {
         public int Id { get; set; }
         public GetScheduleByIdQuery(int id)

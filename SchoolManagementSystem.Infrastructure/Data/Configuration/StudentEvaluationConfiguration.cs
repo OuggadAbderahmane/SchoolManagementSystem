@@ -14,21 +14,25 @@ namespace SchoolManagementSystem.Infrastructure.Data.Configuration
             builder.HasOne(x => x.Year)
                 .WithMany()
                 .HasForeignKey(x => x.YearId)
+                .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
 
             builder.HasOne(x => x.Subject)
                 .WithMany()
                 .HasForeignKey(x => x.SubjectId)
+                .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
 
             builder.HasOne(x => x.Student)
                 .WithMany(x => x.StudentEvaluations)
                 .HasForeignKey(x => x.StudentId)
+                .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
 
             builder.HasOne(x => x.Semester)
                 .WithMany()
                 .HasForeignKey(x => x.SemesterId)
+                .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
 
             builder.HasIndex(x => new { x.StudentId, x.SubjectId, x.SemesterId, x.YearId })

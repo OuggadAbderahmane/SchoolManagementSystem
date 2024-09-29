@@ -57,6 +57,16 @@ namespace SchoolManagementSystem.API.Controllers
                 return Ok(response);
             return BadRequest(response);
         }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteSubject(int Id)
+        {
+            var response = await _mediator.Send(new DeleteSubjectCommand(Id));
+            if (response.Succeeded)
+                return Ok(response);
+            return BadRequest(response);
+        }
         #endregion
     }
 }

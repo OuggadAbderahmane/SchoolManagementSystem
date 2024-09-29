@@ -82,6 +82,11 @@ namespace SchoolManagementSystem.Service.Implementations
         {
             return await _studentevaluationRepository.GetTableAsNoTracking().AnyAsync(S => S.StudentId == studentId && S.SubjectId == subjectId && S.SemesterId == semesterId && S.YearId == yearId);
         }
+
+        public async Task<int> DeleteByIdAsync(int Id)
+        {
+            return await _studentevaluationRepository.GetTableAsNoTracking().Where(x => x.Id == Id).ExecuteDeleteAsync();
+        }
         #endregion
     }
 }

@@ -66,6 +66,12 @@ namespace SchoolManagementSystem.Service.Implementations
         {
             return await _subjectRepository.GetSubjectsListAsync();
         }
+
+        public async Task<int> DeleteByIdAsync(int Id)
+        {
+            return await _subjectRepository.GetTableAsNoTracking().Where(x => x.Id == Id).ExecuteDeleteAsync();
+        }
+
         public async Task<bool> IsExistAsync(string? SubjectName, int? ClassId, int? Id = null)
         {
             if (Id == null)
