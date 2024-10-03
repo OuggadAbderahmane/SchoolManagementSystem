@@ -14,6 +14,7 @@ namespace SchoolManagementSystem.Infrastructure.Data.Configuration
             builder.HasOne(x => x.Class)
                 .WithMany(x => x.Sections)
                 .HasForeignKey(x => x.ClassId)
+                .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired();
 
             builder.HasIndex(e => new { e.ClassId, e.Name })

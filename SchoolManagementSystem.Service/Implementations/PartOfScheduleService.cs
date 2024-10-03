@@ -29,9 +29,14 @@ namespace SchoolManagementSystem.Service.Implementations
             return _PartOfScheduleRepository.GetPartOfSchedulesListIQueryable();
         }
 
-        public async Task<List<GetPartsOfScheduleResponse>> GetScheduleBySectionIdAsync(int Id)
+        public async Task<List<GetPartsOfStudentScheduleResponse>> GetSectionScheduleByIdAsync(int Id)
         {
-            return await _PartOfScheduleRepository.GetScheduleBySectionIdAsync(Id);
+            return await _PartOfScheduleRepository.GetSectionScheduleBydAsync(Id);
+        }
+
+        public async Task<List<GetPartsOfTeacherScheduleResponse>> GetTeacherScheduleByIdAsync(int Id)
+        {
+            return await _PartOfScheduleRepository.GetTeacherScheduleByIdAsync(Id);
         }
 
         public async Task<bool> IsSessionAvailableAsync(int sectionId, sbyte day, sbyte session)
@@ -73,6 +78,16 @@ namespace SchoolManagementSystem.Service.Implementations
         public async Task<bool> IsIdExistAsync(int Id)
         {
             return await _PartOfScheduleRepository.GetTableAsNoTracking().AnyAsync(S => S.Id == Id);
+        }
+
+        public async Task<int> DeletePartOfScheduleAsync(int SectionId, sbyte Day, sbyte Session)
+        {
+            return await _PartOfScheduleRepository.GetTableAsNoTracking().Where(x => x.SectionId == SectionId && x.Day == Day && x.Session == Session).ExecuteDeleteAsync();
+        }
+
+        public async Task<int> DeleteScheduleBySectionIdAsync(int SectionId)
+        {
+            return await _PartOfScheduleRepository.GetTableAsNoTracking().Where(x => x.SectionId == SectionId).ExecuteDeleteAsync();
         }
 
         public async Task<bool> IsSubjectTeacherAvailable(int SubjectTeacherId, int Id)

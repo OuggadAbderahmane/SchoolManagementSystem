@@ -23,12 +23,12 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
         #region Handles Functions
         public async Task<GetClassResponse> GetClassByIdAsync(int Id)
         {
-            return (await _dbContext.Classes.AsNoTracking().Select(x => new GetClassResponse() { Id = x.Id, ClassInfo = _dbContext.GetClassInfo(x.Id) }).FirstOrDefaultAsync(x => x.Id == Id))!;
+            return await GetClassInfoIQueryable().AsNoTracking().Where(x => x.Id == Id).FirstAsync();
         }
 
         public async Task<List<GetClassResponse>> GetClassesListAsync()
         {
-            return await _dbContext.Classes.AsNoTracking().Select(x => new GetClassResponse() { Id = x.Id, ClassInfo = _dbContext.GetClassInfo(x.Id) }).ToListAsync();
+            return await GetClassInfoIQueryable().AsNoTracking().ToListAsync();
         }
 
         public IQueryable<Class> GetClassesListIQueryable()
@@ -36,9 +36,12 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
             return _dbContext.Classes.AsNoTracking();
         }
 
-        public Task<string> GetClassInfo(int Id)
+        public IQueryable<GetClassResponse> GetClassInfoIQueryable()
         {
-            return Task.FromResult(_dbContext.GetClassInfo(Id)!);
+            return from classes in _dbContext.Classes
+                   join levels in _dbContext.Levels on classes.LevelId equals levels.Id
+                   join yearOfLevels in _dbContext.YearOfLevels on classes.YearOfLevelId equals yearOfLevels.Id
+                   select new GetClassResponse { Id = classes.Id, ClassInfo = yearOfLevels.Name + " " + levels.Name + " " + classes.NameOfSpecialization };
         }
         #endregion
     }

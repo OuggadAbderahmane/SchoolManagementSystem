@@ -23,7 +23,6 @@ namespace SchoolManagementSystem.Service.Implementations
         #endregion
 
         #region Handles Functions
-
         public Task<GetAllTeacherInfoResponse> GetTeacherByIdAsync(int Id)
         {
             return _teacherRepository.GetTeacherByIdAsync(Id);
@@ -44,15 +43,15 @@ namespace SchoolManagementSystem.Service.Implementations
             return await _teacherRepository.GetTableAsNoTracking().AnyAsync(D => D.Id == Id);
         }
 
-        public Task<bool> CreateTeacherAsync(int PersonId, decimal Salary, bool IsPermanentWorkAvtive)
+        public async Task<bool> CreateTeacherAsync(int PersonId, decimal Salary, bool IsPermanentWorkAvtive)
         {
             try
             {
-                return _teacherRepository.AddNewTeacherByPerson(PersonId, Salary, IsPermanentWorkAvtive);
+                return await _teacherRepository.AddNewTeacherByPersonAsync(PersonId, Salary, IsPermanentWorkAvtive);
             }
             catch
             {
-                return Task.FromResult(false);
+                return false;
             }
         }
 
@@ -68,6 +67,12 @@ namespace SchoolManagementSystem.Service.Implementations
                 return -1;
             }
         }
+
+        public async Task<bool> DeleteTeacherAsync(int Id)
+        {
+            return await _teacherRepository.DeleteTeacherAsync(Id);
+        }
+
         public async Task<bool> UpdateTeacherAsync(int PersonId, decimal? Salary = null, bool? IsPermanentWorkAvtive = null, string? NationalCardNumber = null, string? FirstName = null, string? LastName = null, bool? Gender = null,
                                          DateTime? DateOfBirth = null, string? Address = null, string? ImagePath = null, string? Email = null, string? Phone = null)
         {

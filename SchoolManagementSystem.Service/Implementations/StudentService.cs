@@ -43,15 +43,15 @@ namespace SchoolManagementSystem.Service.Implementations
             return await _studentRepository.GetTableAsNoTracking().AnyAsync(D => D.Id == Id);
         }
 
-        public Task<bool> CreateStudentAsync(int PersonId, int? SectionId = null, int? GuardianId = null, bool IsAvtive = true)
+        public async Task<bool> CreateStudentAsync(int PersonId, int? SectionId = null, int? GuardianId = null, bool IsAvtive = true)
         {
             try
             {
-                return _studentRepository.AddNewStudentByPerson(PersonId, SectionId, GuardianId, IsAvtive);
+                return await _studentRepository.AddNewStudentByPersonAsync(PersonId, SectionId, GuardianId, IsAvtive);
             }
             catch
             {
-                return Task.FromResult(false);
+                return false;
             }
         }
 
@@ -67,6 +67,12 @@ namespace SchoolManagementSystem.Service.Implementations
                 return -1;
             }
         }
+
+        public async Task<bool> DeleteStudentAsync(int Id)
+        {
+            return await _studentRepository.DeleteStudentAsync(Id);
+        }
+
         public async Task<bool> UpdateStudentAsync(int PersonId, int? SectionId = null, int? GuardianId = null, bool? IsAvtive = null, string? NationalCardNumber = null, string? FirstName = null, string? LastName = null, bool? Gender = null,
                                          DateTime? DateOfBirth = null, string? Address = null, string? ImagePath = null)
         {

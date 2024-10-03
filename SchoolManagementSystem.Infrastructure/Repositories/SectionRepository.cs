@@ -30,31 +30,22 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
 
         public async Task<GetSectionResponse> GetSectionByIdAsync(int Id)
         {
-            return (await _dbContext.Sections.AsNoTracking().Select(x => new GetSectionResponse
-            {
-                Id = x.Id,
-                SectionName = x.Name,
-                Classinfo = _classRepository.GetClassInfo(x.ClassId).Result
-            }).FirstOrDefaultAsync(x => x.Id == Id))!;
+            return await GetSectionsListResponse().FirstAsync();
         }
 
         public IQueryable<GetSectionResponse> GetSectionsListResponse()
         {
-            return _dbContext.Sections.AsNoTracking().Select(x => new GetSectionResponse
+            return _dbContext.Sections.AsNoTracking().Join(_classRepository.GetClassInfoIQueryable(), x => x.ClassId, x => x.Id, (S, C) => new GetSectionResponse
             {
-                Id = x.Id,
-                SectionName = x.Name,
-                Classinfo = _classRepository.GetClassInfo(x.ClassId).Result
+                Id = S.Id,
+                SectionName = S.Name,
+                Classinfo = C.ClassInfo
             });
         }
+
         public async Task<List<GetSectionResponse>> GetSectionsListAsync()
         {
-            return await _dbContext.Sections.AsNoTracking().Select(x => new GetSectionResponse
-            {
-                Id = x.Id,
-                SectionName = x.Name,
-                Classinfo = _classRepository.GetClassInfo(x.ClassId).Result
-            }).ToListAsync();
+            return await GetSectionsListResponse().ToListAsync();
         }
         #endregion
     }

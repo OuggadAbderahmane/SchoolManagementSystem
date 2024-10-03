@@ -13,5 +13,6 @@ namespace SchoolManagementSystem.Service.Abstracts
         public Task<bool> IsIdExistAsync(int Id);
         public Task<bool> IsExistAsync(string? SectionName, int? ClassId, int? Id = null);
         public IQueryable<Section> GetSectionsListIQueryable();
+        public Task<int> DeleteByIdAsync(int Id);
     }
 }

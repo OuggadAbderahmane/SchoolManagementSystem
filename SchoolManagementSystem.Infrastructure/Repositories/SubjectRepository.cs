@@ -30,32 +30,22 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
 
         public async Task<GetSubjectResponse> GetSubjectByIdAsync(int Id)
         {
-            return (await _dbContext.Subjects.AsNoTracking().Select(x => new GetSubjectResponse
-            {
-                Id = x.Id,
-                Name = x.Name,
-                ClassInfo = _classRepository.GetClassInfo(x.ClassId).Result
-            }).FirstOrDefaultAsync(x => x.Id == Id))!;
+            return (await GetSubjectsListResponse().Where(x => x.Id == Id).FirstAsync());
         }
 
         public IQueryable<GetSubjectResponse> GetSubjectsListResponse()
         {
-            return _dbContext.Subjects.AsNoTracking().Select(x => new GetSubjectResponse
+            return _dbContext.Subjects.AsNoTracking().Join(_classRepository.GetClassInfoIQueryable(), x => x.ClassId, x => x.Id, (S, C) => new GetSubjectResponse
             {
-                Id = x.Id,
-                Name = x.Name,
-                ClassInfo = _classRepository.GetClassInfo(x.ClassId).Result
+                Id = S.Id,
+                Name = S.Name,
+                ClassInfo = C.ClassInfo
             });
         }
 
         public async Task<List<GetSubjectResponse>> GetSubjectsListAsync()
         {
-            return await _dbContext.Subjects.AsNoTracking().Select(x => new GetSubjectResponse
-            {
-                Id = x.Id,
-                Name = x.Name,
-                ClassInfo = _classRepository.GetClassInfo(x.ClassId).Result
-            }).ToListAsync();
+            return await GetSubjectsListResponse().ToListAsync();
         }
         #endregion
     }

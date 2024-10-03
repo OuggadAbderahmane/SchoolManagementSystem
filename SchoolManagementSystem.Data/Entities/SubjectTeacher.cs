@@ -15,6 +15,6 @@
 
         public Subject Subject { get; set; }
         public Teacher Teacher { get; set; }
-        public ICollection<PartOfSchedule> PartOfSchedules { get; set; } = new HashSet<PartOfSchedule>();
+        public ICollection<PartOfSchedule> PartOfSchedules { get; set; } = new List<PartOfSchedule>();
     }
 }

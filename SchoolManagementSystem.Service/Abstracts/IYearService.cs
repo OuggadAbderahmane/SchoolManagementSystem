@@ -12,5 +12,6 @@ namespace SchoolManagementSystem.Service.Abstracts
         public IQueryable<GetYearResponse> GetYearsListResponse();
         public Task<int> CreateYearAsync(Year year);
         public Task<bool> UpdateYearAsync(Year year);
+        public Task<int> DeleteByIdAsync(int Id);
     }
 }

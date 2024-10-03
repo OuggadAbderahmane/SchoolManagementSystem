@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public ICollection<Class> Class { get; set; } = new HashSet<Class>();
+        public ICollection<Class> Class { get; set; } = new List<Class>();
     }
 
 }

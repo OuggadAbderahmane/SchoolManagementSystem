@@ -41,7 +41,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                                 LastName = S.LastName,
                                                 Gender = S.Gender ? "Male" : "Female",
                                                 SectionName = S.Section == null ? null : S.Section.Name,
-                                                classInfo = S.Section == null ? null : _classRepository.GetClassInfo(S.Section.ClassId).Result,
+                                                classInfo = S.Section == null ? null : _classRepository.GetClassInfoIQueryable().Where(x => x.Id == S.Section.ClassId).First().ClassInfo,
                                                 ImagePath = S.ImagePath != null ? url + S.ImagePath : null,
                                                 Address = S.Address,
                                                 DateOfBirth = S.DateOfBirth,
@@ -58,7 +58,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                                 FirstName = S.FirstName,
                                                 LastName = S.LastName,
                                                 SectionName = S.Section == null ? null : S.Section.Name,
-                                                classInfo = S.Section == null ? null : _classRepository.GetClassInfo(S.Section.ClassId).Result,
+                                                classInfo = S.Section == null ? null : _classRepository.GetClassInfoIQueryable().Where(x => x.Id == S.Section.ClassId).First().ClassInfo,
                                                 ImagePath = S.ImagePath != null ? url + S.ImagePath : null
                                             });
         }
@@ -106,18 +106,31 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                 return false;
             }
         }
-        public Task<bool> AddNewStudentByPerson(int PersonId, int? SectionId = null, int? GuardianId = null, bool IsAvtive = true)
+        public async Task<bool> AddNewStudentByPersonAsync(int PersonId, int? SectionId = null, int? GuardianId = null, bool IsAvtive = true)
         {
             try
             {
-                _dbContext.Database.ExecuteSql($"DECLARE @NewStudentId INT;EXEC AddNewStudentBaseOnPerson {PersonId}, {(SectionId)} ,{(GuardianId)} , {IsAvtive}, @NewStudentId = @NewStudentId OUTPUT");
+                await _dbContext.Database.ExecuteSqlAsync($"DECLARE @NewStudentId INT;EXEC AddNewStudentBaseOnPerson {PersonId}, {(SectionId)} ,{(GuardianId)} , {IsAvtive}, @NewStudentId = @NewStudentId OUTPUT");
             }
             catch
             {
-                return Task.FromResult(false);
+                return false;
             }
 
-            return Task.FromResult(true);
+            return true;
+        }
+        public async Task<bool> DeleteStudentAsync(int Id)
+        {
+            try
+            {
+                await _dbContext.Database.ExecuteSqlAsync($"Exec dbo.DeleteStudent {Id}");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
         }
         #endregion
     }

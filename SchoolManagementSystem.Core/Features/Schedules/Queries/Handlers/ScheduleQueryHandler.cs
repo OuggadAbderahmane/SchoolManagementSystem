@@ -9,8 +9,9 @@ using SchoolManagementSystem.Service.Abstracts;
 
 namespace SchoolManagementSystem.Core.Features.PartOfSchedules.Queries.Handlers
 {
-    public class ScheduleQueryHandler : ResponseHandler, IRequestHandler<GetScheduleByIdQuery, Response<List<GetPartsOfScheduleResponse>>>
-                                                       , IRequestHandler<GetScheduleByStudentIdQuery, Response<List<GetPartsOfScheduleResponse>>>
+    public class ScheduleQueryHandler : ResponseHandler, IRequestHandler<GetScheduleByIdQuery, Response<List<GetPartsOfStudentScheduleResponse>>>
+                                                       , IRequestHandler<GetScheduleByStudentIdQuery, Response<List<GetPartsOfStudentScheduleResponse>>>
+                                                       , IRequestHandler<GetScheduleByTeacherIdQuery, Response<List<GetPartsOfTeacherScheduleResponse>>>
                                                        , IRequestHandler<IsSessionAvailableQuery, Response<bool?>>
                                                        , IRequestHandler<IsTeacherAvailableQuery, Response<bool?>>
                                                        , IRequestHandler<IsSubjectTeacherAvailableQuery, Response<bool?>>
@@ -36,25 +37,35 @@ namespace SchoolManagementSystem.Core.Features.PartOfSchedules.Queries.Handlers
         #endregion
 
         #region Handle Functions
-        public async Task<Response<List<GetPartsOfScheduleResponse>>> Handle(GetScheduleByIdQuery request, CancellationToken cancellationToken)
+        public async Task<Response<List<GetPartsOfStudentScheduleResponse>>> Handle(GetScheduleByIdQuery request, CancellationToken cancellationToken)
         {
             if (!await _SectionService.IsIdExistAsync(request.Id))
             {
-                return NotFound<List<GetPartsOfScheduleResponse>>(_stringLocalizer[SharedResourcesKey.NotFound]);
+                return NotFound<List<GetPartsOfStudentScheduleResponse>>(_stringLocalizer[SharedResourcesKey.NotFound]);
             }
-            var Response = await _PartOfScheduleService.GetScheduleBySectionIdAsync(request.Id);
-            return Response != null ? Success(Response) : NotFound<List<GetPartsOfScheduleResponse>>(_stringLocalizer[SharedResourcesKey.NotFound]);
+            var Response = await _PartOfScheduleService.GetSectionScheduleByIdAsync(request.Id);
+            return Response != null ? Success(Response) : NotFound<List<GetPartsOfStudentScheduleResponse>>(_stringLocalizer[SharedResourcesKey.NotFound]);
         }
 
-        public async Task<Response<List<GetPartsOfScheduleResponse>>> Handle(GetScheduleByStudentIdQuery request, CancellationToken cancellationToken)
+        public async Task<Response<List<GetPartsOfTeacherScheduleResponse>>> Handle(GetScheduleByTeacherIdQuery request, CancellationToken cancellationToken)
+        {
+            if (!await _TeacherService.IsIdExistAsync(request.TeacherId))
+            {
+                return NotFound<List<GetPartsOfTeacherScheduleResponse>>(_stringLocalizer[SharedResourcesKey.NotFound]);
+            }
+            var Response = await _PartOfScheduleService.GetTeacherScheduleByIdAsync(request.TeacherId);
+            return Response != null ? Success(Response) : NotFound<List<GetPartsOfTeacherScheduleResponse>>(_stringLocalizer[SharedResourcesKey.NotFound]);
+        }
+
+        public async Task<Response<List<GetPartsOfStudentScheduleResponse>>> Handle(GetScheduleByStudentIdQuery request, CancellationToken cancellationToken)
         {
             var Student = await _StudentService.GetStudentsListIQueryable().Where(x => x.Id == request.StudentId).FirstOrDefaultAsync();
             if (Student == null || Student.SectionId == null)
             {
-                return NotFound<List<GetPartsOfScheduleResponse>>(_stringLocalizer[SharedResourcesKey.NotFound]);
+                return NotFound<List<GetPartsOfStudentScheduleResponse>>(_stringLocalizer[SharedResourcesKey.NotFound]);
             }
-            var Response = await _PartOfScheduleService.GetScheduleBySectionIdAsync((int)Student.SectionId);
-            return Response != null ? Success(Response) : NotFound<List<GetPartsOfScheduleResponse>>(_stringLocalizer[SharedResourcesKey.NotFound]);
+            var Response = await _PartOfScheduleService.GetSectionScheduleByIdAsync((int)Student.SectionId);
+            return Response != null ? Success(Response) : NotFound<List<GetPartsOfStudentScheduleResponse>>(_stringLocalizer[SharedResourcesKey.NotFound]);
         }
 
         public async Task<Response<bool?>> Handle(IsSessionAvailableQuery request, CancellationToken cancellationToken)

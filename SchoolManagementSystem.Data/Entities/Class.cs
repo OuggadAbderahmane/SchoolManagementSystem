@@ -9,8 +9,8 @@
 
         public Level Level { get; set; }
         public YearOfLevel YearOfLevel { get; set; }
-        public ICollection<Section> Sections { get; set; } = new HashSet<Section>();
-        public ICollection<Subject> Subjects { get; set; } = new HashSet<Subject>();
+        public ICollection<Section> Sections { get; set; } = new List<Section>();
+        public ICollection<Subject> Subjects { get; set; } = new List<Subject>();
     }
 
 }

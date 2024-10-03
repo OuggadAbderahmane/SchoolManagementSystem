@@ -63,24 +63,25 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "user,admin")]
         [HttpPut("ChangePassword")]
-        public async Task<IActionResult> ChangePassword(ChangePasswordCommand changePassword)
+        public async Task<IActionResult> ChangePassword(string CurrentPassword, string NewPassword)
         {
-            var response = await _mediator.Send(changePassword);
+            var Id = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "UserId").Value);
+            var response = await _mediator.Send(new ChangePasswordCommand { Id = Id, CurrentPassword = CurrentPassword, NewPassword = NewPassword });
             if (response.Succeeded)
                 return Ok(response);
             return BadRequest(response);
         }
 
-        //[HttpDelete("{Id}")]
-        //public async Task<IActionResult> DeleteUser(int Id)
-        //{
-        //    var response = await _mediator.Send(new DeleteUserCommand(Id));
-        //    if (response.Succeeded)
-        //        return Ok(response);
-        //    return BadRequest(response);
-        //}
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteUser(int Id)
+        {
+            var response = await _mediator.Send(new DeleteUserCommand(Id));
+            if (response.Succeeded)
+                return Ok(response);
+            return BadRequest(response);
+        }
         #endregion
     }
 }

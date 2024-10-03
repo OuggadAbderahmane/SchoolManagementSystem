@@ -11,7 +11,7 @@ namespace SchoolManagementSystem.Core.Features.Subjects.Commands.Handlers
 {
     public class SubjectCommandHandler : ResponseHandler, IRequestHandler<AddSubjectCommand, Response<IdResponse>>
                                                         , IRequestHandler<UpdateSubjectCommand, Response<string>>
-    //, IRequestHandler<DeleteSubjectCommand, Response<string>>
+                                                        , IRequestHandler<DeleteSubjectCommand, Response<string>>
     {
         #region Fields
         private readonly ISubjectService _subjectService;
@@ -37,14 +37,14 @@ namespace SchoolManagementSystem.Core.Features.Subjects.Commands.Handlers
             return Result ? Updated<string>() : Failed<string>();
         }
 
-        //public async Task<Response<string>> Handle(DeleteSubjectCommand request, CancellationToken cancellationToken)
-        //{
-        //    var Deleted = await _subjectService.DeleteByIdAsync(request.Id);
-        //    if (Deleted == 0)
-        //        return Failed<string>();
+        public async Task<Response<string>> Handle(DeleteSubjectCommand request, CancellationToken cancellationToken)
+        {
+            var Deleted = await _subjectService.DeleteByIdAsync(request.Id);
+            if (Deleted == 0)
+                return Failed<string>(_stringLocalizer[SharedResourcesKey.DeleteError]);
 
-        //    return Deleted<string>();
-        //}
+            return Deleted<string>();
+        }
         #endregion
     }
 }

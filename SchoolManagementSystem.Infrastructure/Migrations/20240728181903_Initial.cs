@@ -357,9 +357,9 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 1, "الابتدائي" },
-                    { 2, "المتوسط" },
-                    { 3, "الثانوي" }
+                    { 1, "ابتدائي" },
+                    { 2, "متوسط" },
+                    { 3, "ثانوي" }
                 });
 
             migrationBuilder.InsertData(

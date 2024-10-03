@@ -10,8 +10,9 @@ using SchoolManagementSystem.Service.Abstracts;
 namespace SchoolManagementSystem.Core.Features.Guardians.Commands.Handlers
 {
     public class GuardianCommandHandler : ResponseHandler, IRequestHandler<AddGuardianCommand, Response<IdResponse>>
-                                                        , IRequestHandler<AddGuardianByPersonCommand, Response<string>>
-                                                        , IRequestHandler<UpdateGuardianCommand, Response<string>>
+                                                         , IRequestHandler<AddGuardianByPersonCommand, Response<string>>
+                                                         , IRequestHandler<UpdateGuardianCommand, Response<string>>
+                                                         , IRequestHandler<DeleteGuardianCommand, Response<string>>
     {
         #region Fields
         private readonly IGuardianService _guardianService;
@@ -82,6 +83,15 @@ namespace SchoolManagementSystem.Core.Features.Guardians.Commands.Handlers
                                                                      request.Email,
                                                                      request.Phone);
             return Result ? Updated<string>() : Failed<string>();
+        }
+
+        public async Task<Response<string>> Handle(DeleteGuardianCommand request, CancellationToken cancellationToken)
+        {
+            var Deleted = await _guardianService.DeleteGuardianAsync(request.Id);
+            if (!Deleted)
+                return Failed<string>(_stringLocalizer[SharedResourcesKey.DeleteError]);
+
+            return Deleted<string>();
         }
         #endregion
     }

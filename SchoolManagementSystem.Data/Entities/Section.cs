@@ -20,7 +20,7 @@
         }
 
         public Class Class { get; set; }
-        public ICollection<Student> Students { get; set; } = new HashSet<Student>();
+        public ICollection<Student> Students { get; set; } = new List<Student>();
     }
 
 }

@@ -10,8 +10,7 @@ using SchoolManagementSystem.Service.Abstracts;
 namespace SchoolManagementSystem.Core.Features.SubjectTeachers.Commands.Handlers
 {
     public class SubjectTeacherCommandHandler : ResponseHandler, IRequestHandler<AddSubjectTeacherCommand, Response<IdResponse>>
-    //, IRequestHandler<AddSubjectTeacherByPersonCommand, Response<string>>
-    //, IRequestHandler<UpdateSubjectTeacherCommand, Response<string>>
+                                                               , IRequestHandler<DeleteSubjectTeacherCommand, Response<string>>
     {
         #region Fields
         private readonly ISubjectTeacherService _SubjectTeacherService;
@@ -28,9 +27,17 @@ namespace SchoolManagementSystem.Core.Features.SubjectTeachers.Commands.Handlers
         #region Handle Functions
         public async Task<Response<IdResponse>> Handle(AddSubjectTeacherCommand request, CancellationToken cancellationToken)
         {
-
             var Result = await _SubjectTeacherService.CreateSubjectTeacherAsync(new SubjectTeacher(request.SubjectId, request.TeacherId));
             return Result != -1 ? Created<IdResponse>(new IdResponse { Id = Result }) : Failed<IdResponse>();
+        }
+
+        public async Task<Response<string>> Handle(DeleteSubjectTeacherCommand request, CancellationToken cancellationToken)
+        {
+            var Deleted = await _SubjectTeacherService.DeleteByIdAsync(request.Id);
+            if (Deleted == 0)
+                return Failed<string>(_stringLocalizer[SharedResourcesKey.DeleteError]);
+
+            return Deleted<string>();
         }
         #endregion
     }

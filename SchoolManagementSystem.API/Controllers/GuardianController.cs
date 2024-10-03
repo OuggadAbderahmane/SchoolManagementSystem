@@ -77,6 +77,16 @@ namespace SchoolManagementSystem.API.Controllers
                 return Ok(response);
             return BadRequest(response);
         }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("Delete/{Id}")]
+        public async Task<IActionResult> DeleteGuardian(int Id)
+        {
+            var response = await _mediator.Send(new DeleteGuardianCommand(Id));
+            if (response.Succeeded)
+                return Ok(response);
+            return BadRequest(response);
+        }
         #endregion
     }
 }

@@ -12,6 +12,7 @@ namespace SchoolManagementSystem.Core.Features.Students.Commands.Handlers
     public class StudentCommandHandler : ResponseHandler, IRequestHandler<AddStudentCommand, Response<IdResponse>>
                                                         , IRequestHandler<AddStudentByPersonCommand, Response<string>>
                                                         , IRequestHandler<UpdateStudentCommand, Response<string>>
+                                                        , IRequestHandler<DeleteStudentCommand, Response<string>>
     {
         #region Fields
         private readonly IStudentService _studentService;
@@ -82,6 +83,15 @@ namespace SchoolManagementSystem.Core.Features.Students.Commands.Handlers
                                                                      request.Address,
                                                                      ImagePath);
             return Result ? Updated<string>() : Failed<string>();
+        }
+
+        public async Task<Response<string>> Handle(DeleteStudentCommand request, CancellationToken cancellationToken)
+        {
+            var Deleted = await _studentService.DeleteStudentAsync(request.Id);
+            if (!Deleted)
+                return Failed<string>(_stringLocalizer[SharedResourcesKey.DeleteError]);
+
+            return Deleted<string>();
         }
         #endregion
     }

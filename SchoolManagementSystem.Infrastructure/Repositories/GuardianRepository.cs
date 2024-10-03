@@ -46,7 +46,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                                 DateOfBirth = S.DateOfBirth,
                                             }).FirstOrDefaultAsync())!;
         }
-        public IQueryable<GetGuardianResponse> GetGuardiansListResponseAsync()
+        public IQueryable<GetGuardianResponse> GetGuardiansListResponse()
         {
             var url = _helperClass.GetSchemeHost() + '/';
             return _dbContext.Guardians.AsNoTracking().Include(g => g.Job).Select(S =>
@@ -93,18 +93,31 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                 return false;
             }
         }
-        public Task<bool> AddNewGuardianByPerson(int PersonId, int? JobId = null)
+        public async Task<bool> AddNewGuardianByPersonAsync(int PersonId, int? JobId = null)
         {
             try
             {
-                _dbContext.Database.ExecuteSql($"DECLARE @NewGuardianId INT;EXEC AddNewGuardianBaseOnPerson {PersonId}, {(JobId)} @NewGuardianId = @NewGuardianId OUTPUT");
+                await _dbContext.Database.ExecuteSqlAsync($"DECLARE @NewGuardianId INT;EXEC AddNewGuardianBaseOnPerson {PersonId}, {(JobId)} @NewGuardianId = @NewGuardianId OUTPUT");
             }
             catch
             {
-                return Task.FromResult(false);
+                return false;
             }
 
-            return Task.FromResult(true);
+            return true;
+        }
+        public async Task<bool> DeleteGuardianAsync(int Id)
+        {
+            try
+            {
+                await _dbContext.Database.ExecuteSqlAsync($"Exec dbo.DeleteGuardian {Id}");
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
         }
         #endregion
     }

@@ -11,5 +11,6 @@ namespace SchoolManagementSystem.Service.Abstracts
         public Task<bool> IsSubjectTeacherExistAsync(int Subject, int Teacher);
         public Task<int> CreateSubjectTeacherAsync(SubjectTeacher subjectTeacher);
         public IQueryable<SubjectTeacher> GetSubjectTeachersListIQueryable();
+        public Task<int> DeleteByIdAsync(int Id);
     }
 }

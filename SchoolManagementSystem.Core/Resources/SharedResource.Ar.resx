@@ -126,6 +126,9 @@
   <data name="DeletedSuccessfully" xml:space="preserve">
     <value>تم الحذف بنجاح</value>
   </data>
+  <data name="DeleteError" xml:space="preserve">
+    <value>لا يمكنك حذفه لأنه يحتوي على بيانات مرتبطة به</value>
+  </data>
   <data name="DoesNotExist" xml:space="preserve">
     <value>غير موجود</value>
   </data>

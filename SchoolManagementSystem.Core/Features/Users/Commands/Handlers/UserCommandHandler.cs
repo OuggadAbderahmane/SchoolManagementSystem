@@ -10,7 +10,7 @@ namespace SchoolManagementSystem.Core.Features.Users.Commands.Handlers
 {
     public class UserCommandHandler : ResponseHandler, IRequestHandler<AddUserCommand, Response<string>>
                                                      , IRequestHandler<UpdateUserCommand, Response<string>>
-                                                     //, IRequestHandler<DeleteUserCommand, Response<string>>
+                                                     , IRequestHandler<DeleteUserCommand, Response<string>>
                                                      , IRequestHandler<ChangePasswordCommand, Response<string>>
     {
         #region Fields
@@ -57,14 +57,14 @@ namespace SchoolManagementSystem.Core.Features.Users.Commands.Handlers
             return Updated<string>();
         }
 
-        //public async Task<Response<string>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
-        //{
-        //    var Deleted = await _userService.DeleteByIdAsync(request.Id);
-        //    if (Deleted == 0)
-        //        return Failed<string>();
+        public async Task<Response<string>> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        {
+            var Deleted = await _userService.DeleteByIdAsync(request.Id);
+            if (Deleted == 0)
+                return Failed<string>();
 
-        //    return Deleted<string>();
-        //}
+            return Deleted<string>();
+        }
 
         public async Task<Response<string>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {

@@ -41,11 +41,5 @@ namespace SchoolManagementSystem.Infrastructure.Data
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }
-
-        public string GetClassInfo(int Id)
-        {
-            var result = Database.SqlQueryRaw<string>("select dbo.GetClassInfo(@p0)", Id).AsEnumerable().FirstOrDefault();
-            return result!;
-        }
     }
 }
