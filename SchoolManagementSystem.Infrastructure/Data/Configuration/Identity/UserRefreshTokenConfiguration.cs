@@ -20,6 +20,8 @@ namespace SchoolManagementSystem.Infrastructure.Data.Configuration.Identity
             builder.Property(x => x.ExpireAt)
                 .IsRequired();
 
+            builder.HasIndex(x => x.UserId).IsUnique(false);
+
             builder.HasOne(U => U.User)
                 .WithOne(U => U.UserRefreshToken)
                 .HasForeignKey<UserRefreshToken>(x => x.UserId)

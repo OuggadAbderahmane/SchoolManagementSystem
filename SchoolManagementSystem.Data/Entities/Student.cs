@@ -8,6 +8,6 @@
 
         public Section? Section { get; set; }
         public Guardian? guardian { get; set; }
-        public ICollection<StudentEvaluation> StudentEvaluations { get; set; } = new HashSet<StudentEvaluation>();
+        public ICollection<StudentEvaluation> StudentEvaluations { get; set; } = new List<StudentEvaluation>();
     }
 }

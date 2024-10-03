@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SchoolManagementSystem.Core\SchoolManagementSystem.Core.csproj" />
-    <ProjectReference Include="..\SchoolManagementSystem.Infrastructure\SchoolManagementSystem.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
