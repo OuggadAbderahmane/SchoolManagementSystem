@@ -37,7 +37,7 @@ namespace SchoolManagementSystem.API.Controllers
         [HttpGet("GetUser")]
         public async Task<IActionResult> GetUser()
         {
-            var response = await _mediator.Send(new GetUserByNameOrIdQuery(HttpContext.User.Claims.First(claim => claim.Type == "UserName").Value));
+            var response = await _mediator.Send(new GetUserQuery());
             if (response.Succeeded)
                 return Ok(response);
             return NotFound(response);
@@ -67,8 +67,7 @@ namespace SchoolManagementSystem.API.Controllers
         [HttpPut("ChangePassword")]
         public async Task<IActionResult> ChangePassword(string CurrentPassword, string NewPassword)
         {
-            var Id = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "UserId").Value);
-            var response = await _mediator.Send(new ChangePasswordCommand { Id = Id, CurrentPassword = CurrentPassword, NewPassword = NewPassword });
+            var response = await _mediator.Send(new ChangePasswordCommand { CurrentPassword = CurrentPassword, NewPassword = NewPassword });
             if (response.Succeeded)
                 return Ok(response);
             return BadRequest(response);

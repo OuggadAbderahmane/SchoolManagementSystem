@@ -41,8 +41,7 @@ namespace SchoolManagementSystem.API.Controllers
         [HttpGet("GetStudent")]
         public async Task<IActionResult> GetStudent()
         {
-            var Id = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "PersonId").Value);
-            var response = await _mediator.Send(new GetStudentByIdQuery(Id));
+            var response = await _mediator.Send(new GetStudentQuery());
             if (response.Succeeded)
                 return Ok(response);
             return NotFound(response);

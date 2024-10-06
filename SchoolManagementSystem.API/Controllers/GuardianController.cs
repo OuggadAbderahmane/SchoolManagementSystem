@@ -41,8 +41,7 @@ namespace SchoolManagementSystem.API.Controllers
         [HttpGet("GetGuardian")]
         public async Task<IActionResult> GetGuardian()
         {
-            var Id = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "PersonId").Value);
-            var response = await _mediator.Send(new GetGuardianByIdQuery(Id));
+            var response = await _mediator.Send(new GetGuardianQuery());
             if (response.Succeeded)
                 return Ok(response);
             return NotFound(response);

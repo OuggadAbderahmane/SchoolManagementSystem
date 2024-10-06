@@ -34,8 +34,7 @@ namespace SchoolManagementSystem.API.Controllers
         [HttpGet("GetStudentSchedule")]
         public async Task<IActionResult> GetStudentSchedule()
         {
-            var Id = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "PersonId").Value);
-            var response = await _mediator.Send(new GetScheduleByStudentIdQuery(Id));
+            var response = await _mediator.Send(new GetStudentScheduleQuery());
             if (response.Succeeded)
                 return Ok(response);
             return NotFound(response);
@@ -56,8 +55,7 @@ namespace SchoolManagementSystem.API.Controllers
         [HttpGet("GetTeacherSchedule")]
         public async Task<IActionResult> GetTeacherSchedule()
         {
-            var Id = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "PersonId").Value);
-            var response = await _mediator.Send(new GetScheduleByTeacherIdQuery(Id));
+            var response = await _mediator.Send(new GetTeacherScheduleQuery());
             if (response.Succeeded)
                 return Ok(response);
             return NotFound(response);

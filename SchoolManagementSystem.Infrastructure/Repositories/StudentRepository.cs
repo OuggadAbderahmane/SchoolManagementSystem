@@ -110,7 +110,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
         {
             try
             {
-                await _dbContext.Database.ExecuteSqlAsync($"DECLARE @NewStudentId INT;EXEC AddNewStudentBaseOnPerson {PersonId}, {(SectionId)} ,{(GuardianId)} , {IsAvtive}, @NewStudentId = @NewStudentId OUTPUT");
+                await _dbContext.Database.ExecuteSqlAsync($"EXEC AddNewStudentBaseOnPerson {PersonId}, {(SectionId)} ,{(GuardianId)} , {IsAvtive}");
             }
             catch
             {

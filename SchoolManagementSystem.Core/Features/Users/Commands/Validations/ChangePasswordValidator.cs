@@ -27,10 +27,6 @@ namespace SchoolManagementSystem.Core.Features.Users.Commands.Validations
         #region Actions
         public void ApplyCustuomValidationsRules()
         {
-            RuleFor(x => x.Id)
-            .MustAsync(async (Key, CancellationToken) => await _userService.IsIdExistAsync(Key))
-            .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.DoesNotExist]);
-
             RuleFor(x => x.CurrentPassword)
             .Must((model, Key, CancellationToken) =>
             {
@@ -40,10 +36,6 @@ namespace SchoolManagementSystem.Core.Features.Users.Commands.Validations
         }
         public void ApplyValidationsRules()
         {
-            RuleFor(x => x.Id)
-                    .NotNull().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotNull])
-                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEqualsTo] + " 0");
-
             RuleFor(x => x.CurrentPassword)
                 .NotNull().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotNull])
                 .NotEmpty().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEmpty])
@@ -54,7 +46,6 @@ namespace SchoolManagementSystem.Core.Features.Users.Commands.Validations
                 .NotEmpty().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEmpty])
                 .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#()\-+=$!%*?&])[A-Za-z\d@#()\-+=$!%*?&]{8,}$")
                 .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.PasswordErrorMatch]);
-
         }
         #endregion
     }

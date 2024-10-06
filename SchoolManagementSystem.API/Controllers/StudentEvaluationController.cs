@@ -44,8 +44,7 @@ namespace SchoolManagementSystem.API.Controllers
         [HttpGet("GetGradeReport")]
         public async Task<IActionResult> GetGradeReport(int YearId, int? SemesterId)
         {
-            var studentId = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "PersonId").Value);
-            var response = await _mediator.Send(new GetGradeReportQuery(studentId, YearId, SemesterId));
+            var response = await _mediator.Send(new GetStudentGradeReportQuery(YearId, SemesterId));
             if (response.Succeeded)
                 return Ok(response);
             return NotFound(response);

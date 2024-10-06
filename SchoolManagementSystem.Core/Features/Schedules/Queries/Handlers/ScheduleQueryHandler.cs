@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Bases;
@@ -10,8 +11,9 @@ using SchoolManagementSystem.Service.Abstracts;
 namespace SchoolManagementSystem.Core.Features.PartOfSchedules.Queries.Handlers
 {
     public class ScheduleQueryHandler : ResponseHandler, IRequestHandler<GetScheduleByIdQuery, Response<List<GetPartsOfStudentScheduleResponse>>>
-                                                       , IRequestHandler<GetScheduleByStudentIdQuery, Response<List<GetPartsOfStudentScheduleResponse>>>
+                                                       , IRequestHandler<GetStudentScheduleQuery, Response<List<GetPartsOfStudentScheduleResponse>>>
                                                        , IRequestHandler<GetScheduleByTeacherIdQuery, Response<List<GetPartsOfTeacherScheduleResponse>>>
+                                                       , IRequestHandler<GetTeacherScheduleQuery, Response<List<GetPartsOfTeacherScheduleResponse>>>
                                                        , IRequestHandler<IsSessionAvailableQuery, Response<bool?>>
                                                        , IRequestHandler<IsTeacherAvailableQuery, Response<bool?>>
                                                        , IRequestHandler<IsSubjectTeacherAvailableQuery, Response<bool?>>
@@ -22,10 +24,11 @@ namespace SchoolManagementSystem.Core.Features.PartOfSchedules.Queries.Handlers
         private readonly ISectionService _SectionService;
         private readonly ITeacherService _TeacherService;
         private readonly ISubjectTeacherService _SubjectTeacherService;
+        private readonly IHttpContextAccessor _contextAccessor;
         #endregion
 
         #region Constructors
-        public ScheduleQueryHandler(IPartOfScheduleService PartOfScheduleService, ISectionService sectionService, IStringLocalizer<SharedResource> stringLocalizer, ITeacherService teacherService, ISubjectTeacherService subjectTeacherService, IStudentService studentService) : base(stringLocalizer)
+        public ScheduleQueryHandler(IPartOfScheduleService PartOfScheduleService, ISectionService sectionService, IStringLocalizer<SharedResource> stringLocalizer, ITeacherService teacherService, ISubjectTeacherService subjectTeacherService, IStudentService studentService, IHttpContextAccessor contextAccessor) : base(stringLocalizer)
 
         {
             _PartOfScheduleService = PartOfScheduleService;
@@ -33,6 +36,7 @@ namespace SchoolManagementSystem.Core.Features.PartOfSchedules.Queries.Handlers
             _SectionService = sectionService;
             _TeacherService = teacherService;
             _SubjectTeacherService = subjectTeacherService;
+            _contextAccessor = contextAccessor;
         }
         #endregion
 
@@ -57,9 +61,22 @@ namespace SchoolManagementSystem.Core.Features.PartOfSchedules.Queries.Handlers
             return Response != null ? Success(Response) : NotFound<List<GetPartsOfTeacherScheduleResponse>>(_stringLocalizer[SharedResourcesKey.NotFound]);
         }
 
-        public async Task<Response<List<GetPartsOfStudentScheduleResponse>>> Handle(GetScheduleByStudentIdQuery request, CancellationToken cancellationToken)
+        public async Task<Response<List<GetPartsOfTeacherScheduleResponse>>> Handle(GetTeacherScheduleQuery request, CancellationToken cancellationToken)
         {
-            var Student = await _StudentService.GetStudentsListIQueryable().Where(x => x.Id == request.StudentId).FirstOrDefaultAsync();
+
+            var Id = int.Parse(_contextAccessor.HttpContext!.User.Claims.First(claim => claim.Type == "PersonId").Value);
+            if (!await _TeacherService.IsIdExistAsync(Id))
+            {
+                return NotFound<List<GetPartsOfTeacherScheduleResponse>>(_stringLocalizer[SharedResourcesKey.NotFound]);
+            }
+            var Response = await _PartOfScheduleService.GetTeacherScheduleByIdAsync(Id);
+            return Response != null ? Success(Response) : NotFound<List<GetPartsOfTeacherScheduleResponse>>(_stringLocalizer[SharedResourcesKey.NotFound]);
+        }
+
+        public async Task<Response<List<GetPartsOfStudentScheduleResponse>>> Handle(GetStudentScheduleQuery request, CancellationToken cancellationToken)
+        {
+            var Id = int.Parse(_contextAccessor.HttpContext!.User.Claims.First(claim => claim.Type == "PersonId").Value);
+            var Student = await _StudentService.GetStudentsListIQueryable().Where(x => x.Id == Id).FirstOrDefaultAsync();
             if (Student == null || Student.SectionId == null)
             {
                 return NotFound<List<GetPartsOfStudentScheduleResponse>>(_stringLocalizer[SharedResourcesKey.NotFound]);

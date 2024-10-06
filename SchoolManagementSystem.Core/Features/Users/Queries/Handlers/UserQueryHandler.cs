@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Users.Queries.Models;
@@ -13,16 +14,19 @@ namespace SchoolManagementSystem.Core.Features.Users.Queries.Handlers
 {
     public class UserQueryHandler : ResponseHandler, IRequestHandler<GetUsersPaginatedListQuery, Response<PaginatedResult<GetUserResponse>>>
                                                    , IRequestHandler<GetUserByNameOrIdQuery, Response<GetUserResponse>>
+                                                   , IRequestHandler<GetUserQuery, Response<GetUserResponse>>
     //, IRequestHandler<GetUsersListQuery, Response<List<GetDepartmentsListResponse>>>
     {
         #region Fields
         private readonly IUserService _userService;
+        private readonly IHttpContextAccessor _contextAccessor;
         #endregion
 
         #region Constructors
-        public UserQueryHandler(IUserService userService, IStringLocalizer<SharedResource> stringLocalizer) : base(stringLocalizer)
+        public UserQueryHandler(IUserService userService, IStringLocalizer<SharedResource> stringLocalizer, IHttpContextAccessor contextAccessor) : base(stringLocalizer)
         {
             _userService = userService;
+            _contextAccessor = contextAccessor;
         }
         #endregion
 
@@ -45,6 +49,13 @@ namespace SchoolManagementSystem.Core.Features.Users.Queries.Handlers
                 Response = await _userService.GetUserByIdAsync(userId);
             else
                 Response = await _userService.GetUserByNameAsync(request.UserNameOrId);
+            return Response != null ? Success(Response) : NotFound<GetUserResponse>(_stringLocalizer[SharedResourcesKey.NotFound]);
+        }
+
+        public async Task<Response<GetUserResponse>> Handle(GetUserQuery request, CancellationToken cancellationToken)
+        {
+            var Id = _contextAccessor.HttpContext!.User.Claims.First(claim => claim.Type == "UserName").Value;
+            var Response = await _userService.GetUserByNameAsync(Id);
             return Response != null ? Success(Response) : NotFound<GetUserResponse>(_stringLocalizer[SharedResourcesKey.NotFound]);
         }
         #endregion

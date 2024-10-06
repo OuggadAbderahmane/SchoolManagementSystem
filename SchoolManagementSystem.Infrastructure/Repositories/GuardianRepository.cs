@@ -97,7 +97,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
         {
             try
             {
-                await _dbContext.Database.ExecuteSqlAsync($"DECLARE @NewGuardianId INT;EXEC AddNewGuardianBaseOnPerson {PersonId}, {(JobId)} @NewGuardianId = @NewGuardianId OUTPUT");
+                await _dbContext.Database.ExecuteSqlAsync($"EXEC AddNewGuardianBaseOnPerson {PersonId}, {(JobId)}");
             }
             catch
             {
