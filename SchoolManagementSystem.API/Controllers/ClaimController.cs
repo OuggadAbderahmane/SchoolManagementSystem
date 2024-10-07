@@ -22,7 +22,7 @@ namespace SchoolManagementSystem.API.Controllers
         {
             var result = await _mediator.Send(new GetUserClaimsQuery(UserNameOrId));
             if (result.Succeeded)
-                return Ok();
+                return Ok(result);
             return NotFound(result);
         }
     }

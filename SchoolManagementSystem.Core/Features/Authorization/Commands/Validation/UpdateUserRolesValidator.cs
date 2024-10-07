@@ -42,6 +42,13 @@ namespace SchoolManagementSystem.Core.Features.Authorization.Commands.Validation
             RuleForEach(x => x.RolesName)
                 .Must((Key) => Key != null)
                 .NotNull().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotNull])
+                .Must((model, Key) =>
+                {
+                    if (Key != null)
+                        return Key.ToLower() != "admin";
+                    return false;
+                })
+                .WithMessage(_stringLocalizer[SharedResourcesKey.AdminError])
                 .MustAsync(async (Key, CancellationToken) =>
                 {
                     if (Key != null)

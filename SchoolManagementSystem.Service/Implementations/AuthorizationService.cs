@@ -129,7 +129,7 @@ namespace SchoolManagementSystem.Service.Implementations
                 {
                     Type = claim.Type
                 };
-                if (userClaims.Any(x => x.Type == claim.Type))
+                if (userClaims.Any(x => x.Value == claim.Type))
                     c.Value = true;
                 else c.Value = false;
                 Claims.Claims.Add(c);
