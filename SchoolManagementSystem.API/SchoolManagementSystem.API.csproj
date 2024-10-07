@@ -4,6 +4,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>C:\C# cors\SchoolManagementSystem\SchoolManagementSystem.API\bin\Debug\net8.0\SchoolManagementSystem.Infrastructure.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

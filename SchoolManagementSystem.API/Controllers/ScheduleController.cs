@@ -5,6 +5,7 @@ using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Features.Schedules.Commands.Models;
 using SchoolManagementSystem.Core.Features.Schedules.Queries.Models;
 using SchoolManagementSystem.Core.Resources;
+using System.ComponentModel.DataAnnotations;
 
 namespace SchoolManagementSystem.API.Controllers
 {
@@ -63,7 +64,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("IsSessionAvailable")]
-        public async Task<IActionResult> IsSessionAvailable(int sectionId, sbyte day, sbyte session)
+        public async Task<IActionResult> IsSessionAvailable([Required] int sectionId, [Required] sbyte day, [Required] sbyte session)
         {
             var response = await _mediator.Send(new IsSessionAvailableQuery(sectionId, day, session));
             if (response.Succeeded)
@@ -73,7 +74,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("IsTeacherAvailable")]
-        public async Task<IActionResult> IsTeacherAvailable(int teacherId, sbyte day, sbyte session)
+        public async Task<IActionResult> IsTeacherAvailable([Required] int teacherId, [Required] sbyte day, [Required] sbyte session)
         {
             var response = await _mediator.Send(new IsTeacherAvailableQuery(teacherId, day, session));
             if (response.Succeeded)
@@ -83,7 +84,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("IsSubjectTeacherAvailable")]
-        public async Task<IActionResult> IsSubjectTeacherAvailable(int subjectTeacherId, sbyte day, sbyte session)
+        public async Task<IActionResult> IsSubjectTeacherAvailable([Required] int subjectTeacherId, [Required] sbyte day, [Required] sbyte session)
         {
             var response = await _mediator.Send(new IsSubjectTeacherAvailableQuery(subjectTeacherId, day, session));
             if (response.Succeeded)
@@ -123,7 +124,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("DeletePartOfSchedule")]
-        public async Task<IActionResult> DeleteSchedule(int SectionId, sbyte Day, sbyte Session)
+        public async Task<IActionResult> DeleteSchedule([Required] int SectionId, [Required] sbyte Day, [Required] sbyte Session)
         {
             var response = await _mediator.Send(new DeletePartOfScheduleCommand(SectionId, Day, Session));
             if (response.Succeeded)

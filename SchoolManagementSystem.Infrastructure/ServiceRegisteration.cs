@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using SchoolManagementSystem.Data.Entities.Identity;
 using SchoolManagementSystem.Data.Helper;
 using SchoolManagementSystem.Infrastructure.Data;
+using System.Reflection;
 using System.Text;
 
 namespace SchoolManagementSystem.Infrastructure
@@ -14,6 +16,39 @@ namespace SchoolManagementSystem.Infrastructure
     {
         public static IServiceCollection AddServiceRegisteration(this IServiceCollection services, IConfiguration Configuration)
         {
+
+            #region Swagger
+            services.AddSwaggerGen(options =>
+            {
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"));
+                options.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "Enter the Bearer Authorization : `Bearer Generated-JWT-Token`",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        },
+                        In = ParameterLocation.Header,
+                        Name = "Bearer"
+                    },new string[] {}
+                    }
+                });
+            });
+
+            #endregion
+
             #region Identity
             services.AddIdentity<User, Role>(option =>
             {

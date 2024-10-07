@@ -9,7 +9,6 @@ namespace SchoolManagementSystem.Core.Features.Guardians.Commands.Models
         {
             Id = id;
         }
-
         public int Id { get; set; }
     }
 }

@@ -33,6 +33,10 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
+
+        /// <summary>
+        /// Only Users have user Role can use it
+        /// </summary>
         [Authorize(Roles = "user")]
         [HttpGet("GetUser")]
         public async Task<IActionResult> GetUser()
@@ -63,6 +67,9 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
+        /// <summary>
+        /// Both user and admin can change his own password
+        /// </summary>
         [Authorize(Roles = "user,admin")]
         [HttpPut("ChangePassword")]
         public async Task<IActionResult> ChangePassword(string CurrentPassword, string NewPassword)

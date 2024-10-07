@@ -5,6 +5,7 @@ using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Features.StudentsEvaluations.Commands.Models;
 using SchoolManagementSystem.Core.Features.StudentsEvaluations.Queries.Models;
 using SchoolManagementSystem.Core.Resources;
+using System.ComponentModel.DataAnnotations;
 
 namespace SchoolManagementSystem.API.Controllers
 {
@@ -31,7 +32,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("GetGradeReportByStudentId")]
-        public async Task<IActionResult> GetGradeReportByStudentId(int StudentId, int YearId, int? SemesterId)
+        public async Task<IActionResult> GetGradeReportByStudentId([Required] int StudentId, [Required] int YearId, int? SemesterId)
         {
             var response = await _mediator.Send(new GetGradeReportQuery(StudentId, YearId, SemesterId));
             if (response.Succeeded)
@@ -42,7 +43,7 @@ namespace SchoolManagementSystem.API.Controllers
         [Authorize(policy: "StudentOnly")]
         [Authorize(Roles = "user")]
         [HttpGet("GetGradeReport")]
-        public async Task<IActionResult> GetGradeReport(int YearId, int? SemesterId)
+        public async Task<IActionResult> GetGradeReport([Required] int YearId, int? SemesterId)
         {
             var response = await _mediator.Send(new GetStudentGradeReportQuery(YearId, SemesterId));
             if (response.Succeeded)

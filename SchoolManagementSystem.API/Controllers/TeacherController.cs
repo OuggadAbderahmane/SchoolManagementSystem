@@ -36,6 +36,9 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
+        /// <summary>
+        /// Only Users have Teacher claim can use it
+        /// </summary>
         [Authorize(policy: "TeacherOnly")]
         [Authorize(Roles = "user")]
         [HttpGet("GetTeacher")]
@@ -57,6 +60,9 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
+        /// <summary>
+        /// If you have a person that already exists and want to make it Guardian
+        /// </summary>
         [Authorize(Roles = "admin")]
         [HttpPost("AddByExistPerson")]
         public async Task<IActionResult> AddTeacherByExistPerson(AddTeacherByPersonCommand addTeacher)
