@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Authorization.Commands.Models;
 using SchoolManagementSystem.Core.Features.Authorization.Queries.Models;
+using SchoolManagementSystem.Data.Responses;
 
 namespace SchoolManagementSystem.API.Controllers
 {
@@ -17,7 +19,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
         [HttpGet("getUserRoles")]
-        public async Task<IActionResult> getUserRoleById(string UserNameOrId)
+        public async Task<ActionResult<Response<GetUserRolesResponse>>> getUserRoleById(string UserNameOrId)
         {
             var result = await _mediator.Send(new GetUserRolesQuery(UserNameOrId));
             if (result.Succeeded)
@@ -26,7 +28,7 @@ namespace SchoolManagementSystem.API.Controllers
         }
 
         [HttpPut("UpdateUserRoles")]
-        public async Task<IActionResult> UpdateUserRolesAsync(UpdateUserRolesCommand updateUserRoles)
+        public async Task<ActionResult<Response<string>>> UpdateUserRolesAsync(UpdateUserRolesCommand updateUserRoles)
         {
             await _mediator.Send(updateUserRoles);
             return Ok("Updated Successfully");

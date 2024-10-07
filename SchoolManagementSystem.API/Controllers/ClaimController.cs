@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Authorization.Queries.Models;
+using SchoolManagementSystem.Data.Responses;
 
 namespace SchoolManagementSystem.API.Controllers
 {
@@ -16,7 +18,7 @@ namespace SchoolManagementSystem.API.Controllers
 
 
         [HttpGet("getUserClaims")]
-        public async Task<IActionResult> getUserClaimsById(string UserNameOrId)
+        public async Task<ActionResult<Response<GetUserClaimsResponse>>> getUserClaimsById(string UserNameOrId)
         {
             var result = await _mediator.Send(new GetUserClaimsQuery(UserNameOrId));
             if (result.Succeeded)

@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Authentication.Commands.Models;
+using SchoolManagementSystem.Data.Helper;
 
 namespace SchoolManagementSystem.API.Controllers
 {
@@ -14,7 +16,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
         [HttpPost("ByUserName")]
-        public async Task<IActionResult> SignInByUserNameAsync(SignInByUserNameCommand UserInfo)
+        public async Task<ActionResult<Response<JwtAuthResult>>> SignInByUserNameAsync(SignInByUserNameCommand UserInfo)
         {
             var response = await _mediator.Send(UserInfo);
             if (response.Succeeded)
@@ -23,7 +25,7 @@ namespace SchoolManagementSystem.API.Controllers
         }
 
         [HttpPost("RefreshAccessToken")]
-        public async Task<IActionResult> RefreshAccessTokenAsync(RefreshTokenCommand RefreshToken)
+        public async Task<ActionResult<Response<string>>> RefreshAccessTokenAsync(RefreshTokenCommand RefreshToken)
         {
             var response = await _mediator.Send(RefreshToken);
             if (response.Succeeded)

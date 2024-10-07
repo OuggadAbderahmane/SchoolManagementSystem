@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.StudentsEvaluations.Commands.Models;
 using SchoolManagementSystem.Core.Features.StudentsEvaluations.Queries.Models;
 using SchoolManagementSystem.Core.Resources;
+using SchoolManagementSystem.Data.Responses;
 using System.ComponentModel.DataAnnotations;
 
 namespace SchoolManagementSystem.API.Controllers
@@ -22,7 +24,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetStudentEvaluationById(int Id)
+        public async Task<ActionResult<Response<GetStudentEvaluationResponse>>> GetStudentEvaluationById(int Id)
         {
             var response = await _mediator.Send(new GetStudentEvaluationByIdQuery(Id));
             if (response.Succeeded)
@@ -32,7 +34,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("GetGradeReportByStudentId")]
-        public async Task<IActionResult> GetGradeReportByStudentId([Required] int StudentId, [Required] int YearId, int? SemesterId)
+        public async Task<ActionResult<Response<List<GetGradeReport>>>> GetGradeReportByStudentId([Required] int StudentId, [Required] int YearId, int? SemesterId)
         {
             var response = await _mediator.Send(new GetGradeReportQuery(StudentId, YearId, SemesterId));
             if (response.Succeeded)
@@ -43,7 +45,7 @@ namespace SchoolManagementSystem.API.Controllers
         [Authorize(policy: "StudentOnly")]
         [Authorize(Roles = "user")]
         [HttpGet("GetGradeReport")]
-        public async Task<IActionResult> GetGradeReport([Required] int YearId, int? SemesterId)
+        public async Task<ActionResult<Response<List<GetGradeReport>>>> GetGradeReport([Required] int YearId, int? SemesterId)
         {
             var response = await _mediator.Send(new GetStudentGradeReportQuery(YearId, SemesterId));
             if (response.Succeeded)
@@ -63,7 +65,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPut]
-        public async Task<IActionResult> UpdateStudentEvaluation(UpdateStudentEvaluationCommand updateStudentEvaluation)
+        public async Task<ActionResult<Response<string>>> UpdateStudentEvaluation(UpdateStudentEvaluationCommand updateStudentEvaluation)
         {
             var response = await _mediator.Send(updateStudentEvaluation);
             if (response.Succeeded)
@@ -74,7 +76,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteStudentEvaluation(int Id)
+        public async Task<ActionResult<Response<string>>> DeleteStudentEvaluation(int Id)
         {
             var response = await _mediator.Send(new DeleteStudentEvaluationCommand(Id));
             if (response.Succeeded)

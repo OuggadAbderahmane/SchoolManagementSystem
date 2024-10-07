@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Guardians.Commands.Models;
 using SchoolManagementSystem.Core.Features.Guardians.Queries.Models;
 using SchoolManagementSystem.Core.Resources;
+using SchoolManagementSystem.Data.Responses;
 
 namespace SchoolManagementSystem.API.Controllers
 {
@@ -21,14 +23,14 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet]
-        public async Task<IActionResult> GetGuardiansPaginatedList(int? pageNumber, int? pageSize)
+        public async Task<ActionResult<Response<PaginatedResult<GetGuardianResponse>>>> GetGuardiansPaginatedList(int? pageNumber, int? pageSize)
         {
             return Ok(await _mediator.Send(new GetGuardiansPaginatedListQuery(pageNumber, pageSize)));
         }
 
         [Authorize(Roles = "admin")]
         [HttpGet("GetGuardianById/{Id}")]
-        public async Task<IActionResult> GetGuardianById(int Id)
+        public async Task<ActionResult<Response<GetAllGuardianInfoResponse>>> GetGuardianById(int Id)
         {
             var response = await _mediator.Send(new GetGuardianByIdQuery(Id));
             if (response.Succeeded)
@@ -42,7 +44,7 @@ namespace SchoolManagementSystem.API.Controllers
         [Authorize(policy: "GuardianOnly")]
         [Authorize(Roles = "user")]
         [HttpGet("GetGuardian")]
-        public async Task<IActionResult> GetGuardian()
+        public async Task<ActionResult<Response<GetAllGuardianInfoResponse>>> GetGuardian()
         {
             var response = await _mediator.Send(new GetGuardianQuery());
             if (response.Succeeded)
@@ -52,7 +54,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost("Add")]
-        public async Task<IActionResult> AddGuardian(AddGuardianCommand addGuardian)
+        public async Task<ActionResult<Response<IdResponse>>> AddGuardian(AddGuardianCommand addGuardian)
         {
             var response = await _mediator.Send(addGuardian);
             if (response.Succeeded)
@@ -65,7 +67,7 @@ namespace SchoolManagementSystem.API.Controllers
         /// </summary>
         [Authorize(Roles = "admin")]
         [HttpPost("AddByExistPerson")]
-        public async Task<IActionResult> AddGuardianByExistPerson(AddGuardianByPersonCommand addGuardian)
+        public async Task<ActionResult<Response<string>>> AddGuardianByExistPerson(AddGuardianByPersonCommand addGuardian)
         {
             var response = await _mediator.Send(addGuardian);
             if (response.Succeeded)
@@ -75,7 +77,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPut("Update")]
-        public async Task<IActionResult> UpdateGuardian(UpdateGuardianCommand updateGuardian)
+        public async Task<ActionResult<Response<string>>> UpdateGuardian(UpdateGuardianCommand updateGuardian)
         {
             var response = await _mediator.Send(updateGuardian);
             if (response.Succeeded)
@@ -85,7 +87,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("Delete/{Id}")]
-        public async Task<IActionResult> DeleteGuardian(int Id)
+        public async Task<ActionResult<Response<string>>> DeleteGuardian(int Id)
         {
             var response = await _mediator.Send(new DeleteGuardianCommand(Id));
             if (response.Succeeded)

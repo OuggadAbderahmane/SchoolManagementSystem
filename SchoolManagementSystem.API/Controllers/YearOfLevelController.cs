@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.YearOfLevels.Queries.Models;
+using SchoolManagementSystem.Data.Responses;
 
 namespace SchoolManagementSystem.API.Controllers
 {
@@ -17,13 +19,13 @@ namespace SchoolManagementSystem.API.Controllers
         #region Handle Functions
 
         [HttpGet("List")]
-        public async Task<IActionResult> GetYearOfLevelsList()
+        public async Task<ActionResult<Response<List<GetYearOfLevelResponse>>>> GetYearOfLevelsList()
         {
             return Ok(await _mediator.Send(new GetYearOfLevelsListQuery()));
         }
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetYearOfLevelById(int Id)
+        public async Task<ActionResult<Response<GetYearOfLevelResponse>>> GetYearOfLevelById(int Id)
         {
             var response = await _mediator.Send(new GetYearOfLevelByIdQuery(Id));
             if (response.Succeeded)

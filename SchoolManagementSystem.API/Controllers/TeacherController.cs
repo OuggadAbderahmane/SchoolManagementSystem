@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Teachers.Commands.Models;
 using SchoolManagementSystem.Core.Features.Teachers.Queries.Models;
 using SchoolManagementSystem.Core.Resources;
+using SchoolManagementSystem.Data.Responses;
 
 namespace SchoolManagementSystem.API.Controllers
 {
@@ -21,14 +23,14 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet]
-        public async Task<IActionResult> GetTeachersPaginatedList(int? pageNumber, int? pageSize)
+        public async Task<ActionResult<Response<PaginatedResult<GetTeacherResponse>>>> GetTeachersPaginatedList(int? pageNumber, int? pageSize)
         {
             return Ok(await _mediator.Send(new GetTeachersPaginatedListQuery(pageNumber, pageSize)));
         }
 
         [Authorize(Roles = "admin")]
         [HttpGet("GetTeacherById/{Id}")]
-        public async Task<IActionResult> GetTeacherById(int Id)
+        public async Task<ActionResult<Response<GetAllTeacherInfoResponse>>> GetTeacherById(int Id)
         {
             var response = await _mediator.Send(new GetTeacherByIdQuery(Id));
             if (response.Succeeded)
@@ -52,7 +54,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost("Add")]
-        public async Task<IActionResult> AddTeacher(AddTeacherCommand addTeacher)
+        public async Task<ActionResult<Response<GetAllTeacherInfoResponse>>> AddTeacher(AddTeacherCommand addTeacher)
         {
             var response = await _mediator.Send(addTeacher);
             if (response.Succeeded)
@@ -65,7 +67,7 @@ namespace SchoolManagementSystem.API.Controllers
         /// </summary>
         [Authorize(Roles = "admin")]
         [HttpPost("AddByExistPerson")]
-        public async Task<IActionResult> AddTeacherByExistPerson(AddTeacherByPersonCommand addTeacher)
+        public async Task<ActionResult<Response<string>>> AddTeacherByExistPerson(AddTeacherByPersonCommand addTeacher)
         {
             var response = await _mediator.Send(addTeacher);
             if (response.Succeeded)
@@ -75,7 +77,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPut("Update")]
-        public async Task<IActionResult> UpdateTeacher(UpdateTeacherCommand updateTeacher)
+        public async Task<ActionResult<Response<string>>> UpdateTeacher(UpdateTeacherCommand updateTeacher)
         {
             var response = await _mediator.Send(updateTeacher);
             if (response.Succeeded)
@@ -85,7 +87,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("Delete/{Id}")]
-        public async Task<IActionResult> DeleteTeacher(int Id)
+        public async Task<ActionResult<Response<string>>> DeleteTeacher(int Id)
         {
             var response = await _mediator.Send(new DeleteTeacherCommand(Id));
             if (response.Succeeded)
