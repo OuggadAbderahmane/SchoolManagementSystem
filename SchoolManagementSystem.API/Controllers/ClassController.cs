@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Classes.Queries.Models;
+using SchoolManagementSystem.Data.Responses;
 
 namespace SchoolManagementSystem.API.Controllers
 {
@@ -17,14 +19,14 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("List")]
-        public async Task<IActionResult> GetClassesList()
+        public async Task<ActionResult<Response<List<GetClassResponse>>>> GetClassesList()
         {
             return Ok(await _mediator.Send(new GetClassesListQuery()));
         }
 
         [Authorize(Roles = "admin")]
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetClassById(int Id)
+        public async Task<ActionResult<Response<GetClassResponse>>> GetClassById(int Id)
         {
             var response = await _mediator.Send(new GetClassByIdQuery(Id));
             if (response.Succeeded)

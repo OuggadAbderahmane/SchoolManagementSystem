@@ -50,7 +50,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
         public async Task<GetPersonResponse> GetPersonByIdAsync(int Id)
         {
             var url = _helperClass.GetSchemeHost() + '/';
-            return await _dbContext.People.AsNoTracking().Where(S => S.Id == Id).Select(S =>
+            return (await _dbContext.People.AsNoTracking().Where(S => S.Id == Id).Select(S =>
                                             new GetPersonResponse
                                             {
                                                 Id = S.Id,
@@ -59,7 +59,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                                 LastName = S.LastName,
                                                 Gender = S.Gender ? "Male" : "Female",
                                                 ImagePath = S.ImagePath != null ? url + S.ImagePath : null,
-                                            }).FirstAsync();
+                                            }).FirstOrDefaultAsync())!;
         }
 
         public bool UpdatePersonByQuery(int PersonId, string? NationalCardNumber = null, string? FirstName = null, string? LastName = null, bool? Gender = null,

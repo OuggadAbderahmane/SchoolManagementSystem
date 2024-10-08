@@ -5,10 +5,10 @@ namespace SchoolManagementSystem.Core.Features.Schedules.Commands.Models
 {
     public class UpdatePartOfScheduleCommand : IRequest<Response<string>>
     {
-        public int SectionId { get; set; }
-        public sbyte Day { get; set; }
-        public sbyte Session { get; set; }
-        public int SubjectTeacherId { get; set; }
+        public required int SectionId { get; set; }
+        public required sbyte Day { get; set; }
+        public required sbyte Session { get; set; }
+        public required int SubjectTeacherId { get; set; }
 
     }
 }

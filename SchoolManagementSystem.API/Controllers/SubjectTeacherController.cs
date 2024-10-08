@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.SubjectTeachers.Commands.Models;
 using SchoolManagementSystem.Core.Features.SubjectTeachers.Queries.Models;
 using SchoolManagementSystem.Core.Resources;
+using SchoolManagementSystem.Data.Responses;
 
 namespace SchoolManagementSystem.API.Controllers
 {
@@ -20,13 +22,13 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
         [HttpGet]
-        public async Task<IActionResult> GetSubjectTeachersPaginatedList(int? pageNumber, int? pageSize)
+        public async Task<ActionResult<Response<PaginatedResult<GetSubjectTeacherResponse>>>> GetSubjectTeachersPaginatedList(int? pageNumber, int? pageSize)
         {
             return Ok(await _mediator.Send(new GetSubjectTeachersPaginatedListQuery(pageNumber, pageSize)));
         }
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetSubjectTeacherById(int Id)
+        public async Task<ActionResult<Response<GetSubjectTeacherResponse>>> GetSubjectTeacherById(int Id)
         {
             var response = await _mediator.Send(new GetSubjectTeacherByIdQuery(Id));
             if (response.Succeeded)
@@ -35,7 +37,7 @@ namespace SchoolManagementSystem.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddSubjectTeacher(AddSubjectTeacherCommand addSubjectTeacher)
+        public async Task<ActionResult<Response<IdResponse>>> AddSubjectTeacher(AddSubjectTeacherCommand addSubjectTeacher)
         {
             var response = await _mediator.Send(addSubjectTeacher);
             if (response.Succeeded)
@@ -46,7 +48,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteSubjectTeacher(int Id)
+        public async Task<ActionResult<Response<string>>> DeleteSubjectTeacher(int Id)
         {
             var response = await _mediator.Send(new DeleteSubjectTeacherCommand(Id));
             if (response.Succeeded)

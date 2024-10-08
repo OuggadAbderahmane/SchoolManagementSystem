@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Years.Commands.Models;
 using SchoolManagementSystem.Core.Features.Years.Queries.Models;
 using SchoolManagementSystem.Core.Resources;
+using SchoolManagementSystem.Data.Responses;
 
 namespace SchoolManagementSystem.API.Controllers
 {
@@ -20,13 +22,13 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
         [HttpGet("PaginatedList")]
-        public async Task<IActionResult> GetYearsPaginatedList(int? pageNumber, int? pageSize)
+        public async Task<ActionResult<Response<PaginatedResult<GetYearResponse>>>> GetYearsPaginatedList(int? pageNumber, int? pageSize)
         {
             return Ok(await _mediator.Send(new GetYearsPaginatedListQuery(pageNumber, pageSize)));
         }
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetYearById(int Id)
+        public async Task<ActionResult<Response<GetYearResponse>>> GetYearById(int Id)
         {
             var response = await _mediator.Send(new GetYearByIdQuery(Id));
             if (response.Succeeded)
@@ -34,7 +36,7 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
         [HttpPost]
-        public async Task<IActionResult> AddYear(AddYearCommand addYear)
+        public async Task<ActionResult<Response<IdResponse>>> AddYear(AddYearCommand addYear)
         {
             var response = await _mediator.Send(addYear);
             if (response.Succeeded)
@@ -42,7 +44,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
         [HttpPut]
-        public async Task<IActionResult> UpdateYear(UpdateYearCommand updateYear)
+        public async Task<ActionResult<Response<string>>> UpdateYear(UpdateYearCommand updateYear)
         {
             var response = await _mediator.Send(updateYear);
             if (response.Succeeded)
@@ -52,7 +54,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteYear(int Id)
+        public async Task<ActionResult<Response<string>>> DeleteYear(int Id)
         {
             var response = await _mediator.Send(new DeleteYearCommand(Id));
             if (response.Succeeded)

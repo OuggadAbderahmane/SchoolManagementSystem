@@ -7,11 +7,11 @@ namespace SchoolManagementSystem.Core.Features.Guardians.Commands.Models
 {
     public class AddGuardianCommand : IRequest<Response<IdResponse>>
     {
-        public string NationalCardNumber { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Gender { get; set; }
-        public int JobId { get; set; }
+        public required string NationalCardNumber { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public required string Gender { get; set; }
+        public required int JobId { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string? Email { get; set; }
         public string? Phone { get; set; }

@@ -5,8 +5,8 @@ namespace SchoolManagementSystem.Core.Features.Teachers.Commands.Models
 {
     public class AddTeacherByPersonCommand : IRequest<Response<string>>
     {
-        public int Id { get; set; }
-        public decimal Salary { get; set; }
-        public bool PermanentWork { get; set; }
+        public required int Id { get; set; }
+        public required decimal Salary { get; set; }
+        public required bool PermanentWork { get; set; }
     }
 }

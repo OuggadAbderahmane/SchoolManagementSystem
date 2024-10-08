@@ -7,15 +7,15 @@ namespace SchoolManagementSystem.Core.Features.Students.Commands.Models
 {
     public class AddStudentCommand : IRequest<Response<IdResponse>>
     {
-        public string NationalCardNumber { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Gender { get; set; }
+        public required string NationalCardNumber { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public required string Gender { get; set; }
         public int? SectionId { get; set; }
         public int? GuardianId { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public required DateTime DateOfBirth { get; set; }
         public string? Address { get; set; }
         public IFormFile? ImagePath { get; set; }
-        public bool IsAvtive { get; set; }
+        public required bool IsAvtive { get; set; }
     }
 }

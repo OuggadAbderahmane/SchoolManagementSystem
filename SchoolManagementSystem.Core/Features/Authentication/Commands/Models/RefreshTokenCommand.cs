@@ -5,6 +5,6 @@ namespace SchoolManagementSystem.Core.Features.Authentication.Commands.Models
 {
     public class RefreshTokenCommand : IRequest<Response<string>>
     {
-        public string RefreshToken { get; set; }
+        public required string RefreshToken { get; set; }
     }
 }

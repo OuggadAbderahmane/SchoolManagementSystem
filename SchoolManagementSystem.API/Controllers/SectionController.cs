@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Sections.Commands.Models;
 using SchoolManagementSystem.Core.Features.Sections.Queries.Models;
 using SchoolManagementSystem.Core.Resources;
+using SchoolManagementSystem.Data.Responses;
 
 namespace SchoolManagementSystem.API.Controllers
 {
@@ -21,21 +23,21 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("List")]
-        public async Task<IActionResult> GetSectionsList()
+        public async Task<ActionResult<Response<List<GetSectionResponse>>>> GetSectionsList()
         {
             return Ok(await _mediator.Send(new GetSectionsListQuery()));
         }
 
         [Authorize(Roles = "admin")]
         [HttpGet("PaginatedList")]
-        public async Task<IActionResult> GetSectionsPaginatedList(int? pageNumber, int? pageSize)
+        public async Task<ActionResult<Response<PaginatedResult<GetSectionResponse>>>> GetSectionsPaginatedList(int? pageNumber, int? pageSize)
         {
             return Ok(await _mediator.Send(new GetSectionsPaginatedListQuery(pageNumber, pageSize)));
         }
 
         [Authorize(Roles = "admin")]
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetSectionById(int Id)
+        public async Task<ActionResult<Response<GetSectionResponse>>> GetSectionById(int Id)
         {
             var response = await _mediator.Send(new GetSectionByIdQuery(Id));
             if (response.Succeeded)
@@ -45,7 +47,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost]
-        public async Task<IActionResult> AddSection(AddSectionCommand addSection)
+        public async Task<ActionResult<Response<IdResponse>>> AddSection(AddSectionCommand addSection)
         {
             var response = await _mediator.Send(addSection);
             if (response.Succeeded)
@@ -55,7 +57,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPut]
-        public async Task<IActionResult> UpdateSection(UpdateSectionCommand updateSection)
+        public async Task<ActionResult<Response<string>>> UpdateSection(UpdateSectionCommand updateSection)
         {
             var response = await _mediator.Send(updateSection);
             if (response.Succeeded)
@@ -65,7 +67,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteSection(int Id)
+        public async Task<ActionResult<Response<string>>> DeleteSection(int Id)
         {
             var response = await _mediator.Send(new DeleteSectionCommand(Id));
             if (response.Succeeded)

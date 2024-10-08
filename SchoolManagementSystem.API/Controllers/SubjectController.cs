@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Subjects.Commands.Models;
 using SchoolManagementSystem.Core.Features.Subjects.Queries.Models;
 using SchoolManagementSystem.Core.Resources;
+using SchoolManagementSystem.Data.Responses;
 
 namespace SchoolManagementSystem.API.Controllers
 {
@@ -20,19 +22,19 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
         [HttpGet("List")]
-        public async Task<IActionResult> GetSubjectsList()
+        public async Task<ActionResult<Response<List<GetSubjectResponse>>>> GetSubjectsList()
         {
             return Ok(await _mediator.Send(new GetSubjectsListQuery()));
         }
 
         [HttpGet("PaginatedList")]
-        public async Task<IActionResult> GetSubjectsPaginatedList(int? pageNumber, int? pageSize)
+        public async Task<ActionResult<Response<PaginatedResult<GetSubjectResponse>>>> GetSubjectsPaginatedList(int? pageNumber, int? pageSize)
         {
             return Ok(await _mediator.Send(new GetSubjectsPaginatedListQuery(pageNumber, pageSize)));
         }
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetSubjectById(int Id)
+        public async Task<ActionResult<Response<GetSubjectResponse>>> GetSubjectById(int Id)
         {
             var response = await _mediator.Send(new GetSubjectByIdQuery(Id));
             if (response.Succeeded)
@@ -41,7 +43,7 @@ namespace SchoolManagementSystem.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddSubject(AddSubjectCommand addSubject)
+        public async Task<ActionResult<Response<IdResponse>>> AddSubject(AddSubjectCommand addSubject)
         {
             var response = await _mediator.Send(addSubject);
             if (response.Succeeded)
@@ -60,7 +62,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteSubject(int Id)
+        public async Task<ActionResult<Response<string>>> DeleteSubject(int Id)
         {
             var response = await _mediator.Send(new DeleteSubjectCommand(Id));
             if (response.Succeeded)

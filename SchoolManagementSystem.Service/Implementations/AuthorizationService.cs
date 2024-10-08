@@ -104,13 +104,13 @@ namespace SchoolManagementSystem.Service.Implementations
 
         public async Task<GetUserClaimsResponse> GetUserClaimsResponseAsync(int userId)
         {
-            User user = await _userManager.Users.FirstAsync(x => x.Id == userId);
+            User user = (await _userManager.Users.FirstOrDefaultAsync(x => x.Id == userId))!;
             return await GetUserClaimsResponseAsync(user);
         }
 
         public async Task<GetUserClaimsResponse> GetUserClaimsResponseAsync(string userName)
         {
-            User user = await _userManager.Users.FirstAsync(x => x.UserName == userName);
+            User user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == userName);
             return await GetUserClaimsResponseAsync(user);
         }
 
@@ -129,7 +129,7 @@ namespace SchoolManagementSystem.Service.Implementations
                 {
                     Type = claim.Type
                 };
-                if (userClaims.Any(x => x.Type == claim.Type))
+                if (userClaims.Any(x => x.Value == claim.Type))
                     c.Value = true;
                 else c.Value = false;
                 Claims.Claims.Add(c);

@@ -2,9 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Schedules.Commands.Models;
 using SchoolManagementSystem.Core.Features.Schedules.Queries.Models;
 using SchoolManagementSystem.Core.Resources;
+using SchoolManagementSystem.Data.Responses;
+using System.ComponentModel.DataAnnotations;
 
 namespace SchoolManagementSystem.API.Controllers
 {
@@ -21,7 +24,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("GetSectionScheduleById/{Id}")]
-        public async Task<IActionResult> GetSectionScheduleById(int Id)
+        public async Task<ActionResult<Response<List<GetPartsOfStudentScheduleResponse>>>> GetSectionScheduleById(int Id)
         {
             var response = await _mediator.Send(new GetScheduleByIdQuery(Id));
             if (response.Succeeded)
@@ -32,10 +35,9 @@ namespace SchoolManagementSystem.API.Controllers
         [Authorize(policy: "StudentOnly")]
         [Authorize(Roles = "user")]
         [HttpGet("GetStudentSchedule")]
-        public async Task<IActionResult> GetStudentSchedule()
+        public async Task<ActionResult<Response<List<GetPartsOfStudentScheduleResponse>>>> GetStudentSchedule()
         {
-            var Id = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "PersonId").Value);
-            var response = await _mediator.Send(new GetScheduleByStudentIdQuery(Id));
+            var response = await _mediator.Send(new GetStudentScheduleQuery());
             if (response.Succeeded)
                 return Ok(response);
             return NotFound(response);
@@ -43,7 +45,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("GetTeacherScheduleById/{Id}")]
-        public async Task<IActionResult> GetTeacherScheduleById(int Id)
+        public async Task<ActionResult<Response<List<GetPartsOfTeacherScheduleResponse>>>> GetTeacherScheduleById(int Id)
         {
             var response = await _mediator.Send(new GetScheduleByTeacherIdQuery(Id));
             if (response.Succeeded)
@@ -54,10 +56,9 @@ namespace SchoolManagementSystem.API.Controllers
         [Authorize(policy: "TeacherOnly")]
         [Authorize(Roles = "user")]
         [HttpGet("GetTeacherSchedule")]
-        public async Task<IActionResult> GetTeacherSchedule()
+        public async Task<ActionResult<Response<List<GetPartsOfTeacherScheduleResponse>>>> GetTeacherSchedule()
         {
-            var Id = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "PersonId").Value);
-            var response = await _mediator.Send(new GetScheduleByTeacherIdQuery(Id));
+            var response = await _mediator.Send(new GetTeacherScheduleQuery());
             if (response.Succeeded)
                 return Ok(response);
             return NotFound(response);
@@ -65,7 +66,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("IsSessionAvailable")]
-        public async Task<IActionResult> IsSessionAvailable(int sectionId, sbyte day, sbyte session)
+        public async Task<ActionResult<Response<bool?>>> IsSessionAvailable([Required] int sectionId, [Required] sbyte day, [Required] sbyte session)
         {
             var response = await _mediator.Send(new IsSessionAvailableQuery(sectionId, day, session));
             if (response.Succeeded)
@@ -75,7 +76,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("IsTeacherAvailable")]
-        public async Task<IActionResult> IsTeacherAvailable(int teacherId, sbyte day, sbyte session)
+        public async Task<ActionResult<Response<bool?>>> IsTeacherAvailable([Required] int teacherId, [Required] sbyte day, [Required] sbyte session)
         {
             var response = await _mediator.Send(new IsTeacherAvailableQuery(teacherId, day, session));
             if (response.Succeeded)
@@ -85,7 +86,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet("IsSubjectTeacherAvailable")]
-        public async Task<IActionResult> IsSubjectTeacherAvailable(int subjectTeacherId, sbyte day, sbyte session)
+        public async Task<ActionResult<Response<bool?>>> IsSubjectTeacherAvailable([Required] int subjectTeacherId, [Required] sbyte day, [Required] sbyte session)
         {
             var response = await _mediator.Send(new IsSubjectTeacherAvailableQuery(subjectTeacherId, day, session));
             if (response.Succeeded)
@@ -95,7 +96,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost("AddPart")]
-        public async Task<IActionResult> AddPartOfSchedule(AddPartOfScheduleCommand addPartOfSchedule)
+        public async Task<ActionResult<Response<string>>> AddPartOfSchedule(AddPartOfScheduleCommand addPartOfSchedule)
         {
             var response = await _mediator.Send(addPartOfSchedule);
             if (response.Succeeded)
@@ -105,7 +106,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPut("UpdatePart")]
-        public async Task<IActionResult> UpdatePartOfSchedule(UpdatePartOfScheduleCommand updatePartOfSchedule)
+        public async Task<ActionResult<Response<string>>> UpdatePartOfSchedule(UpdatePartOfScheduleCommand updatePartOfSchedule)
         {
             var response = await _mediator.Send(updatePartOfSchedule);
             if (response.Succeeded)
@@ -115,7 +116,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("DeleteSchedule/{SectionId}")]
-        public async Task<IActionResult> DeleteSchedule(int SectionId)
+        public async Task<ActionResult<Response<string>>> DeleteSchedule(int SectionId)
         {
             var response = await _mediator.Send(new DeleteScheduleBySectionIdCommand(SectionId));
             if (response.Succeeded)
@@ -125,7 +126,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("DeletePartOfSchedule")]
-        public async Task<IActionResult> DeleteSchedule(int SectionId, sbyte Day, sbyte Session)
+        public async Task<ActionResult<Response<string>>> DeletePartOfSchedule([Required] int SectionId, [Required] sbyte Day, [Required] sbyte Session)
         {
             var response = await _mediator.Send(new DeletePartOfScheduleCommand(SectionId, Day, Session));
             if (response.Succeeded)

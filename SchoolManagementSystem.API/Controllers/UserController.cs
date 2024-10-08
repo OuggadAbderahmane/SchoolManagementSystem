@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Users.Commands.Models;
 using SchoolManagementSystem.Core.Features.Users.Queries.Models;
+using SchoolManagementSystem.Data.Responses;
 
 namespace SchoolManagementSystem.API.Controllers
 {
@@ -18,14 +20,14 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpGet]
-        public async Task<IActionResult> GetUsersList(int? pageNumber, int? pageSize)
+        public async Task<ActionResult<Response<PaginatedResult<GetUserResponse>>>> GetUsersList(int? pageNumber, int? pageSize)
         {
             return Ok(await _mediator.Send(new GetUsersPaginatedListQuery(pageNumber, pageSize)));
         }
 
         [Authorize(Roles = "admin")]
         [HttpGet("GetUserByNameOrId")]
-        public async Task<IActionResult> GetUserByNameOrId(string UserNameOrId)
+        public async Task<ActionResult<Response<GetUserResponse>>> GetUserByNameOrId(string UserNameOrId)
         {
             var response = await _mediator.Send(new GetUserByNameOrIdQuery(UserNameOrId));
             if (response.Succeeded)
@@ -33,11 +35,15 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
+
+        /// <summary>
+        /// Only Users have user Role can use it
+        /// </summary>
         [Authorize(Roles = "user")]
         [HttpGet("GetUser")]
-        public async Task<IActionResult> GetUser()
+        public async Task<ActionResult<Response<GetUserResponse>>> GetUser()
         {
-            var response = await _mediator.Send(new GetUserByNameOrIdQuery(HttpContext.User.Claims.First(claim => claim.Type == "UserName").Value));
+            var response = await _mediator.Send(new GetUserQuery());
             if (response.Succeeded)
                 return Ok(response);
             return NotFound(response);
@@ -45,7 +51,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPost]
-        public async Task<IActionResult> AddUser(AddUserCommand addUser)
+        public async Task<ActionResult<Response<string>>> AddUser(AddUserCommand addUser)
         {
             var response = await _mediator.Send(addUser);
             if (response.Succeeded)
@@ -55,7 +61,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpPut]
-        public async Task<IActionResult> UpdateUser(UpdateUserCommand updateUser)
+        public async Task<ActionResult<Response<string>>> UpdateUser(UpdateUserCommand updateUser)
         {
             var response = await _mediator.Send(updateUser);
             if (response.Succeeded)
@@ -63,19 +69,21 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
+        /// <summary>
+        /// Both user and admin can change his own password
+        /// </summary>
         [Authorize(Roles = "user,admin")]
         [HttpPut("ChangePassword")]
-        public async Task<IActionResult> ChangePassword(string CurrentPassword, string NewPassword)
+        public async Task<ActionResult<Response<string>>> ChangePassword(string CurrentPassword, string NewPassword)
         {
-            var Id = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "UserId").Value);
-            var response = await _mediator.Send(new ChangePasswordCommand { Id = Id, CurrentPassword = CurrentPassword, NewPassword = NewPassword });
+            var response = await _mediator.Send(new ChangePasswordCommand { CurrentPassword = CurrentPassword, NewPassword = NewPassword });
             if (response.Succeeded)
                 return Ok(response);
             return BadRequest(response);
         }
 
         [HttpDelete("{Id}")]
-        public async Task<IActionResult> DeleteUser(int Id)
+        public async Task<ActionResult<Response<string>>> DeleteUser(int Id)
         {
             var response = await _mediator.Send(new DeleteUserCommand(Id));
             if (response.Succeeded)

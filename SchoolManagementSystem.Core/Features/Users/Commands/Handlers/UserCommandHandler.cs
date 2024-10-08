@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Users.Commands.Models;
@@ -15,12 +16,14 @@ namespace SchoolManagementSystem.Core.Features.Users.Commands.Handlers
     {
         #region Fields
         private readonly IUserService _userService;
+        private readonly IHttpContextAccessor _contextAccessor;
         #endregion
 
         #region Constructors
-        public UserCommandHandler(IUserService userService, IStringLocalizer<SharedResource> stringLocalizer) : base(stringLocalizer)
+        public UserCommandHandler(IUserService userService, IStringLocalizer<SharedResource> stringLocalizer, IHttpContextAccessor contextAccessor) : base(stringLocalizer)
         {
             _userService = userService;
+            _contextAccessor = contextAccessor;
         }
         #endregion
 
@@ -68,7 +71,8 @@ namespace SchoolManagementSystem.Core.Features.Users.Commands.Handlers
 
         public async Task<Response<string>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
-            var success = await _userService.UpdateUserPasswordAsync(request.Id, request.NewPassword, request.CurrentPassword);
+            var Id = int.Parse(_contextAccessor.HttpContext!.User.Claims.First(claim => claim.Type == "UserId").Value);
+            var success = await _userService.UpdateUserPasswordAsync(Id, request.NewPassword, request.CurrentPassword);
             if (success == null)
                 return Failed<string>("Incorrect Password");
             if (!(bool)success)

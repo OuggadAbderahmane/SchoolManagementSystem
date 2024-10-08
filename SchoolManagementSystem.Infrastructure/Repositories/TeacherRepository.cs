@@ -108,7 +108,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
         {
             try
             {
-                await _dbContext.Database.ExecuteSqlAsync($"DECLARE @NewTeacherId INT;EXEC AddNewTeacherBaseOnPerson {PersonId}, {Salary} ,{IsPermanentWorkAvtive} , @NewTeacherId = @NewTeacherId OUTPUT");
+                await _dbContext.Database.ExecuteSqlAsync($"EXEC AddNewTeacherBaseOnPerson {PersonId}, {Salary} ,{IsPermanentWorkAvtive}");
             }
             catch
             {

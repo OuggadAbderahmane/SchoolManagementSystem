@@ -6,10 +6,10 @@ namespace SchoolManagementSystem.Core.Features.StudentsEvaluations.Commands.Mode
 {
     public class AddStudentEvaluationCommand : IRequest<Response<IdResponse>>
     {
-        public int StudentId { get; set; }
-        public int SubjectId { get; set; }
-        public int SemesterId { get; set; }
-        public int YearId { get; set; }
+        public required int StudentId { get; set; }
+        public required int SubjectId { get; set; }
+        public required int SemesterId { get; set; }
+        public required int YearId { get; set; }
         public double? ContinuousAssessment { get; set; }
         public double? FirstTest { get; set; }
         public double? SecondTest { get; set; }
