@@ -17,14 +17,14 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
 
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpGet("List")]
         public async Task<ActionResult<Response<List<GetClassResponse>>>> GetClassesList()
         {
             return Ok(await _mediator.Send(new GetClassesListQuery()));
         }
 
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpGet("{Id}")]
         public async Task<ActionResult<Response<GetClassResponse>>> GetClassById(int Id)
         {

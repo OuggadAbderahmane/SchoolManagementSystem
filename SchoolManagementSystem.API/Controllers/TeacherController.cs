@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Bases;
@@ -21,14 +20,14 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
 
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<ActionResult<Response<PaginatedResult<GetTeacherResponse>>>> GetTeachersPaginatedList(int? pageNumber, int? pageSize)
         {
             return Ok(await _mediator.Send(new GetTeachersPaginatedListQuery(pageNumber, pageSize)));
         }
 
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpGet("GetTeacherById/{Id}")]
         public async Task<ActionResult<Response<GetAllTeacherInfoResponse>>> GetTeacherById(int Id)
         {
@@ -41,8 +40,8 @@ namespace SchoolManagementSystem.API.Controllers
         /// <summary>
         /// Only Users have Teacher claim can use it
         /// </summary>
-        [Authorize(policy: "TeacherOnly")]
-        [Authorize(Roles = "user")]
+        //[Authorize(policy: "TeacherOnly")]
+        //[Authorize(Roles = "user")]
         [HttpGet("GetTeacher")]
         public async Task<IActionResult> GetTeacher()
         {
@@ -52,9 +51,9 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpPost("Add")]
-        public async Task<ActionResult<Response<GetAllTeacherInfoResponse>>> AddTeacher(AddTeacherCommand addTeacher)
+        public async Task<ActionResult<Response<GetAllTeacherInfoResponse>>> AddTeacher([FromForm] AddTeacherCommand addTeacher)
         {
             var response = await _mediator.Send(addTeacher);
             if (response.Succeeded)
@@ -65,7 +64,7 @@ namespace SchoolManagementSystem.API.Controllers
         /// <summary>
         /// If you have a person that already exists and want to make it Guardian
         /// </summary>
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpPost("AddByExistPerson")]
         public async Task<ActionResult<Response<string>>> AddTeacherByExistPerson(AddTeacherByPersonCommand addTeacher)
         {
@@ -75,7 +74,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpPut("Update")]
         public async Task<ActionResult<Response<string>>> UpdateTeacher(UpdateTeacherCommand updateTeacher)
         {
@@ -85,7 +84,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpDelete("Delete/{Id}")]
         public async Task<ActionResult<Response<string>>> DeleteTeacher(int Id)
         {

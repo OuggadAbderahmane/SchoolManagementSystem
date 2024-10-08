@@ -11,7 +11,7 @@ using SchoolManagementSystem.Data.Responses;
 namespace SchoolManagementSystem.API.Controllers
 {
     [Route("[controller]s")]
-    [Authorize(Roles = "admin")]
+    //[Authorize(Roles = "admin")]
     [ApiController]
     public class SubjectTeacherController(IMediator mediator, IStringLocalizer<SharedResource> stringLocalizer) : ControllerBase
     {
@@ -46,7 +46,7 @@ namespace SchoolManagementSystem.API.Controllers
         }
 
 
-        [Authorize(Roles = "admin")]
+        //[Authorize(Roles = "admin")]
         [HttpDelete("{Id}")]
         public async Task<ActionResult<Response<string>>> DeleteSubjectTeacher(int Id)
         {
