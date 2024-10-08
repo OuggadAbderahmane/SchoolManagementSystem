@@ -42,7 +42,7 @@ namespace SchoolManagementSystem.Service.Implementations
 
         public async Task<string> GetClassInfo(int Id)
         {
-            return (await _ClassRepository.GetClassInfoIQueryable().Where(x => x.Id == Id).FirstAsync()).ClassInfo;
+            return (await _ClassRepository.GetClassInfoIQueryable().Where(x => x.Id == Id).FirstOrDefaultAsync())?.ClassInfo;
         }
         #endregion
     }

@@ -23,7 +23,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
         #region Handles Functions
         public async Task<GetClassResponse> GetClassByIdAsync(int Id)
         {
-            return await GetClassInfoIQueryable().AsNoTracking().Where(x => x.Id == Id).FirstAsync();
+            return (await GetClassInfoIQueryable().AsNoTracking().Where(x => x.Id == Id).FirstOrDefaultAsync())!;
         }
 
         public async Task<List<GetClassResponse>> GetClassesListAsync()

@@ -30,7 +30,7 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
 
         public async Task<GetSectionResponse> GetSectionByIdAsync(int Id)
         {
-            return await GetSectionsListResponse().FirstAsync();
+            return (await GetSectionsListResponse().Where(x => x.Id == Id).FirstOrDefaultAsync())!;
         }
 
         public IQueryable<GetSectionResponse> GetSectionsListResponse()
