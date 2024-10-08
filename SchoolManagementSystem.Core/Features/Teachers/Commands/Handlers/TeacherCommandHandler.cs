@@ -60,7 +60,7 @@ namespace SchoolManagementSystem.Core.Features.Teachers.Commands.Handlers
         public async Task<Response<string>> Handle(AddTeacherByPersonCommand request, CancellationToken cancellationToken)
         {
             var Result = await _teacherService.CreateTeacherAsync(request.Id, request.Salary, request.PermanentWork);
-            return Result ? Created<string>(_stringLocalizer[SharedResourcesKey.Created]) : Failed<string>();
+            return Result ? Created<string>() : Failed<string>();
         }
 
         public async Task<Response<string>> Handle(UpdateTeacherCommand request, CancellationToken cancellationToken)

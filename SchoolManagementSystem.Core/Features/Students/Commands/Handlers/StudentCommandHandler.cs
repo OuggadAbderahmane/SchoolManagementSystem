@@ -59,7 +59,7 @@ namespace SchoolManagementSystem.Core.Features.Students.Commands.Handlers
         public async Task<Response<string>> Handle(AddStudentByPersonCommand request, CancellationToken cancellationToken)
         {
             var Result = await _studentService.CreateStudentAsync(request.Id, request.SectionId, request.GuardianId, request.IsAvtive);
-            return Result ? Created<string>(_stringLocalizer[SharedResourcesKey.Created]) : Failed<string>();
+            return Result ? Created<string>() : Failed<string>();
         }
 
         public async Task<Response<string>> Handle(UpdateStudentCommand request, CancellationToken cancellationToken)

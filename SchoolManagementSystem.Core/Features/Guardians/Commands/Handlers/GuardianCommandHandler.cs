@@ -59,7 +59,7 @@ namespace SchoolManagementSystem.Core.Features.Guardians.Commands.Handlers
         public async Task<Response<string>> Handle(AddGuardianByPersonCommand request, CancellationToken cancellationToken)
         {
             var Result = await _guardianService.CreateGuardianAsync(request.Id, request.JobId);
-            return Result ? Created<string>(_stringLocalizer[SharedResourcesKey.Created]) : Failed<string>();
+            return Result ? Created<string>() : Failed<string>();
         }
 
         public async Task<Response<string>> Handle(UpdateGuardianCommand request, CancellationToken cancellationToken)
