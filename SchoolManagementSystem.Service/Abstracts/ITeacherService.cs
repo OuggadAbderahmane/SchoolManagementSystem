@@ -6,7 +6,7 @@ namespace SchoolManagementSystem.Service.Abstracts
     public interface ITeacherService
     {
         public Task<GetAllTeacherInfoResponse> GetTeacherByIdAsync(int Id);
-        public IQueryable<GetTeacherResponse> GetTeachersListResponse();
+        public IQueryable<GetTeacherResponse> GetTeachersListResponse(string NationalCardNumber, string FirstName, string LastName, bool? Gender, bool? PermanentWork);
         public IQueryable<Teacher> GetTeachersListIQueryable();
         public Task<bool> IsIdExistAsync(int Id);
         public Task<bool> CreateTeacherAsync(int PersonId, decimal Salary, bool IsPermanentWorkAvtive);

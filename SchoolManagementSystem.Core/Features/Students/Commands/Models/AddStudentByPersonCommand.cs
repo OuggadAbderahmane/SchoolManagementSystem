@@ -8,6 +8,6 @@ namespace SchoolManagementSystem.Core.Features.Students.Commands.Models
         public required int Id { get; set; }
         public int? SectionId { get; set; }
         public int? GuardianId { get; set; }
-        public required bool IsAvtive { get; set; }
+        public required bool IsActive { get; set; }
     }
 }

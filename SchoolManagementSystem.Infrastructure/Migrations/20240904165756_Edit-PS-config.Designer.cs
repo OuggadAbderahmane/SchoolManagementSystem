@@ -535,7 +535,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("IsAvtive")
+                    b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("BIT")
                         .HasDefaultValue(true);
@@ -614,7 +614,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                     b.Property<int?>("GuardianId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsAvtive")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<int?>("SectionId")

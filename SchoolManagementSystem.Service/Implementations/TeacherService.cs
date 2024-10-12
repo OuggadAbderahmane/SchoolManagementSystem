@@ -28,9 +28,9 @@ namespace SchoolManagementSystem.Service.Implementations
             return _teacherRepository.GetTeacherByIdAsync(Id);
         }
 
-        public IQueryable<GetTeacherResponse> GetTeachersListResponse()
+        public IQueryable<GetTeacherResponse> GetTeachersListResponse(string NationalCardNumber, string FirstName, string LastName, bool? Gender, bool? PermanentWork)
         {
-            return _teacherRepository.GetTeachersListResponse();
+            return _teacherRepository.GetTeachersListResponse(NationalCardNumber, FirstName, LastName, Gender, PermanentWork);
         }
 
         public IQueryable<Teacher> GetTeachersListIQueryable()

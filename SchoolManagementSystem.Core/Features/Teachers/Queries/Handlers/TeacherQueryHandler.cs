@@ -5,6 +5,7 @@ using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Teachers.Queries.Models;
 using SchoolManagementSystem.Core.Resources;
 using SchoolManagementSystem.Core.Wrappers;
+using SchoolManagementSystem.Data;
 using SchoolManagementSystem.Data.Responses;
 using SchoolManagementSystem.Service.Abstracts;
 
@@ -37,7 +38,7 @@ namespace SchoolManagementSystem.Core.Features.Teachers.Queries.Handlers
 
         public async Task<Response<PaginatedResult<GetTeacherResponse>>> Handle(GetTeachersPaginatedListQuery request, CancellationToken cancellationToken)
         {
-            return Success(await _teacherService.GetTeachersListResponse().ToPaginatedListAsync(request.pageNumber, request.pageSize));
+            return Success(await _teacherService.GetTeachersListResponse(request.NationalCardNumber!, request.FirstName!, request.LastName!, request.Gender.HasValue ? request.Gender == enGender.MALE : null, request.PermanentWork).ToPaginatedListAsync(request.pageNumber, request.pageSize));
         }
 
         public async Task<Response<GetAllTeacherInfoResponse>> Handle(GetTeacherQuery request, CancellationToken cancellationToken)

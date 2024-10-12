@@ -68,7 +68,7 @@ namespace SchoolManagementSystem.Core.Features.Students.Commands.Validations
                     .NotNull().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotNull])
                     .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEqualsTo] + " 0");
 
-            RuleFor(x => x.IsAvtive)
+            RuleFor(x => x.IsActive)
                     .NotNull().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotNull]);
 
             RuleFor(x => x.SectionId)

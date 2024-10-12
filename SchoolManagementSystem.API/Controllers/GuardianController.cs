@@ -22,9 +22,9 @@ namespace SchoolManagementSystem.API.Controllers
 
         //[Authorize(Roles = "admin")]
         [HttpGet]
-        public async Task<ActionResult<Response<PaginatedResult<GetGuardianResponse>>>> GetGuardiansPaginatedList(int? pageNumber, int? pageSize)
+        public async Task<ActionResult<Response<PaginatedResult<GetGuardianResponse>>>> GetGuardiansPaginatedList([FromQuery] GetGuardiansPaginatedListQuery getGuardiansPaginatedListQuery)
         {
-            return Ok(await _mediator.Send(new GetGuardiansPaginatedListQuery(pageNumber, pageSize)));
+            return Ok(await _mediator.Send(getGuardiansPaginatedListQuery));
         }
 
         //[Authorize(Roles = "admin")]

@@ -16,6 +16,6 @@ namespace SchoolManagementSystem.Core.Features.Students.Commands.Models
         public DateTime? DateOfBirth { get; set; }
         public string? Address { get; set; }
         public IFormFile? ImagePath { get; set; }
-        public bool? IsAvtive { get; set; }
+        public bool? IsActive { get; set; }
     }
 }

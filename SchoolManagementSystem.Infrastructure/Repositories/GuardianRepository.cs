@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SchoolManagementSystem.Data.Entities;
 using SchoolManagementSystem.Data.Responses;
 using SchoolManagementSystem.Infrastructure.Abstracts;
@@ -46,10 +47,23 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                                 DateOfBirth = S.DateOfBirth,
                                             }).FirstOrDefaultAsync())!;
         }
-        public IQueryable<GetGuardianResponse> GetGuardiansListResponse()
+        public IQueryable<GetGuardianResponse> GetGuardiansListResponse(string NationalCardNumber, string FirstName, string LastName, bool? Gender, int JobID)
         {
             var url = _helperClass.GetSchemeHost() + '/';
-            return _dbContext.Guardians.AsNoTracking().Include(g => g.Job).Select(S =>
+
+            IQueryable<Guardian> filter = _dbContext.Guardians.AsNoTracking().Include(g => g.Job);
+            if (!NationalCardNumber.IsNullOrEmpty())
+                filter = filter.Where(x => x.NationalCardNumber.Contains(NationalCardNumber));
+            if (!FirstName.IsNullOrEmpty())
+                filter = filter.Where(x => x.FirstName.Contains(FirstName));
+            if (!LastName.IsNullOrEmpty())
+                filter = filter.Where(x => x.LastName.Contains(LastName));
+            if (Gender != null)
+                filter = filter.Where(x => x.Gender == Gender);
+            if (JobID != 0)
+                filter = filter.Where(x => x.JobID == JobID);
+
+            return filter.Select(S =>
                                             new GetGuardianResponse
                                             {
                                                 Id = S.Id,

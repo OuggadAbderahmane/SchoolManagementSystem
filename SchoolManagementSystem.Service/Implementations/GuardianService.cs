@@ -28,9 +28,9 @@ namespace SchoolManagementSystem.Service.Implementations
             return await _guardianRepository.GetGuardianByIdAsync(Id);
         }
 
-        public IQueryable<GetGuardianResponse> GetGuardiansListResponse()
+        public IQueryable<GetGuardianResponse> GetGuardiansListResponse(string NationalCardNumber, string FirstName, string LastName, bool? Gender, int JobID)
         {
-            return _guardianRepository.GetGuardiansListResponse();
+            return _guardianRepository.GetGuardiansListResponse(NationalCardNumber, FirstName, LastName, Gender, JobID);
         }
 
         public IQueryable<Guardian> GetGuardiansListIQueryable()

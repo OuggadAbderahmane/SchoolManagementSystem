@@ -90,7 +90,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Value = table.Column<string>(type: "VARCHAR(20)", maxLength: 20, nullable: false),
-                    IsAvtive = table.Column<bool>(type: "BIT", nullable: false, defaultValue: true)
+                    IsActive = table.Column<bool>(type: "BIT", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -214,7 +214,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false),
                     SectionId = table.Column<int>(type: "int", nullable: true),
                     GuardianId = table.Column<int>(type: "int", nullable: true),
-                    IsAvtive = table.Column<bool>(type: "bit", nullable: false)
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

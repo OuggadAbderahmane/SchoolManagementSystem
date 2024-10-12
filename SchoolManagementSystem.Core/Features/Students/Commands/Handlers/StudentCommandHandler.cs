@@ -50,7 +50,7 @@ namespace SchoolManagementSystem.Core.Features.Students.Commands.Handlers
                 GuardianId = request.GuardianId,
                 SectionId = request.SectionId,
                 ImagePath = ImagePath,
-                IsAvtive = request.IsAvtive,
+                IsActive = request.IsActive,
                 DateOfBirth = request.DateOfBirth,
             });
             return Result != -1 ? Created<IdResponse>(new IdResponse { Id = Result }) : Failed<IdResponse>();
@@ -58,7 +58,7 @@ namespace SchoolManagementSystem.Core.Features.Students.Commands.Handlers
 
         public async Task<Response<string>> Handle(AddStudentByPersonCommand request, CancellationToken cancellationToken)
         {
-            var Result = await _studentService.CreateStudentAsync(request.Id, request.SectionId, request.GuardianId, request.IsAvtive);
+            var Result = await _studentService.CreateStudentAsync(request.Id, request.SectionId, request.GuardianId, request.IsActive);
             return Result ? Created<string>() : Failed<string>();
         }
 
@@ -74,7 +74,7 @@ namespace SchoolManagementSystem.Core.Features.Students.Commands.Handlers
             var Result = await _studentService.UpdateStudentAsync(request.Id,
                                                                      request.SectionId,
                                                                      request.GuardianId,
-                                                                     request.IsAvtive,
+                                                                     request.IsActive,
                                                                      request.NationalCardNumber,
                                                                      request.FirstName,
                                                                      request.LastName,

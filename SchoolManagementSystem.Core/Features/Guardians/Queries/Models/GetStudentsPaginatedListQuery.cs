@@ -1,18 +1,18 @@
 ﻿using MediatR;
 using SchoolManagementSystem.Core.Bases;
+using SchoolManagementSystem.Data;
 using SchoolManagementSystem.Data.Responses;
 
 namespace SchoolManagementSystem.Core.Features.Guardians.Queries.Models
 {
     public class GetGuardiansPaginatedListQuery : IRequest<Response<PaginatedResult<GetGuardianResponse>>>
     {
-        public int pageNumber;
-        public int pageSize;
-
-        public GetGuardiansPaginatedListQuery(int? pageNumber, int? pageSize = null)
-        {
-            this.pageNumber = pageNumber == null ? 1 : (int)pageNumber;
-            this.pageSize = pageSize == null ? 10 : (int)pageSize;
-        }
+        public string? NationalCardNumber { get; set; }
+        public int pageNumber { get; set; }
+        public int pageSize { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public enGender? Gender { get; set; }
+        public int JobID { get; set; }
     }
 }

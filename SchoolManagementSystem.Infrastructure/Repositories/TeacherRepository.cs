@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SchoolManagementSystem.Data.Entities;
 using SchoolManagementSystem.Data.Responses;
 using SchoolManagementSystem.Infrastructure.Abstracts;
@@ -48,19 +49,31 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                             }).FirstOrDefaultAsync())!;
         }
 
-        public IQueryable<GetTeacherResponse> GetTeachersListResponse()
+        public IQueryable<GetTeacherResponse> GetTeachersListResponse(string NationalCardNumber, string FirstName, string LastName, bool? Gender, bool? PermanentWork)
         {
             var url = _helperClass.GetSchemeHost() + '/';
-            return _dbContext.Teachers.AsNoTracking().Select(S =>
-                                            new GetTeacherResponse
-                                            {
-                                                Id = S.Id,
-                                                FirstName = S.FirstName,
-                                                LastName = S.LastName,
-                                                Salary = S.Salary,
-                                                PermanentWork = S.PermanentWork,
-                                                ImagePath = S.ImagePath != null ? url + S.ImagePath : null
-                                            });
+            var filter = _dbContext.Teachers.AsNoTracking();
+            if (!NationalCardNumber.IsNullOrEmpty())
+                filter = filter.Where(x => x.NationalCardNumber.Contains(NationalCardNumber));
+            if (!FirstName.IsNullOrEmpty())
+                filter = filter.Where(x => x.FirstName.Contains(FirstName));
+            if (!LastName.IsNullOrEmpty())
+                filter = filter.Where(x => x.LastName.Contains(LastName));
+            if (Gender != null)
+                filter = filter.Where(x => x.Gender == Gender);
+            if (PermanentWork != null)
+                filter = filter.Where(x => x.PermanentWork == PermanentWork);
+
+            return filter.Select(S =>
+                                new GetTeacherResponse
+                                {
+                                    Id = S.Id,
+                                    FirstName = S.FirstName,
+                                    LastName = S.LastName,
+                                    Salary = S.Salary,
+                                    PermanentWork = S.PermanentWork,
+                                    ImagePath = S.ImagePath != null ? url + S.ImagePath : null
+                                });
         }
 
         public IQueryable<Teacher> GetTeachersListIQueryable()

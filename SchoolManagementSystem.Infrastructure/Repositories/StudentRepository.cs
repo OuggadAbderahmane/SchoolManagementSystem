@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SchoolManagementSystem.Data.Entities;
 using SchoolManagementSystem.Data.Responses;
 using SchoolManagementSystem.Infrastructure.Abstracts;
@@ -45,30 +46,47 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                                 ImagePath = S.ImagePath != null ? url + S.ImagePath : null,
                                                 Address = S.Address,
                                                 DateOfBirth = S.DateOfBirth,
-                                                IsAvtive = S.IsAvtive
+                                                IsActive = S.IsActive
                                             }).FirstOrDefaultAsync())!;
         }
-        public IQueryable<GetStudentResponse> GetStudentsListResponse()
+        public IQueryable<GetStudentResponse> GetStudentsListResponse(string NationalCardNumber, string FirstName, string LastName, bool? Gender, int SectionId, int GuardianId, bool? IsActive)
         {
             var url = _helperClass.GetSchemeHost() + '/';
-            return _dbContext.Students.AsNoTracking().Include(x => x.Section).Select(S =>
-                                            new GetStudentResponse
-                                            {
-                                                Id = S.Id,
-                                                FirstName = S.FirstName,
-                                                LastName = S.LastName,
-                                                SectionName = S.Section == null ? null : S.Section.Name,
-                                                classInfo = S.Section == null ? null : _classRepository.GetClassInfoIQueryable().Where(x => x.Id == S.Section.ClassId).First().ClassInfo,
-                                                ImagePath = S.ImagePath != null ? url + S.ImagePath : null
-                                            });
+            IQueryable<Student> filter = _dbContext.Students.AsNoTracking().Include(x => x.Section);
+            if (!NationalCardNumber.IsNullOrEmpty())
+                filter = filter.Where(x => x.NationalCardNumber.Contains(NationalCardNumber));
+            if (!FirstName.IsNullOrEmpty())
+                filter = filter.Where(x => x.FirstName.Contains(FirstName));
+            if (!LastName.IsNullOrEmpty())
+                filter = filter.Where(x => x.LastName.Contains(LastName));
+            if (Gender != null)
+                filter = filter.Where(x => x.Gender == Gender);
+            if (SectionId != 0)
+                filter = filter.Where(x => x.SectionId == SectionId);
+            if (GuardianId != 0)
+                filter = filter.Where(x => x.GuardianId == GuardianId);
+            if (IsActive != null)
+                filter = filter.Where(x => x.IsActive == IsActive);
+
+            return filter.Select(S =>
+                                new GetStudentResponse
+                                {
+                                    Id = S.Id,
+                                    FirstName = S.FirstName,
+                                    LastName = S.LastName,
+                                    SectionName = S.Section == null ? null : S.Section.Name,
+                                    classInfo = S.Section == null ? null : _classRepository.GetClassInfoIQueryable().Where(x => x.Id == S.Section.ClassId).First().ClassInfo,
+                                    ImagePath = S.ImagePath != null ? url + S.ImagePath : null
+                                });
+
         }
         public IQueryable<Student> GetStudentsListIQueryable()
         {
             return _dbContext.Students.AsNoTracking();
         }
-        public bool UpdateStudentByQuery(int PersonId, int? SectionId = null, int? GuardianId = null, bool? IsAvtive = null)
+        public bool UpdateStudentByQuery(int PersonId, int? SectionId = null, int? GuardianId = null, bool? IsActive = null)
         {
-            if (SectionId == null && GuardianId == null && IsAvtive == null)
+            if (SectionId == null && GuardianId == null && IsActive == null)
                 return true;
             var parameters = new List<SqlParameter>();
             var query = new StringBuilder("UPDATE [dbo].[Students] SET ");
@@ -83,10 +101,10 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                 query.Append("GuardianId = @GuardianId, ");
                 parameters.Add(new SqlParameter("@GuardianId", GuardianId));
             }
-            if (IsAvtive != null)
+            if (IsActive != null)
             {
-                query.Append("IsAvtive = @IsAvtive ");
-                parameters.Add(new SqlParameter("@IsAvtive", IsAvtive));
+                query.Append("IsActive = @IsActive ");
+                parameters.Add(new SqlParameter("@IsActive", IsActive));
             }
 
             if (query[query.Length - 2] == ',')
@@ -106,11 +124,11 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                 return false;
             }
         }
-        public async Task<bool> AddNewStudentByPersonAsync(int PersonId, int? SectionId = null, int? GuardianId = null, bool IsAvtive = true)
+        public async Task<bool> AddNewStudentByPersonAsync(int PersonId, int? SectionId = null, int? GuardianId = null, bool IsActive = true)
         {
             try
             {
-                await _dbContext.Database.ExecuteSqlAsync($"EXEC AddNewStudentBaseOnPerson {PersonId}, {(SectionId)} ,{(GuardianId)} , {IsAvtive}");
+                await _dbContext.Database.ExecuteSqlAsync($"EXEC AddNewStudentBaseOnPerson {PersonId}, {(SectionId)} ,{(GuardianId)} , {IsActive}");
             }
             catch
             {

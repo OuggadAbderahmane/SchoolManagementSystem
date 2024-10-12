@@ -6,7 +6,7 @@ namespace SchoolManagementSystem.Service.Abstracts
     public interface IGuardianService
     {
         public Task<GetAllGuardianInfoResponse> GetGuardianByIdAsync(int Id);
-        public IQueryable<GetGuardianResponse> GetGuardiansListResponse();
+        public IQueryable<GetGuardianResponse> GetGuardiansListResponse(string NationalCardNumber, string FirstName, string LastName, bool? Gender, int JobID);
         public Task<bool> IsIdExistAsync(int Id);
         public IQueryable<Guardian> GetGuardiansListIQueryable();
         public Task<bool> CreateGuardianAsync(int PersonId, int? JobId = null);

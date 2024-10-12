@@ -4,7 +4,7 @@
     {
         public int? SectionId { get; set; }
         public int? GuardianId { get; set; }
-        public bool IsAvtive { get; set; }
+        public bool IsActive { get; set; }
 
         public Section? Section { get; set; }
         public Guardian? guardian { get; set; }

@@ -15,7 +15,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                 table: "FinalExams");
 
             migrationBuilder.RenameColumn(
-                name: "IsAvtive",
+                name: "IsActive",
                 table: "Years",
                 newName: "IsActive");
 
@@ -36,7 +36,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
             migrationBuilder.RenameColumn(
                 name: "IsActive",
                 table: "Years",
-                newName: "IsAvtive");
+                newName: "IsActive");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FinalExams_StudentId",
