@@ -81,9 +81,9 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
             return _dbContext.Teachers.AsNoTracking();
         }
 
-        public bool UpdateTeacherByQuery(int PersonId, decimal? Salary = null, bool? IsPermanentWorkAvtive = null)
+        public bool UpdateTeacherByQuery(int PersonId, decimal? Salary = null, bool? PermanentWork = null)
         {
-            if (Salary == null && IsPermanentWorkAvtive == null)
+            if (Salary == null && PermanentWork == null)
                 return true;
             var parameters = new List<SqlParameter>();
             var query = new StringBuilder("UPDATE [dbo].[Teachers] SET ");
@@ -93,10 +93,10 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                 query.Append("Salary = @Salary, ");
                 parameters.Add(new SqlParameter("@Salary", Salary));
             }
-            if (IsPermanentWorkAvtive != null)
+            if (PermanentWork != null)
             {
-                query.Append("IsPermanentWorkAvtive = @IsPermanentWorkAvtive ");
-                parameters.Add(new SqlParameter("@IsPermanentWorkAvtive", IsPermanentWorkAvtive));
+                query.Append("PermanentWork = @PermanentWork ");
+                parameters.Add(new SqlParameter("@PermanentWork", PermanentWork));
             }
 
             if (query[query.Length - 2] == ',')
@@ -117,11 +117,11 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> AddNewTeacherByPersonAsync(int PersonId, decimal Salary, bool IsPermanentWorkAvtive)
+        public async Task<bool> AddNewTeacherByPersonAsync(int PersonId, decimal Salary, bool PermanentWork)
         {
             try
             {
-                await _dbContext.Database.ExecuteSqlAsync($"EXEC AddNewTeacherBaseOnPerson {PersonId}, {Salary} ,{IsPermanentWorkAvtive}");
+                await _dbContext.Database.ExecuteSqlAsync($"EXEC AddNewTeacherBaseOnPerson {PersonId}, {Salary} ,{PermanentWork}");
             }
             catch
             {

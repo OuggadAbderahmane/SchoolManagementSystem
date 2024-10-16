@@ -43,11 +43,11 @@ namespace SchoolManagementSystem.Service.Implementations
             return await _teacherRepository.GetTableAsNoTracking().AnyAsync(D => D.Id == Id);
         }
 
-        public async Task<bool> CreateTeacherAsync(int PersonId, decimal Salary, bool IsPermanentWorkAvtive)
+        public async Task<bool> CreateTeacherAsync(int PersonId, decimal Salary, bool PermanentWork)
         {
             try
             {
-                return await _teacherRepository.AddNewTeacherByPersonAsync(PersonId, Salary, IsPermanentWorkAvtive);
+                return await _teacherRepository.AddNewTeacherByPersonAsync(PersonId, Salary, PermanentWork);
             }
             catch
             {
@@ -73,12 +73,12 @@ namespace SchoolManagementSystem.Service.Implementations
             return await _teacherRepository.DeleteTeacherAsync(Id);
         }
 
-        public async Task<bool> UpdateTeacherAsync(int PersonId, decimal? Salary = null, bool? IsPermanentWorkAvtive = null, string? NationalCardNumber = null, string? FirstName = null, string? LastName = null, bool? Gender = null,
+        public async Task<bool> UpdateTeacherAsync(int PersonId, decimal? Salary = null, bool? PermanentWork = null, string? NationalCardNumber = null, string? FirstName = null, string? LastName = null, bool? Gender = null,
                                          DateTime? DateOfBirth = null, string? Address = null, string? ImagePath = null, string? Email = null, string? Phone = null)
         {
             var Transaction = _teacherRepository.BeginTransaction();
 
-            if (!_teacherRepository.UpdateTeacherByQuery(PersonId, Salary, IsPermanentWorkAvtive) || !_personRepository.UpdatePersonByQuery(PersonId, NationalCardNumber, FirstName, LastName, Gender, DateOfBirth, Email, Phone, Address, ImagePath))
+            if (!_teacherRepository.UpdateTeacherByQuery(PersonId, Salary, PermanentWork) || !_personRepository.UpdatePersonByQuery(PersonId, NationalCardNumber, FirstName, LastName, Gender, DateOfBirth, Email, Phone, Address, ImagePath))
             {
                 await Transaction.RollbackAsync();
                 return false;
