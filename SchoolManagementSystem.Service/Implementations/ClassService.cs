@@ -30,9 +30,9 @@ namespace SchoolManagementSystem.Service.Implementations
             return await _ClassRepository.GetTableAsNoTracking().AnyAsync(S => S.Id == Id);
         }
 
-        public async Task<List<GetClassResponse>> GetClassesListAsync()
+        public async Task<List<GetClassResponse>> GetClassesListAsync(int? LevelId, int? YearOfLevelId)
         {
-            return await _ClassRepository.GetClassesListAsync();
+            return await _ClassRepository.GetClassesListAsync(LevelId, YearOfLevelId);
         }
 
         public IQueryable<Class> GetClassesListIQueryable()
@@ -42,7 +42,7 @@ namespace SchoolManagementSystem.Service.Implementations
 
         public async Task<string> GetClassInfo(int Id)
         {
-            return (await _ClassRepository.GetClassInfoIQueryable().Where(x => x.Id == Id).FirstOrDefaultAsync())?.ClassInfo;
+            return (await _ClassRepository.GetClassInfoIQueryable().Where(x => x.Id == Id).FirstOrDefaultAsync())?.ClassInfo!;
         }
         #endregion
     }

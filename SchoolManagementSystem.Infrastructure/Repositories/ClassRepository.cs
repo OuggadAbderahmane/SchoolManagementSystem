@@ -26,9 +26,9 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
             return (await GetClassInfoIQueryable().AsNoTracking().Where(x => x.Id == Id).FirstOrDefaultAsync())!;
         }
 
-        public async Task<List<GetClassResponse>> GetClassesListAsync()
+        public async Task<List<GetClassResponse>> GetClassesListAsync(int? LevelId, int? YearOfLevelId)
         {
-            return await GetClassInfoIQueryable().AsNoTracking().ToListAsync();
+            return await GetClassInfoIQueryable(LevelId, YearOfLevelId).AsNoTracking().ToListAsync();
         }
 
         public IQueryable<Class> GetClassesListIQueryable()
@@ -38,10 +38,20 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
 
         public IQueryable<GetClassResponse> GetClassInfoIQueryable()
         {
-            return from classes in _dbContext.Classes
-                   join levels in _dbContext.Levels on classes.LevelId equals levels.Id
-                   join yearOfLevels in _dbContext.YearOfLevels on classes.YearOfLevelId equals yearOfLevels.Id
-                   select new GetClassResponse { Id = classes.Id, ClassInfo = yearOfLevels.Name + " " + levels.Name + " " + classes.NameOfSpecialization };
+            return GetClassInfoIQueryable(null, null);
+        }
+
+        public IQueryable<GetClassResponse> GetClassInfoIQueryable(int? LevelId, int? YearOfLevelId)
+        {
+            var result = from classes in _dbContext.Classes
+                         join levels in _dbContext.Levels on classes.LevelId equals levels.Id
+                         join yearOfLevels in _dbContext.YearOfLevels on classes.YearOfLevelId equals yearOfLevels.Id
+                         select new { classes.Id, levelId = classes.LevelId, yearOfLevelName = yearOfLevels.Name, levelName = levels.Name, yearOfLevelId = classes.YearOfLevelId, classes.NameOfSpecialization };
+            if (LevelId.HasValue)
+                result = result.Where(x => x.levelId == LevelId);
+            if (YearOfLevelId.HasValue)
+                result = result.Where(x => x.yearOfLevelId == YearOfLevelId);
+            return result.Select(x => new GetClassResponse { Id = x.Id, ClassInfo = x.yearOfLevelName + " " + x.levelName + " " + x.NameOfSpecialization });
         }
         #endregion
     }

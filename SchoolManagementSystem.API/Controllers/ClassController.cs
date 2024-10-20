@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Classes.Queries.Models;
@@ -19,9 +18,9 @@ namespace SchoolManagementSystem.API.Controllers
 
         //[Authorize(Roles = "admin")]
         [HttpGet("List")]
-        public async Task<ActionResult<Response<List<GetClassResponse>>>> GetClassesList()
+        public async Task<ActionResult<Response<List<GetClassResponse>>>> GetClassesList([FromQuery] GetClassesListQuery getClassesListQuery)
         {
-            return Ok(await _mediator.Send(new GetClassesListQuery()));
+            return Ok(await _mediator.Send(getClassesListQuery));
         }
 
         //[Authorize(Roles = "admin")]
