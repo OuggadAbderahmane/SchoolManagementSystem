@@ -99,15 +99,15 @@ namespace SchoolManagementSystem.Service.Implementations
 
         public async Task<bool> UpdatePartOfScheduleAsync(PartOfSchedule partOfSchedule)
         {
-            var PartOfSchedule = await _PartOfScheduleRepository.GetTableAsTracking().Where(x => x.Day == partOfSchedule.Day && x.Session == partOfSchedule.Session && x.SectionId == partOfSchedule.SectionId).FirstOrDefaultAsync();
-            if (PartOfSchedule == null)
+            var updatePartOfSchedule = await _PartOfScheduleRepository.GetTableAsTracking().Where(x => x.Day == partOfSchedule.Day && x.Session == partOfSchedule.Session && x.SectionId == partOfSchedule.SectionId).FirstOrDefaultAsync();
+            if (updatePartOfSchedule == null)
             {
                 return await CreatePartOfScheduleAsync(partOfSchedule) != -1;
             }
-            PartOfSchedule.SubjectTeacherId = partOfSchedule.SubjectTeacherId;
+            updatePartOfSchedule.SubjectTeacherId = partOfSchedule.SubjectTeacherId;
             try
             {
-                await _PartOfScheduleRepository.UpdateAsync(partOfSchedule);
+                await _PartOfScheduleRepository.UpdateAsync(updatePartOfSchedule);
                 return true;
             }
             catch

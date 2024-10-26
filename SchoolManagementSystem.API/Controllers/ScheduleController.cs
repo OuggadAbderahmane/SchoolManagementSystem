@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Bases;
@@ -136,3 +135,4 @@ namespace SchoolManagementSystem.API.Controllers
         #endregion
     }
 }
+
