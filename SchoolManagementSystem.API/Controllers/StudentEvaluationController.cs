@@ -22,7 +22,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet("{Id}")]
         public async Task<ActionResult<Response<GetStudentEvaluationResponse>>> GetStudentEvaluationById(int Id)
         {
@@ -32,7 +32,7 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet("GetGradeReportByStudentId")]
         public async Task<ActionResult<Response<List<GetGradeReport>>>> GetGradeReportByStudentId([Required] int StudentId, [Required] int YearId, int? SemesterId)
         {
@@ -42,8 +42,8 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
-        //[Authorize(policy: "StudentOnly")]
-        //[Authorize(Roles = "user")]
+        [Authorize(policy: "StudentOnly")]
+        [Authorize(Roles = "user")]
         [HttpGet("GetGradeReport")]
         public async Task<ActionResult<Response<List<GetGradeReport>>>> GetGradeReport([Required] int YearId, int? SemesterId)
         {
@@ -53,7 +53,7 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> AddStudentEvaluation(AddStudentEvaluationCommand addStudentEvaluation)
         {
@@ -63,7 +63,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpPut]
         public async Task<ActionResult<Response<string>>> UpdateStudentEvaluation(UpdateStudentEvaluationCommand updateStudentEvaluation)
         {
@@ -74,7 +74,7 @@ namespace SchoolManagementSystem.API.Controllers
         }
 
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpDelete("{Id}")]
         public async Task<ActionResult<Response<string>>> DeleteStudentEvaluation(int Id)
         {

@@ -1,8 +1,8 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Authentication.Commands.Models;
-using SchoolManagementSystem.Data.Helper;
 
 namespace SchoolManagementSystem.API.Controllers
 {
@@ -16,21 +16,31 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
         [HttpPost("ByUserName")]
-        public async Task<ActionResult<Response<JwtAuthResult>>> SignInByUserNameAsync(SignInByUserNameCommand UserInfo)
+        public async Task<ActionResult<Response<string>>> SignInByUserNameAsync(SignInByUserNameCommand signInByUser)
         {
-            var response = await _mediator.Send(UserInfo);
+            var response = await _mediator.Send(signInByUser);
             if (response.Succeeded)
                 return Ok(response);
             return Unauthorized(response);
         }
 
-        [HttpPost("RefreshAccessToken")]
-        public async Task<ActionResult<Response<string>>> RefreshAccessTokenAsync(RefreshTokenCommand RefreshToken)
+        [HttpGet("RefreshAccessToken")]
+        public async Task<ActionResult<Response<string>>> RefreshAccessTokenAsync()
         {
-            var response = await _mediator.Send(RefreshToken);
+            var response = await _mediator.Send(new RefreshTokenCommand());
             if (response.Succeeded)
                 return Ok(response);
             return Unauthorized(response);
+        }
+
+        [HttpGet("Logout")]
+        [Authorize(Roles = "user,admin")]
+        public async Task<ActionResult<Response<string>>> Logout()
+        {
+            var response = await _mediator.Send(new LogoutCommand());
+            if (response.Succeeded)
+                return Ok(response);
+            return BadRequest(response);
         }
         #endregion
     }

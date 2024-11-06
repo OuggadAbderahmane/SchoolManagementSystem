@@ -64,7 +64,7 @@ namespace SchoolManagementSystem.Service.Implementations
 
         public async Task<bool> IsSubjectTeacherAvailable(int SubjectTeacherId, sbyte day, sbyte session)
         {
-            var teacherId = (await _subjectTeacherService.GetSubjectTeachersListIQueryable().Where(x => x.Id == SubjectTeacherId).FirstOrDefaultAsync()).TeacherId;
+            var teacherId = (await _subjectTeacherService.GetSubjectTeachersListIQueryable().Where(x => x.Id == SubjectTeacherId).FirstOrDefaultAsync())!.TeacherId;
             return await IsTeacherAvailable(teacherId, day, session);
         }
 

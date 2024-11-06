@@ -8,7 +8,7 @@ using SchoolManagementSystem.Data.Responses;
 namespace SchoolManagementSystem.API.Controllers
 {
     [Route("[controller]s")]
-    //[Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin")]
     [ApiController]
     public class YearOfLevelController(IMediator mediator) : ControllerBase
     {

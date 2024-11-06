@@ -90,10 +90,12 @@ namespace SchoolManagementSystem.Infrastructure
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
+                        ClockSkew = TimeSpan.Zero,
                         ValidateIssuer = true,
                         ValidIssuer = jwtOptions!.Issuer,
                         ValidateAudience = true,
                         ValidAudience = jwtOptions.Audience,
+                        ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SigningKey))
                     };
@@ -105,15 +107,15 @@ namespace SchoolManagementSystem.Infrastructure
             {
                 option.AddPolicy("StudentOnly", policy =>
                 {
-                    policy.RequireClaim("UserType", "Student");
+                    policy.RequireClaim("userType", "student");
                 });
                 option.AddPolicy("TeacherOnly", policy =>
                 {
-                    policy.RequireClaim("UserType", "Teacher");
+                    policy.RequireClaim("userType", "teacher");
                 });
                 option.AddPolicy("GuardianOnly", policy =>
                 {
-                    policy.RequireClaim("UserType", "Guardian");
+                    policy.RequireClaim("userType", "guardian");
                 });
             });
             #endregion

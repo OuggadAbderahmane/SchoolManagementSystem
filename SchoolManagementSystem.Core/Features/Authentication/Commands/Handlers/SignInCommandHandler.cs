@@ -1,34 +1,37 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Authentication.Commands.Models;
 using SchoolManagementSystem.Core.Resources;
 using SchoolManagementSystem.Data.Entities.Identity;
-using SchoolManagementSystem.Data.Helper;
 using SchoolManagementSystem.Service.Abstracts;
 
 namespace SchoolManagementSystem.Core.Features.Authentication.Commands.Handlers
 {
-    public class SignInCommandHandler : ResponseHandler, IRequestHandler<SignInByUserNameCommand, Response<JwtAuthResult>>
+    public class SignInCommandHandler : ResponseHandler, IRequestHandler<SignInByUserNameCommand, Response<string>>
                                                        , IRequestHandler<RefreshTokenCommand, Response<string>>
+                                                       , IRequestHandler<LogoutCommand, Response<string>>
     {
 
         #region Fields
         private readonly IUserService _userService;
+        private readonly IHttpContextAccessor _contextAccessor;
         private readonly IUserRefreshTokenService _userRefreshTokenService;
         #endregion
 
         #region Constructors
-        public SignInCommandHandler(IUserService userService, IStringLocalizer<SharedResource> stringLocalizer, IUserRefreshTokenService userRefreshTokenService) : base(stringLocalizer)
+        public SignInCommandHandler(IUserService userService, IStringLocalizer<SharedResource> stringLocalizer, IUserRefreshTokenService userRefreshTokenService, IHttpContextAccessor contextAccessor) : base(stringLocalizer)
         {
             _userService = userService;
             _userRefreshTokenService = userRefreshTokenService;
+            _contextAccessor = contextAccessor;
         }
         #endregion
 
         #region Handle Functions
-        public async Task<Response<JwtAuthResult>> Handle(SignInByUserNameCommand request, CancellationToken cancellationToken)
+        public async Task<Response<string>> Handle(SignInByUserNameCommand request, CancellationToken cancellationToken)
         {
             if (await _userService.IsPasswordCorrectAsync(request.UserName, request.Password))
             {
@@ -46,17 +49,27 @@ namespace SchoolManagementSystem.Core.Features.Authentication.Commands.Handlers
                                         }).ToList(),
                                     })
                                     .Where(x => x.UserName == request.UserName).First();
-                return Success(await _userRefreshTokenService.GetJWTTokenWithRefresherAsync(user));
+                var TokenData = await _userRefreshTokenService.GetJWTTokenWithRefresherAsync(user);
+                _userRefreshTokenService.SetTokenInsideCookie(TokenData);
+                return Success(TokenData.AccessToken);
             }
-            return Unauthenticated<JwtAuthResult>();
+            return Unauthenticated<string>();
         }
 
         public async Task<Response<string>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
         {
-            var AccessToken = await _userRefreshTokenService.RefreshAccessTokenAsync(request.RefreshToken);
-            if (AccessToken != null)
-                return Success(AccessToken);
+            if (_contextAccessor.HttpContext!.Request.Cookies.TryGetValue("refreshToken", out var refreshToken))
+            {
+                var AccessToken = await _userRefreshTokenService.RefreshAccessTokenAsync(refreshToken);
+                if (AccessToken != null)
+                    return Success(AccessToken);
+            }
             return Unauthenticated<string>();
+        }
+
+        public Task<Response<string>> Handle(LogoutCommand request, CancellationToken cancellationToken)
+        {
+            return _userRefreshTokenService.RemoveTokenFromCookies() ? Task.FromResult(Success("")) : Task.FromResult(Failed<string>());
         }
         #endregion
     }

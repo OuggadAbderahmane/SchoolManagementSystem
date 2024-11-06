@@ -141,11 +141,11 @@ namespace SchoolManagementSystem.Service.Implementations
         {
             var claims = new List<Claim>();
             if (await _appDbContext.Teachers.AnyAsync(x => x.Id == user.PersonId))
-                claims.Add(new Claim("UserType", "Teacher"));
+                claims.Add(new Claim("userType", "teacher"));
             if (await _appDbContext.Students.AnyAsync(x => x.Id == user.PersonId))
-                claims.Add(new Claim("UserType", "Student"));
+                claims.Add(new Claim("userType", "student"));
             if (await _appDbContext.Guardians.AnyAsync(x => x.Id == user.PersonId))
-                claims.Add(new Claim("UserType", "Guardian"));
+                claims.Add(new Claim("userType", "guardian"));
             return claims;
         }
         #endregion

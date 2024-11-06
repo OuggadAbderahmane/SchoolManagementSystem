@@ -9,7 +9,7 @@ namespace SchoolManagementSystem.API.Controllers
 {
     [Route("[controller]s")]
     [ApiController]
-    //[Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin")]
     public class ClaimController(IMediator mediator) : ControllerBase
     {
         #region Fields
@@ -27,5 +27,3 @@ namespace SchoolManagementSystem.API.Controllers
         }
     }
 }
-
-// var Id = int.Parse(HttpContext.User.Claims.First(claim => claim.Type == "PersonId").Value);

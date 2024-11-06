@@ -21,6 +21,7 @@ namespace SchoolManagementSystem.Infrastructure.Data.Configuration.Identity
                 .IsRequired();
 
             builder.HasIndex(x => x.UserId).IsUnique(false);
+            builder.HasIndex(x => x.RefreshTokenString).IsUnique();
 
             builder.HasOne(U => U.User)
                 .WithOne(U => U.UserRefreshToken)

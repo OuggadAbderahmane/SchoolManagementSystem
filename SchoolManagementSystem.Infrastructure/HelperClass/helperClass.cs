@@ -16,7 +16,7 @@ namespace SchoolManagementSystem.Infrastructure.HelperClass
 
         public string GetSchemeHost()
         {
-            return _contextAccessor.HttpContext.Request.Scheme + "://" + _contextAccessor.HttpContext.Request.Host;
+            return _contextAccessor.HttpContext!.Request.Scheme + "://" + _contextAccessor.HttpContext!.Request.Host;
         }
 
         public static Expression<Func<StudentEvaluation, GetStudentEvaluationResponse>> expressionStudentEvaluationResponse = x => new GetStudentEvaluationResponse

@@ -85,12 +85,12 @@ namespace SchoolManagementSystem.Service.Implementations
             return result.Succeeded;
         }
 
-        public async Task<bool?> UpdateUserPasswordAsync(int userId, string Newpassword, string Currentpassword)
+        public async Task<bool?> UpdateUserPasswordAsync(string userName, string Newpassword, string Currentpassword)
         {
-            var UpdateUser = await _userManager.FindByIdAsync(userId.ToString());
+            var UpdateUser = await _userManager.FindByNameAsync(userName);
             if (UpdateUser == null)
                 return false;
-            if (!await IsPasswordCorrectAsync(userId, Currentpassword))
+            if (!await IsPasswordCorrectAsync(UpdateUser.Id, Currentpassword))
                 return null;
             UpdateUser.PasswordHash = _userManager.PasswordHasher.HashPassword(UpdateUser, Newpassword);
             var result = await _userManager.UpdateAsync(UpdateUser);

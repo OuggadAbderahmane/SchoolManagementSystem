@@ -483,12 +483,15 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
 
                     b.Property<string>("RefreshTokenString")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RefreshTokenString")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 

@@ -71,8 +71,9 @@ namespace SchoolManagementSystem.Core.Features.Users.Commands.Handlers
 
         public async Task<Response<string>> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
-            var Id = int.Parse(_contextAccessor.HttpContext!.User.Claims.First(claim => claim.Type == "UserId").Value);
-            var success = await _userService.UpdateUserPasswordAsync(Id, request.NewPassword, request.CurrentPassword);
+            // Problem
+            var userName = _contextAccessor.HttpContext!.User.Claims.First(claim => claim.Type == "userName").Value;
+            var success = await _userService.UpdateUserPasswordAsync(userName, request.NewPassword, request.CurrentPassword);
             if (success == null)
                 return Failed<string>("Incorrect Password");
             if (!(bool)success)

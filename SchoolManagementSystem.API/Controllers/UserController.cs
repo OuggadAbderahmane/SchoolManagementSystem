@@ -18,14 +18,14 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<ActionResult<Response<PaginatedResult<GetUserResponse>>>> GetUsersList(int? pageNumber, int? pageSize)
         {
             return Ok(await _mediator.Send(new GetUsersPaginatedListQuery(pageNumber, pageSize)));
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet("GetUserByNameOrId")]
         public async Task<ActionResult<Response<GetUserResponse>>> GetUserByNameOrId(string UserNameOrId)
         {
@@ -39,7 +39,7 @@ namespace SchoolManagementSystem.API.Controllers
         /// <summary>
         /// Only Users have user Role can use it
         /// </summary>
-        //[Authorize(Roles = "user")]
+        [Authorize(Roles = "user")]
         [HttpGet("GetUser")]
         public async Task<ActionResult<Response<GetUserResponse>>> GetUser()
         {
@@ -49,7 +49,7 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<ActionResult<Response<string>>> AddUser(AddUserCommand addUser)
         {
@@ -59,7 +59,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpPut]
         public async Task<ActionResult<Response<string>>> UpdateUser(UpdateUserCommand updateUser)
         {
@@ -72,7 +72,7 @@ namespace SchoolManagementSystem.API.Controllers
         /// <summary>
         /// Both user and admin can change his own password
         /// </summary>
-        //[Authorize(Roles = "user,admin")]
+        [Authorize(Roles = "user,admin")]
         [HttpPut("ChangePassword")]
         public async Task<ActionResult<Response<string>>> ChangePassword(string CurrentPassword, string NewPassword)
         {

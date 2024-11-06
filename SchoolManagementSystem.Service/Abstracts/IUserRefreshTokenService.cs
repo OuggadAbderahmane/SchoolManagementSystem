@@ -10,5 +10,7 @@ namespace SchoolManagementSystem.Service.Abstracts
         public Task<bool> IsUserIdExistAsync(int UserId);
         public Task<JwtAuthResult> GetJWTTokenWithRefresherAsync(User user);
         public Task<string> RefreshAccessTokenAsync(string RefreshTokenString);
+        public void SetTokenInsideCookie(JwtAuthResult TokenData);
+        public bool RemoveTokenFromCookies();
     }
 }

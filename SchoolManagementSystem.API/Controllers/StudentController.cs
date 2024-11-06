@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Bases;
@@ -20,14 +21,14 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<ActionResult<Response<PaginatedResult<GetStudentResponse>>>> GetStudentsPaginatedList([FromQuery] GetStudentsPaginatedListQuery getStudentsPaginatedListQuery)
         {
             return Ok(await _mediator.Send(getStudentsPaginatedListQuery));
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet("GetStudentById/{Id}")]
         public async Task<ActionResult<Response<GetAllStudentInfoResponse>>> GetStudentById(int Id)
         {
@@ -40,8 +41,8 @@ namespace SchoolManagementSystem.API.Controllers
         /// <summary>
         /// Only Users have Student claim can use it
         /// </summary>
-        //[Authorize(policy: "StudentOnly")]
-        //[Authorize(Roles = "user")]
+        [Authorize(policy: "StudentOnly")]
+        [Authorize(Roles = "user")]
         [HttpGet("GetStudent")]
         public async Task<ActionResult<Response<GetAllStudentInfoResponse>>> GetStudent()
         {
@@ -51,7 +52,7 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpPost("Add")]
         public async Task<ActionResult<Response<IdResponse>>> AddStudent([FromForm] AddStudentCommand addStudent)
         {
@@ -64,7 +65,7 @@ namespace SchoolManagementSystem.API.Controllers
         /// <summary>
         /// If you have a person that already exists and want to make it Student
         /// </summary>
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpPost("AddByExistPerson")]
         public async Task<ActionResult<Response<string>>> AddStudentByExistPerson(AddStudentByPersonCommand addStudent)
         {
@@ -74,7 +75,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpPut("Update")]
         public async Task<ActionResult<Response<string>>> UpdateStudent(UpdateStudentCommand updateStudent)
         {
@@ -84,7 +85,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        //[Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin")]
         [HttpDelete("Delete/{Id}")]
         public async Task<ActionResult<Response<string>>> DeleteStudent(int Id)
         {
