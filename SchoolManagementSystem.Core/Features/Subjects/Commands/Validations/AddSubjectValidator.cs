@@ -47,7 +47,7 @@ namespace SchoolManagementSystem.Core.Features.Subjects.Commands.Validations
 
             RuleFor(x => x.ClassId)
                     .NotNull().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotNull])
-                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEqualsTo] + " 0");
+                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotLessThanOrEqualsTo] + " 0");
         }
         #endregion
     }

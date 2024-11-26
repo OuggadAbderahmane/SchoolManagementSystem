@@ -14,7 +14,7 @@
         public const string ItExists = "ItExists";
         public const string NotNull = "NotNull";
         public const string NotEmpty = "NotEmpty";
-        public const string NotEqualsTo = "NotEqualsTo";
+        public const string NotLessThanOrEqualsTo = "NotLessThanOrEqualsTo";
         public const string DoesNotExist = "DoesNotExist";
         public const string AdminError = "AdminError";
         public const string Exists = "Exists";

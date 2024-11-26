@@ -8,12 +8,6 @@ namespace SchoolManagementSystem.Infrastructure.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Teacher> builder)
         {
-
-
-            builder.Property(x => x.Salary)
-                .HasColumnType("decimal(8,2)")
-                .IsRequired();
-
             builder.Property(x => x.PermanentWork)
                 .HasColumnType("BIT")
                 .HasDefaultValue(false)

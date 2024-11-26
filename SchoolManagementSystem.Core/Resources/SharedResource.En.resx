@@ -159,11 +159,11 @@
   <data name="NotEmpty" xml:space="preserve">
     <value>can't be empty</value>
   </data>
-  <data name="NotEqualsTo" xml:space="preserve">
-    <value>can't be equals to</value>
-  </data>
   <data name="NotFound" xml:space="preserve">
     <value>Not Found</value>
+  </data>
+  <data name="NotLessThanOrEqualsTo" xml:space="preserve">
+    <value>can't be less than or equals to</value>
   </data>
   <data name="NotNull" xml:space="preserve">
     <value>can't be null</value>

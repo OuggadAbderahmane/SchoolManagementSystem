@@ -34,7 +34,7 @@ namespace SchoolManagementSystem.API.Controllers
         }
 
         [HttpGet("Logout")]
-        [Authorize(Roles = "user,admin")]
+        [Authorize(Roles = "user,admin,hr")]
         public async Task<ActionResult<Response<string>>> Logout()
         {
             var response = await _mediator.Send(new LogoutCommand());

@@ -28,7 +28,7 @@ namespace SchoolManagementSystem.Core.Features.Sections.Queries.Handlers
         #region Handle Functions
         public async Task<Response<List<GetSectionResponse>>> Handle(GetSectionsListQuery request, CancellationToken cancellationToken)
         {
-            return Success(await _sectionService.GetSectionsListAsync());
+            return Success(await _sectionService.GetSectionsListAsync(request.LevelId, request.YearOfLevelId, request.ClassId));
         }
 
         public async Task<Response<GetSectionResponse>> Handle(GetSectionByIdQuery request, CancellationToken cancellationToken)

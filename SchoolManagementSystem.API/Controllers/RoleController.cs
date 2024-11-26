@@ -10,7 +10,7 @@ namespace SchoolManagementSystem.API.Controllers
 {
     [Route("[controller]s")]
     [ApiController]
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin,hr")]
     public class RoleController(IMediator mediator) : ControllerBase
     {
         #region Fields

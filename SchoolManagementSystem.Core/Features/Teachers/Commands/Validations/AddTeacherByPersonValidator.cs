@@ -42,20 +42,13 @@ namespace SchoolManagementSystem.Core.Features.Teachers.Commands.Validations
                     .MustAsync(async (Key, CancellationToken) => !await _teacherService.IsIdExistAsync(Key))
                     .WithMessage(_stringLocalizer[SharedResourcesKey.TeacherIdExist]);
 
-            RuleFor(x => x.Salary)
-                    .Must((Key, CancellationToken) => Key.Salary >= 0)
-                    .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.MustBeValid]);
-
         }
 
         public void ApplyValidationsRules()
         {
             RuleFor(x => x.Id)
                     .NotNull().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotNull])
-                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEqualsTo] + " 0");
-
-            RuleFor(x => x.Salary)
-                    .NotNull().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotNull]);
+                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotLessThanOrEqualsTo] + " 0");
 
             RuleFor(x => x.PermanentWork)
                     .NotNull().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotNull]);

@@ -22,7 +22,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpGet("{Id}")]
         public async Task<ActionResult<Response<GetStudentEvaluationResponse>>> GetStudentEvaluationById(int Id)
         {
@@ -32,7 +32,7 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpGet("GetGradeReportByStudentId")]
         public async Task<ActionResult<Response<List<GetGradeReport>>>> GetGradeReportByStudentId([Required] int StudentId, [Required] int YearId, int? SemesterId)
         {
@@ -53,7 +53,7 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpPost]
         public async Task<IActionResult> AddStudentEvaluation(AddStudentEvaluationCommand addStudentEvaluation)
         {
@@ -63,7 +63,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpPut]
         public async Task<ActionResult<Response<string>>> UpdateStudentEvaluation(UpdateStudentEvaluationCommand updateStudentEvaluation)
         {
@@ -74,7 +74,7 @@ namespace SchoolManagementSystem.API.Controllers
         }
 
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpDelete("{Id}")]
         public async Task<ActionResult<Response<string>>> DeleteStudentEvaluation(int Id)
         {

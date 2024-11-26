@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SchoolManagementSystem.Data;
 using SchoolManagementSystem.Data.Entities;
 using SchoolManagementSystem.Data.Responses;
 using SchoolManagementSystem.Infrastructure.Abstracts;
@@ -48,17 +49,12 @@ namespace SchoolManagementSystem.Service.Implementations
             return Task.FromResult(Regex.IsMatch(email, @"^[^\s@]+@[^\s@]+\.[^\s@]+$"));
         }
 
-        public Task<bool> GenderValidator(string gender)
+        public bool GetGenderValue(enGender gender)
         {
-            return Task.FromResult(gender.ToUpper() == "MALE" || gender.ToUpper() == "FEMALE");
+            return gender == enGender.MALE;
         }
 
-        public bool GetGenderValue(string gender)
-        {
-            return gender.ToUpper() == "MALE";
-        }
-
-        public Task<bool> PhoneValidator(string Phone)
+        public Task<bool> NumberValidator(string Phone)
         {
             if (Phone == null)
                 return Task.FromResult(false);
@@ -73,13 +69,6 @@ namespace SchoolManagementSystem.Service.Implementations
             if (Id != null)
                 return await _personRepository.GetTableAsNoTracking().AnyAsync(S => S.Email != null && S.Email.Equals(email) && S.Id != Id); ;
             return await _personRepository.GetTableAsNoTracking().AnyAsync(S => S.Email != null && S.Email.Equals(email));
-        }
-
-        public async Task<bool> IsNationalCardNumberExistAsync(string NationalCardNumber, int? Id = null)
-        {
-            if (Id != null)
-                return await _personRepository.GetTableAsNoTracking().AnyAsync(S => S.NationalCardNumber == NationalCardNumber && S.Id != Id);
-            return await _personRepository.GetTableAsNoTracking().AnyAsync(S => S.NationalCardNumber == NationalCardNumber);
         }
         #endregion
     }

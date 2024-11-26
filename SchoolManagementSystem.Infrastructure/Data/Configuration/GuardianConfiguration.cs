@@ -13,7 +13,6 @@ namespace SchoolManagementSystem.Infrastructure.Data.Configuration
                 .HasForeignKey(x => x.JobID)
                 .IsRequired();
 
-
             builder.ToTable("Guardians");
         }
     }

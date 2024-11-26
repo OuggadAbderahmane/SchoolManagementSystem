@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SchoolManagementSystem.Data;
 using SchoolManagementSystem.Data.Entities;
 using SchoolManagementSystem.Data.Responses;
 using SchoolManagementSystem.Infrastructure.Abstracts;
@@ -33,36 +34,50 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
         public async Task<GetAllStudentInfoResponse> GetStudentByIdAsync(int Id)
         {
             var url = _helperClass.GetSchemeHost() + '/';
-            return (await _dbContext.Students.AsNoTracking().Include(x => x.Section).Where(S => S.Id == Id).Select(S =>
+            return (await _dbContext.Students.AsNoTracking().Include(x => x.Section).Include(x => x.Guardian).Where(S => S.Id == Id).Select(S =>
                                             new GetAllStudentInfoResponse
                                             {
                                                 Id = S.Id,
-                                                NationalCardNumber = S.NationalCardNumber,
+                                                StudentNumber = S.StudentNumber,
                                                 FirstName = S.FirstName,
                                                 LastName = S.LastName,
-                                                Gender = S.Gender ? "Male" : "Female",
+                                                Gender = S.Gender ? enGender.MALE : enGender.FEMALE,
                                                 SectionName = S.Section == null ? null : S.Section.Name,
-                                                classInfo = S.Section == null ? null : _classRepository.GetClassInfoIQueryable().Where(x => x.Id == S.Section.ClassId).First().ClassInfo,
+                                                ClassInfo = S.Section == null ? null : _classRepository.GetClassInfoIQueryable().Where(x => x.Id == S.Section.ClassId).First().ClassInfo,
                                                 ImagePath = S.ImagePath != null ? url + S.ImagePath : null,
                                                 Address = S.Address,
+                                                GuardianId = S.GuardianId,
+                                                GuardianFullName = S.Guardian != null ? S.Guardian.FirstName + ' ' + S.Guardian.LastName : null,
+                                                GuardianPhone = S.Guardian != null ? S.Guardian.Phone : null,
                                                 DateOfBirth = S.DateOfBirth,
+                                                GuardianImagePath = S.Guardian != null ? S.Guardian.ImagePath != null ? url + S.Guardian.ImagePath : null : null,
                                                 IsActive = S.IsActive
                                             }).FirstOrDefaultAsync())!;
         }
-        public IQueryable<GetStudentResponse> GetStudentsListResponse(string NationalCardNumber, string FirstName, string LastName, bool? Gender, int SectionId, int GuardianId, bool? IsActive)
+        public IQueryable<GetStudentResponse> GetStudentsListResponse(string StudentNumber, string FullName, bool? Gender, int SectionId, int ClassID, int LevelId, int YearOfLevelId, int GuardianId, bool? IsActive)
         {
             var url = _helperClass.GetSchemeHost() + '/';
+
             IQueryable<Student> filter = _dbContext.Students.AsNoTracking().Include(x => x.Section);
-            if (!NationalCardNumber.IsNullOrEmpty())
-                filter = filter.Where(x => x.NationalCardNumber.Contains(NationalCardNumber));
-            if (!FirstName.IsNullOrEmpty())
-                filter = filter.Where(x => x.FirstName.Contains(FirstName));
-            if (!LastName.IsNullOrEmpty())
-                filter = filter.Where(x => x.LastName.Contains(LastName));
-            if (Gender != null)
-                filter = filter.Where(x => x.Gender == Gender);
+
+            if (!FullName.IsNullOrEmpty())
+                filter = filter.Where(x => (x.FirstName + " " + x.LastName).Contains(FullName));
+            if (!StudentNumber.IsNullOrEmpty())
+                filter = filter.Where(x => x.StudentNumber.StartsWith(StudentNumber));
+
             if (SectionId != 0)
                 filter = filter.Where(x => x.SectionId == SectionId);
+            else if (ClassID != 0)
+                filter = filter.Where(filter => filter.Section != null && filter.Section.ClassId == ClassID);
+            else if (LevelId != 0)
+            {
+                filter = filter.Where(filter => filter.Section != null && filter.Section.Class.LevelId == LevelId);
+                if (YearOfLevelId != 0)
+                    filter = filter.Where(filter => filter.Section != null && filter.Section.Class.YearOfLevelId == YearOfLevelId);
+            }
+
+            if (Gender != null)
+                filter = filter.Where(x => x.Gender == Gender);
             if (GuardianId != 0)
                 filter = filter.Where(x => x.GuardianId == GuardianId);
             if (IsActive != null)
@@ -72,9 +87,11 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                 new GetStudentResponse
                                 {
                                     Id = S.Id,
+                                    StudentNumber = S.StudentNumber,
                                     FirstName = S.FirstName,
                                     LastName = S.LastName,
                                     SectionName = S.Section == null ? null : S.Section.Name,
+                                    Gender = S.Gender ? enGender.MALE : enGender.FEMALE,
                                     classInfo = S.Section == null ? null : _classRepository.GetClassInfoIQueryable().Where(x => x.Id == S.Section.ClassId).First().ClassInfo,
                                     ImagePath = S.ImagePath != null ? url + S.ImagePath : null
                                 });
@@ -123,19 +140,6 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
             {
                 return false;
             }
-        }
-        public async Task<bool> AddNewStudentByPersonAsync(int PersonId, int? SectionId = null, int? GuardianId = null, bool IsActive = true)
-        {
-            try
-            {
-                await _dbContext.Database.ExecuteSqlAsync($"EXEC AddNewStudentBaseOnPerson {PersonId}, {(SectionId)} ,{(GuardianId)} , {IsActive}");
-            }
-            catch
-            {
-                return false;
-            }
-
-            return true;
         }
         public async Task<bool> DeleteStudentAsync(int Id)
         {

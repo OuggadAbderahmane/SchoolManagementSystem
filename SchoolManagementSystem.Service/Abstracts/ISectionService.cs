@@ -6,7 +6,7 @@ namespace SchoolManagementSystem.Service.Abstracts
     public interface ISectionService
     {
         public Task<GetSectionResponse> GetSectionByIdAsync(int Id);
-        public Task<List<GetSectionResponse>> GetSectionsListAsync();
+        public Task<List<GetSectionResponse>> GetSectionsListAsync(int? LevelId, int? YearOfLevelId, int? ClassId);
         public IQueryable<GetSectionResponse> GetSectionsListResponse();
         public Task<int> CreateSectionAsync(Section section);
         public Task<bool> UpdateSectionAsync(Section section);

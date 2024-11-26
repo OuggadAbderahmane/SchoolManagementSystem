@@ -11,7 +11,7 @@ using SchoolManagementSystem.Data.Responses;
 namespace SchoolManagementSystem.API.Controllers
 {
     [Route("[controller]s")]
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin,hr")]
     [ApiController]
     public class SubjectTeacherController(IMediator mediator, IStringLocalizer<SharedResource> stringLocalizer) : ControllerBase
     {

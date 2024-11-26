@@ -3,6 +3,7 @@ using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Students.Commands.Models;
 using SchoolManagementSystem.Core.Resources;
+using SchoolManagementSystem.Data;
 using SchoolManagementSystem.Data.Entities;
 using SchoolManagementSystem.Data.Responses;
 using SchoolManagementSystem.Service.Abstracts;
@@ -10,7 +11,6 @@ using SchoolManagementSystem.Service.Abstracts;
 namespace SchoolManagementSystem.Core.Features.Students.Commands.Handlers
 {
     public class StudentCommandHandler : ResponseHandler, IRequestHandler<AddStudentCommand, Response<IdResponse>>
-                                                        , IRequestHandler<AddStudentByPersonCommand, Response<string>>
                                                         , IRequestHandler<UpdateStudentCommand, Response<string>>
                                                         , IRequestHandler<DeleteStudentCommand, Response<string>>
     {
@@ -42,7 +42,7 @@ namespace SchoolManagementSystem.Core.Features.Students.Commands.Handlers
             }
             var Result = await _studentService.CreateStudentAsync(new Student
             {
-                NationalCardNumber = request.NationalCardNumber,
+                StudentNumber = request.StudentNumber,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Gender = _personService.GetGenderValue(request.Gender),
@@ -54,12 +54,6 @@ namespace SchoolManagementSystem.Core.Features.Students.Commands.Handlers
                 DateOfBirth = request.DateOfBirth,
             });
             return Result != -1 ? Created<IdResponse>(new IdResponse { Id = Result }) : Failed<IdResponse>();
-        }
-
-        public async Task<Response<string>> Handle(AddStudentByPersonCommand request, CancellationToken cancellationToken)
-        {
-            var Result = await _studentService.CreateStudentAsync(request.Id, request.SectionId, request.GuardianId, request.IsActive);
-            return Result ? Created<string>() : Failed<string>();
         }
 
         public async Task<Response<string>> Handle(UpdateStudentCommand request, CancellationToken cancellationToken)
@@ -75,10 +69,9 @@ namespace SchoolManagementSystem.Core.Features.Students.Commands.Handlers
                                                                      request.SectionId,
                                                                      request.GuardianId,
                                                                      request.IsActive,
-                                                                     request.NationalCardNumber,
                                                                      request.FirstName,
                                                                      request.LastName,
-                                                                     request.Gender != null ? _personService.GetGenderValue(request.Gender) : null,
+                                                                     request.Gender != null ? _personService.GetGenderValue((enGender)request.Gender) : null,
                                                                      request.DateOfBirth,
                                                                      request.Address,
                                                                      ImagePath);

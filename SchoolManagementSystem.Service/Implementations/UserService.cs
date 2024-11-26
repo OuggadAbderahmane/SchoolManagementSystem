@@ -117,8 +117,11 @@ namespace SchoolManagementSystem.Service.Implementations
 
         public async Task<bool> CreateAsync(User user, string password, List<string> roles)
         {
-            await _userManager.CreateAsync(user, password);
-            return (await _userManager.AddToRolesAsync(user, roles.Select(x => x.ToLower()))).Succeeded;
+            var result = (await _userManager.CreateAsync(user, password));
+            //Console.WriteLine("The Error =====> " + result.Errors);
+            if (result.Succeeded)
+                return (await _userManager.AddToRolesAsync(user, roles.Select(x => x.ToLower()))).Succeeded;
+            return false;
         }
 
         public async Task<int> DeleteByIdAsync(int Id)

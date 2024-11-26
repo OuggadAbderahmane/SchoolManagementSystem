@@ -38,11 +38,26 @@ namespace SchoolManagementSystem.Core.Features.Users.Commands.Validations
                 .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.Exists]);
 
             RuleFor(x => x.PersonId)
-                .MustAsync(async (Key, CancellationToken) => !await _userService.IsPersonIdExistAsync(Key))
-                .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.Used]);
-
-            RuleFor(x => x.PersonId)
-                .MustAsync(async (Key, CancellationToken) => await _personService.IsIdExistAsync(Key))
+                .Must((Key, CancellationToken) =>
+                {
+                    if (Key.PersonId != null)
+                        return Key.PersonId > 0;
+                    return true;
+                })
+                .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotLessThanOrEqualsTo] + " 0")
+                .MustAsync(async (Key, CancellationToken) =>
+                {
+                    if (Key != null)
+                        return !await _userService.IsPersonIdExistAsync((int)Key);
+                    return true;
+                })
+                .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.Used])
+                .MustAsync(async (Key, CancellationToken) =>
+                {
+                    if (Key != null)
+                        return await _personService.IsIdExistAsync((int)Key);
+                    return true;
+                })
                 .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.DoesNotExist]);
 
             RuleFor(x => x.Roles)
@@ -69,10 +84,6 @@ namespace SchoolManagementSystem.Core.Features.Users.Commands.Validations
                 .NotEmpty().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEmpty])
                 .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#()\-+=$!%*?&])[A-Za-z\d@#()\-+=$!%*?&]{8,}$")
                 .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.PasswordErrorMatch]);
-
-            RuleFor(x => x.PersonId)
-                .NotNull().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotNull])
-                .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEqualsTo] + " 0");
         }
         #endregion
     }

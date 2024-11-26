@@ -67,7 +67,7 @@ namespace SchoolManagementSystem.Infrastructure
                 option.Lockout.AllowedForNewUsers = true;
 
                 // User Setting
-                option.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-._@+";
+                option.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ12345678#-._@+";
                 option.User.RequireUniqueEmail = false;
 
                 // SignIn Setting

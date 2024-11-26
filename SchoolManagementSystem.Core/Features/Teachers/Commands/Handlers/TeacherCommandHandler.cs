@@ -3,6 +3,7 @@ using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Teachers.Commands.Models;
 using SchoolManagementSystem.Core.Resources;
+using SchoolManagementSystem.Data;
 using SchoolManagementSystem.Data.Entities;
 using SchoolManagementSystem.Data.Responses;
 using SchoolManagementSystem.Service.Abstracts;
@@ -42,13 +43,11 @@ namespace SchoolManagementSystem.Core.Features.Teachers.Commands.Handlers
             }
             var Result = await _teacherService.CreateTeacherAsync(new Teacher
             {
-                NationalCardNumber = request.NationalCardNumber,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Gender = _personService.GetGenderValue(request.Gender),
                 Address = request.Address,
                 PermanentWork = request.PermanentWork,
-                Salary = request.Salary,
                 Email = request.Email,
                 Phone = request.Phone,
                 ImagePath = ImagePath,
@@ -59,7 +58,7 @@ namespace SchoolManagementSystem.Core.Features.Teachers.Commands.Handlers
 
         public async Task<Response<string>> Handle(AddTeacherByPersonCommand request, CancellationToken cancellationToken)
         {
-            var Result = await _teacherService.CreateTeacherAsync(request.Id, request.Salary, request.PermanentWork);
+            var Result = await _teacherService.CreateTeacherAsync(request.Id, request.PermanentWork);
             return Result ? Created<string>() : Failed<string>();
         }
 
@@ -73,12 +72,10 @@ namespace SchoolManagementSystem.Core.Features.Teachers.Commands.Handlers
                     return Failed<string>(_stringLocalizer[SharedResourcesKey.ErrorImage]);
             }
             var Result = await _teacherService.UpdateTeacherAsync(request.Id,
-                                                                     request.Salary,
                                                                      request.PermanentWork,
-                                                                     request.NationalCardNumber,
                                                                      request.FirstName,
                                                                      request.LastName,
-                                                                     request.Gender != null ? _personService.GetGenderValue(request.Gender) : null,
+                                                                     request.Gender != null ? _personService.GetGenderValue((enGender)request.Gender) : null,
                                                                      request.DateOfBirth,
                                                                      request.Address,
                                                                      ImagePath,

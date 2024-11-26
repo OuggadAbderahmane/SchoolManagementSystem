@@ -28,9 +28,9 @@ namespace SchoolManagementSystem.Service.Implementations
             return await _guardianRepository.GetGuardianByIdAsync(Id);
         }
 
-        public IQueryable<GetGuardianResponse> GetGuardiansListResponse(string NationalCardNumber, string FirstName, string LastName, bool? Gender, int JobID)
+        public IQueryable<GetGuardianResponse> GetGuardiansListResponse(string FirstName, string LastName, bool? Gender, int JobID)
         {
-            return _guardianRepository.GetGuardiansListResponse(NationalCardNumber, FirstName, LastName, Gender, JobID);
+            return _guardianRepository.GetGuardiansListResponse(FirstName, LastName, Gender, JobID);
         }
 
         public IQueryable<Guardian> GetGuardiansListIQueryable()
@@ -73,12 +73,12 @@ namespace SchoolManagementSystem.Service.Implementations
             return await _guardianRepository.DeleteGuardianAsync(Id);
         }
 
-        public async Task<bool> UpdateGuardianAsync(int PersonId, int? JobId = null, string? NationalCardNumber = null, string? FirstName = null, string? LastName = null, bool? Gender = null,
+        public async Task<bool> UpdateGuardianAsync(int PersonId, int? JobId = null, string? FirstName = null, string? LastName = null, bool? Gender = null,
                                          DateTime? DateOfBirth = null, string? Address = null, string? ImagePath = null, string? Email = null, string? Phone = null)
         {
             var Transaction = _guardianRepository.BeginTransaction();
 
-            if (!_guardianRepository.UpdateGuardianByQuery(PersonId, JobId) || !_personRepository.UpdatePersonByQuery(PersonId, NationalCardNumber, FirstName, LastName, Gender, DateOfBirth, Email, Phone, Address, ImagePath))
+            if (!_guardianRepository.UpdateGuardianByQuery(PersonId, JobId) || !_personRepository.UpdatePersonByQuery(PersonId, FirstName, LastName, Gender, DateOfBirth, Email, Phone, Address, ImagePath))
             {
                 await Transaction.RollbackAsync();
                 return false;

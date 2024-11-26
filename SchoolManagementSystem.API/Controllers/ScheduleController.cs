@@ -22,7 +22,7 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpGet("GetSectionScheduleById/{Id}")]
         public async Task<ActionResult<Response<List<GetPartsOfStudentScheduleResponse>>>> GetSectionScheduleById(int Id)
         {
@@ -43,7 +43,7 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpGet("GetTeacherScheduleById/{Id}")]
         public async Task<ActionResult<Response<List<GetPartsOfTeacherScheduleResponse>>>> GetTeacherScheduleById(int Id)
         {
@@ -64,7 +64,7 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpGet("IsSessionAvailable")]
         public async Task<ActionResult<Response<bool?>>> IsSessionAvailable([Required] int sectionId, [Required] sbyte day, [Required] sbyte session)
         {
@@ -74,7 +74,7 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpGet("IsTeacherAvailable")]
         public async Task<ActionResult<Response<bool?>>> IsTeacherAvailable([Required] int teacherId, [Required] sbyte day, [Required] sbyte session)
         {
@@ -84,7 +84,7 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpGet("IsSubjectTeacherAvailable")]
         public async Task<ActionResult<Response<bool?>>> IsSubjectTeacherAvailable([Required] int subjectTeacherId, [Required] sbyte day, [Required] sbyte session)
         {
@@ -104,7 +104,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpPut("UpdatePart")]
         public async Task<ActionResult<Response<string>>> UpdatePartOfSchedule(UpdatePartOfScheduleCommand updatePartOfSchedule)
         {
@@ -114,7 +114,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpDelete("DeleteSchedule/{SectionId}")]
         public async Task<ActionResult<Response<string>>> DeleteSchedule(int SectionId)
         {
@@ -124,7 +124,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpDelete("DeletePartOfSchedule")]
         public async Task<ActionResult<Response<string>>> DeletePartOfSchedule([Required] int SectionId, [Required] sbyte Day, [Required] sbyte Session)
         {

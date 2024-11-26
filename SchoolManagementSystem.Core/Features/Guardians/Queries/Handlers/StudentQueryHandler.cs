@@ -41,7 +41,7 @@ namespace SchoolManagementSystem.Core.Features.Guardians.Queries.Handlers
 
         public async Task<Response<PaginatedResult<GetGuardianResponse>>> Handle(GetGuardiansPaginatedListQuery request, CancellationToken cancellationToken)
         {
-            return Success(await _guardianService.GetGuardiansListResponse(request.NationalCardNumber!, request.FirstName!, request.LastName!, request.Gender.HasValue ? request.Gender == enGender.MALE : null, request.JobID).ToPaginatedListAsync(request.pageNumber, request.pageSize));
+            return Success(await _guardianService.GetGuardiansListResponse(request.FirstName!, request.LastName!, request.Gender.HasValue ? request.Gender == enGender.MALE : null, request.JobID).ToPaginatedListAsync(request.pageNumber, request.pageSize));
         }
 
         public async Task<Response<GetAllGuardianInfoResponse>> Handle(GetGuardianQuery request, CancellationToken cancellationToken)

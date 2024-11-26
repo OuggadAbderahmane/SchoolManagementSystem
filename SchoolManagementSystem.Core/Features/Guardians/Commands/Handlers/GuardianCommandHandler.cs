@@ -3,6 +3,7 @@ using Microsoft.Extensions.Localization;
 using SchoolManagementSystem.Core.Bases;
 using SchoolManagementSystem.Core.Features.Guardians.Commands.Models;
 using SchoolManagementSystem.Core.Resources;
+using SchoolManagementSystem.Data;
 using SchoolManagementSystem.Data.Entities;
 using SchoolManagementSystem.Data.Responses;
 using SchoolManagementSystem.Service.Abstracts;
@@ -42,7 +43,6 @@ namespace SchoolManagementSystem.Core.Features.Guardians.Commands.Handlers
             }
             var Result = await _guardianService.CreateGuardianAsync(new Guardian
             {
-                NationalCardNumber = request.NationalCardNumber,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Gender = _personService.GetGenderValue(request.Gender),
@@ -73,10 +73,9 @@ namespace SchoolManagementSystem.Core.Features.Guardians.Commands.Handlers
             }
             var Result = await _guardianService.UpdateGuardianAsync(request.Id,
                                                                      request.JobId,
-                                                                     request.NationalCardNumber,
                                                                      request.FirstName,
                                                                      request.LastName,
-                                                                     request.Gender != null ? _personService.GetGenderValue(request.Gender) : null,
+                                                                     request.Gender != null ? _personService.GetGenderValue((enGender)request.Gender) : null,
                                                                      request.DateOfBirth,
                                                                      request.Address,
                                                                      ImagePath,

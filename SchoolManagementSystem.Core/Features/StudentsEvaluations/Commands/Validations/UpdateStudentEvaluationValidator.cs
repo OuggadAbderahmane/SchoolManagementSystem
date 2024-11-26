@@ -51,7 +51,7 @@ namespace SchoolManagementSystem.Core.Features.StudentsEvaluations.Commands.Vali
         {
             RuleFor(x => x.Id)
                     .NotNull().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotNull])
-                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEqualsTo] + " 0");
+                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotLessThanOrEqualsTo] + " 0");
         }
         #endregion
     }

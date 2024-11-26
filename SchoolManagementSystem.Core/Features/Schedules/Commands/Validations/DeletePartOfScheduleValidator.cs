@@ -27,7 +27,7 @@ namespace SchoolManagementSystem.Core.Features.Schedules.Commands.Validations
         {
             RuleFor(x => x.SectionId)
                     .NotNull().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotNull])
-                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEqualsTo] + " 0")
+                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotLessThanOrEqualsTo] + " 0")
                     .MustAsync(async (Key, CancellationToken) => await _sectionService.IsIdExistAsync(Key))
                     .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.DoesNotExist]);
 

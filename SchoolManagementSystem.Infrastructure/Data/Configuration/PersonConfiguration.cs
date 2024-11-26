@@ -12,11 +12,6 @@ namespace SchoolManagementSystem.Infrastructure.Data.Configuration
             builder.Property(x => x.Id)
                 .ValueGeneratedOnAdd();
 
-            builder.Property(x => x.NationalCardNumber)
-                .HasColumnType("VARCHAR")
-                .HasMaxLength(20)
-                .IsRequired();
-
             builder.Property(x => x.FirstName)
                 .HasColumnType("NVARCHAR")
                 .HasMaxLength(20)

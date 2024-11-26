@@ -28,9 +28,9 @@ namespace SchoolManagementSystem.Service.Implementations
             return _teacherRepository.GetTeacherByIdAsync(Id);
         }
 
-        public IQueryable<GetTeacherResponse> GetTeachersListResponse(string NationalCardNumber, string FirstName, string LastName, bool? Gender, bool? PermanentWork)
+        public IQueryable<GetTeacherResponse> GetTeachersListResponse(string FirstName, string LastName, bool? Gender, bool? PermanentWork)
         {
-            return _teacherRepository.GetTeachersListResponse(NationalCardNumber, FirstName, LastName, Gender, PermanentWork);
+            return _teacherRepository.GetTeachersListResponse(FirstName, LastName, Gender, PermanentWork);
         }
 
         public IQueryable<Teacher> GetTeachersListIQueryable()
@@ -43,11 +43,11 @@ namespace SchoolManagementSystem.Service.Implementations
             return await _teacherRepository.GetTableAsNoTracking().AnyAsync(D => D.Id == Id);
         }
 
-        public async Task<bool> CreateTeacherAsync(int PersonId, decimal Salary, bool PermanentWork)
+        public async Task<bool> CreateTeacherAsync(int PersonId, bool PermanentWork)
         {
             try
             {
-                return await _teacherRepository.AddNewTeacherByPersonAsync(PersonId, Salary, PermanentWork);
+                return await _teacherRepository.AddNewTeacherByPersonAsync(PersonId, PermanentWork);
             }
             catch
             {
@@ -73,12 +73,12 @@ namespace SchoolManagementSystem.Service.Implementations
             return await _teacherRepository.DeleteTeacherAsync(Id);
         }
 
-        public async Task<bool> UpdateTeacherAsync(int PersonId, decimal? Salary = null, bool? PermanentWork = null, string? NationalCardNumber = null, string? FirstName = null, string? LastName = null, bool? Gender = null,
+        public async Task<bool> UpdateTeacherAsync(int PersonId, bool? PermanentWork = null, string? FirstName = null, string? LastName = null, bool? Gender = null,
                                          DateTime? DateOfBirth = null, string? Address = null, string? ImagePath = null, string? Email = null, string? Phone = null)
         {
             var Transaction = _teacherRepository.BeginTransaction();
 
-            if (!_teacherRepository.UpdateTeacherByQuery(PersonId, Salary, PermanentWork) || !_personRepository.UpdatePersonByQuery(PersonId, NationalCardNumber, FirstName, LastName, Gender, DateOfBirth, Email, Phone, Address, ImagePath))
+            if (!_teacherRepository.UpdateTeacherByQuery(PersonId, PermanentWork) || !_personRepository.UpdatePersonByQuery(PersonId, FirstName, LastName, Gender, DateOfBirth, Email, Phone, Address, ImagePath))
             {
                 await Transaction.RollbackAsync();
                 return false;

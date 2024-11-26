@@ -21,21 +21,21 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpGet("List")]
-        public async Task<ActionResult<Response<List<GetSectionResponse>>>> GetSectionsList()
+        public async Task<ActionResult<Response<List<GetSectionResponse>>>> GetSectionsList([FromQuery] GetSectionsListQuery getSections)
         {
-            return Ok(await _mediator.Send(new GetSectionsListQuery()));
+            return Ok(await _mediator.Send(getSections));
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpGet("PaginatedList")]
         public async Task<ActionResult<Response<PaginatedResult<GetSectionResponse>>>> GetSectionsPaginatedList(int? pageNumber, int? pageSize)
         {
             return Ok(await _mediator.Send(new GetSectionsPaginatedListQuery(pageNumber, pageSize)));
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpGet("{Id}")]
         public async Task<ActionResult<Response<GetSectionResponse>>> GetSectionById(int Id)
         {
@@ -45,7 +45,7 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpPost]
         public async Task<ActionResult<Response<IdResponse>>> AddSection(AddSectionCommand addSection)
         {
@@ -55,7 +55,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpPut]
         public async Task<ActionResult<Response<string>>> UpdateSection(UpdateSectionCommand updateSection)
         {
@@ -65,7 +65,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpDelete("{Id}")]
         public async Task<ActionResult<Response<string>>> DeleteSection(int Id)
         {

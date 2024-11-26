@@ -21,14 +21,14 @@ namespace SchoolManagementSystem.API.Controllers
 
         #region Handle Functions
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpGet]
         public async Task<ActionResult<Response<PaginatedResult<GetTeacherResponse>>>> GetTeachersPaginatedList([FromQuery] GetTeachersPaginatedListQuery getTeachersPaginatedListQuery)
         {
             return Ok(await _mediator.Send(getTeachersPaginatedListQuery));
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpGet("GetTeacherById/{Id}")]
         public async Task<ActionResult<Response<GetAllTeacherInfoResponse>>> GetTeacherById(int Id)
         {
@@ -52,7 +52,7 @@ namespace SchoolManagementSystem.API.Controllers
             return NotFound(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpPost("Add")]
         public async Task<ActionResult<Response<GetAllTeacherInfoResponse>>> AddTeacher([FromForm] AddTeacherCommand addTeacher)
         {
@@ -65,7 +65,7 @@ namespace SchoolManagementSystem.API.Controllers
         /// <summary>
         /// If you have a person that already exists and want to make it Guardian
         /// </summary>
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpPost("AddByExistPerson")]
         public async Task<ActionResult<Response<string>>> AddTeacherByExistPerson(AddTeacherByPersonCommand addTeacher)
         {
@@ -75,7 +75,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpPut("Update")]
         public async Task<ActionResult<Response<string>>> UpdateTeacher(UpdateTeacherCommand updateTeacher)
         {
@@ -85,7 +85,7 @@ namespace SchoolManagementSystem.API.Controllers
             return BadRequest(response);
         }
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,hr")]
         [HttpDelete("Delete/{Id}")]
         public async Task<ActionResult<Response<string>>> DeleteTeacher(int Id)
         {

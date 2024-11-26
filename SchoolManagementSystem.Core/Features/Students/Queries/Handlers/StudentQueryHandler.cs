@@ -13,6 +13,7 @@ namespace SchoolManagementSystem.Core.Features.Students.Queries.Handlers
 {
     public class StudentQueryHandler : ResponseHandler, IRequestHandler<GetStudentByIdQuery, Response<GetAllStudentInfoResponse>>
                                                       , IRequestHandler<GetStudentQuery, Response<GetAllStudentInfoResponse>>
+                                                      , IRequestHandler<IsStudentNumberExistsQuery, Response<bool>>
                                                       , IRequestHandler<GetStudentsPaginatedListQuery, Response<PaginatedResult<GetStudentResponse>>>
     {
         #region Fields
@@ -45,7 +46,12 @@ namespace SchoolManagementSystem.Core.Features.Students.Queries.Handlers
 
         public async Task<Response<PaginatedResult<GetStudentResponse>>> Handle(GetStudentsPaginatedListQuery request, CancellationToken cancellationToken)
         {
-            return Success(await _studentService.GetStudentsListResponse(request.NationalCardNumber!, request.FirstName!, request.LastName!, request.Gender.HasValue ? request.Gender == enGender.MALE : null, request.SectionId, request.GuardianId, request.IsActive).ToPaginatedListAsync(request.pageNumber, request.pageSize));
+            return Success(await _studentService.GetStudentsListResponse(request.StudentNumber!, request.FullName!, request.Gender.HasValue ? request.Gender == enGender.MALE : null, request.SectionId, request.ClassId, request.LevelId, request.YearOfLevelId, request.GuardianId, request.IsActive).ToPaginatedListAsync(request.pageNumber, request.pageSize));
+        }
+
+        public async Task<Response<bool>> Handle(IsStudentNumberExistsQuery request, CancellationToken cancellationToken)
+        {
+            return Success(await _studentService.IsStudentNumberExistAsync(request.StudentNumber));
         }
         #endregion
     }

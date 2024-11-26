@@ -617,11 +617,6 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("NVARCHAR");
 
-                    b.Property<string>("NationalCardNumber")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("VARCHAR");
-
                     b.Property<string>("Phone")
                         .HasMaxLength(20)
                         .HasColumnType("VARCHAR");
@@ -906,9 +901,17 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                     b.Property<int?>("SectionId")
                         .HasColumnType("int");
 
+                    b.Property<string>("StudentNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasIndex("GuardianId");
 
                     b.HasIndex("SectionId");
+
+                    b.HasIndex("StudentNumber")
+                        .IsUnique()
+                        .HasFilter("[StudentNumber] IS NOT NULL");
 
                     b.ToTable("Students", (string)null);
                 });
@@ -921,9 +924,6 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("BIT")
                         .HasDefaultValue(false);
-
-                    b.Property<decimal>("Salary")
-                        .HasColumnType("decimal(8,2)");
 
                     b.ToTable("Teachers", (string)null);
                 });
@@ -1132,7 +1132,7 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
 
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Student", b =>
                 {
-                    b.HasOne("SchoolManagementSystem.Data.Entities.Guardian", "guardian")
+                    b.HasOne("SchoolManagementSystem.Data.Entities.Guardian", "Guardian")
                         .WithMany("Students")
                         .HasForeignKey("GuardianId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1148,9 +1148,9 @@ namespace SchoolManagementSystem.Infrastructure.Migrations
                         .HasForeignKey("SectionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Section");
+                    b.Navigation("Guardian");
 
-                    b.Navigation("guardian");
+                    b.Navigation("Section");
                 });
 
             modelBuilder.Entity("SchoolManagementSystem.Data.Entities.Teacher", b =>

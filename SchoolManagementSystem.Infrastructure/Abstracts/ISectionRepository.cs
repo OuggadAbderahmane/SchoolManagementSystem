@@ -7,8 +7,8 @@ namespace SchoolManagementSystem.Infrastructure.Abstracts
     public interface ISectionRepository : IGenericRepository<Section>
     {
         public Task<GetSectionResponse> GetSectionByIdAsync(int Id);
-        public IQueryable<GetSectionResponse> GetSectionsListResponse();
-        public Task<List<GetSectionResponse>> GetSectionsListAsync();
+        public IQueryable<GetSectionResponse> GetSectionsListResponse(int? LevelId = null, int? YearOfLevelId = null, int? ClassId = null);
+        public Task<List<GetSectionResponse>> GetSectionsListAsync(int? LevelId, int? YearOfLevelId, int? ClassId);
         public IQueryable<Section> GetSectionsListIQueryable();
     }
 }

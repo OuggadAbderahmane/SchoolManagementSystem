@@ -1,4 +1,5 @@
-﻿using SchoolManagementSystem.Data.Entities;
+﻿using SchoolManagementSystem.Data;
+using SchoolManagementSystem.Data.Entities;
 using SchoolManagementSystem.Data.Responses;
 
 namespace SchoolManagementSystem.Service.Abstracts
@@ -11,9 +12,7 @@ namespace SchoolManagementSystem.Service.Abstracts
         public Task<bool> IsEmailExistAsync(string email, int? Id = null);
         public IQueryable<Person> GetPeopleListIQueryable();
         public Task<bool> EmailValidator(string email);
-        public Task<bool> PhoneValidator(string Phone);
-        public bool GetGenderValue(string gender);
-        public Task<bool> GenderValidator(string gender);
-        public Task<bool> IsNationalCardNumberExistAsync(string NationalCardNumber, int? Id = null);
+        public Task<bool> NumberValidator(string Phone);
+        public bool GetGenderValue(enGender gender);
     }
 }

@@ -9,7 +9,7 @@ namespace SchoolManagementSystem.Infrastructure.Abstracts
         public Task<GetPersonResponse> GetPersonByIdAsync(int Id);
         public Task<List<GetPersonResponse>> GetPeopleListResponseAsync();
         public IQueryable<Person> GetPeopleListIQueryable();
-        public bool UpdatePersonByQuery(int PersonId, string? NationalCardNumber = null, string? FirstName = null, string? LastName = null, bool? Gender = null,
+        public bool UpdatePersonByQuery(int PersonId, string? FirstName = null, string? LastName = null, bool? Gender = null,
                                          DateTime? DateOfBirth = null, string? Email = null, string? Phone = null, string? Address = null, string? ImagePath = null);
     }
 }

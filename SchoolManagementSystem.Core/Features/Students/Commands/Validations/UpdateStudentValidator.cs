@@ -38,12 +38,6 @@ namespace SchoolManagementSystem.Core.Features.Students.Commands.Validations
             .MustAsync(async (Key, CancellationToken) => await _studentService.IsIdExistAsync(Key))
                     .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.DoesNotExist]);
 
-            RuleFor(x => x.NationalCardNumber)
-                    .Must((Key, CancellationToken) => Key.NationalCardNumber?.Trim() != string.Empty)
-                    .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEmpty])
-                    .MustAsync(async (model, Key, CancellationToken) => Key != null ? !await _personService.IsNationalCardNumberExistAsync(Key, model.Id) : true)
-                    .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.Exists]);
-
             RuleFor(x => x.FirstName)
                     .Must((Key, CancellationToken) => Key.FirstName?.Trim() != string.Empty)
                     .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEmpty]);
@@ -70,12 +64,6 @@ namespace SchoolManagementSystem.Core.Features.Students.Commands.Validations
                     })
                     .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.DoesNotExist]);
 
-            RuleFor(x => x.Gender)
-                    .Must((Key, CancellationToken) => Key.Gender?.Trim() != string.Empty)
-                    .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEmpty])
-                    .Must((Key, CancellationToken) => Key.Gender != null ? _personService.GenderValidator(Key.Gender).Result : true)
-                    .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.MustBeValid]);
-
             RuleFor(x => x.Address)
                     .Must((Key, CancellationToken) => Key.Address?.Trim() != string.Empty)
                     .WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEmpty]);
@@ -89,13 +77,13 @@ namespace SchoolManagementSystem.Core.Features.Students.Commands.Validations
         {
             RuleFor(x => x.Id)
                     .NotNull().WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotNull])
-                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEqualsTo] + " 0");
+                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotLessThanOrEqualsTo] + " 0");
 
             RuleFor(x => x.SectionId)
-                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEqualsTo] + " 0");
+                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotLessThanOrEqualsTo] + " 0");
 
             RuleFor(x => x.GuardianId)
-                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEqualsTo] + " 0");
+                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotLessThanOrEqualsTo] + " 0");
         }
         #endregion
     }

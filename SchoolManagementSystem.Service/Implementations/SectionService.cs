@@ -62,9 +62,9 @@ namespace SchoolManagementSystem.Service.Implementations
             }
         }
 
-        public async Task<List<GetSectionResponse>> GetSectionsListAsync()
+        public async Task<List<GetSectionResponse>> GetSectionsListAsync(int? LevelId, int? YearOfLevelId, int? ClassId)
         {
-            return await _sectionRepository.GetSectionsListAsync();
+            return await _sectionRepository.GetSectionsListAsync(LevelId, YearOfLevelId, ClassId);
         }
 
         public async Task<bool> IsExistAsync(string? SectionName, int? ClassId, int? Id = null)

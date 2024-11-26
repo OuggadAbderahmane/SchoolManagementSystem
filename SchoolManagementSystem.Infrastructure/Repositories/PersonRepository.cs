@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using SchoolManagementSystem.Data;
 using SchoolManagementSystem.Data.Entities;
 using SchoolManagementSystem.Data.Responses;
 using SchoolManagementSystem.Infrastructure.Abstracts;
@@ -39,10 +40,9 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                             new GetPersonResponse
                                             {
                                                 Id = S.Id,
-                                                NationalCardNumber = S.NationalCardNumber,
                                                 FirstName = S.FirstName,
                                                 LastName = S.LastName,
-                                                Gender = S.Gender ? "Male" : "Female",
+                                                Gender = S.Gender ? enGender.MALE : enGender.FEMALE,
                                                 ImagePath = S.ImagePath != null ? url + S.ImagePath : null,
                                             }).ToListAsync();
         }
@@ -54,19 +54,17 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                             new GetPersonResponse
                                             {
                                                 Id = S.Id,
-                                                NationalCardNumber = S.NationalCardNumber,
                                                 FirstName = S.FirstName,
                                                 LastName = S.LastName,
-                                                Gender = S.Gender ? "Male" : "Female",
+                                                Gender = S.Gender ? enGender.MALE : enGender.FEMALE,
                                                 ImagePath = S.ImagePath != null ? url + S.ImagePath : null,
                                             }).FirstOrDefaultAsync())!;
         }
 
-        public bool UpdatePersonByQuery(int PersonId, string? NationalCardNumber = null, string? FirstName = null, string? LastName = null, bool? Gender = null,
+        public bool UpdatePersonByQuery(int PersonId, string? FirstName = null, string? LastName = null, bool? Gender = null,
                                          DateTime? DateOfBirth = null, string? Email = null, string? Phone = null, string? Address = null, string? ImagePath = null)
         {
-            if (NationalCardNumber == null &&
-                FirstName == null &&
+            if (FirstName == null &&
                 LastName == null &&
                 Gender == null &&
                 DateOfBirth == null &&
@@ -78,11 +76,6 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
             var parameters = new List<SqlParameter>();
             var query = new StringBuilder("UPDATE [dbo].[People] SET ");
 
-            if (NationalCardNumber != null)
-            {
-                query.Append("NationalCardNumber = @NationalCardNumber, ");
-                parameters.Add(new SqlParameter("@NationalCardNumber", NationalCardNumber));
-            }
             if (FirstName != null)
             {
                 query.Append("FirstName = @FirstName, ");

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SchoolManagementSystem.Data;
 using SchoolManagementSystem.Data.Entities;
 using SchoolManagementSystem.Data.Responses;
 using SchoolManagementSystem.Infrastructure.Abstracts;
@@ -35,10 +36,9 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                             new GetAllGuardianInfoResponse
                                             {
                                                 Id = S.Id,
-                                                NationalCardNumber = S.NationalCardNumber,
                                                 FirstName = S.FirstName,
                                                 LastName = S.LastName,
-                                                Gender = S.Gender ? "Male" : "Female",
+                                                Gender = S.Gender ? enGender.MALE : enGender.FEMALE,
                                                 JobName = S.Job.Name,
                                                 ImagePath = S.ImagePath != null ? url + S.ImagePath : null,
                                                 Address = S.Address,
@@ -47,13 +47,11 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                                 DateOfBirth = S.DateOfBirth,
                                             }).FirstOrDefaultAsync())!;
         }
-        public IQueryable<GetGuardianResponse> GetGuardiansListResponse(string NationalCardNumber, string FirstName, string LastName, bool? Gender, int JobID)
+        public IQueryable<GetGuardianResponse> GetGuardiansListResponse(string FirstName, string LastName, bool? Gender, int JobID)
         {
             var url = _helperClass.GetSchemeHost() + '/';
 
             IQueryable<Guardian> filter = _dbContext.Guardians.AsNoTracking().Include(g => g.Job);
-            if (!NationalCardNumber.IsNullOrEmpty())
-                filter = filter.Where(x => x.NationalCardNumber.Contains(NationalCardNumber));
             if (!FirstName.IsNullOrEmpty())
                 filter = filter.Where(x => x.FirstName.Contains(FirstName));
             if (!LastName.IsNullOrEmpty())

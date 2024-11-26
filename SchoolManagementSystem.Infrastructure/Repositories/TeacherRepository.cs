@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using SchoolManagementSystem.Data;
 using SchoolManagementSystem.Data.Entities;
 using SchoolManagementSystem.Data.Responses;
 using SchoolManagementSystem.Infrastructure.Abstracts;
@@ -35,11 +36,9 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                             new GetAllTeacherInfoResponse
                                             {
                                                 Id = S.Id,
-                                                NationalCardNumber = S.NationalCardNumber,
                                                 FirstName = S.FirstName,
                                                 LastName = S.LastName,
-                                                Gender = S.Gender ? "Male" : "Female",
-                                                Salary = S.Salary,
+                                                Gender = S.Gender ? enGender.MALE : enGender.FEMALE,
                                                 ImagePath = S.ImagePath != null ? url + S.ImagePath : null,
                                                 Address = S.Address,
                                                 Email = S.Email,
@@ -49,12 +48,10 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                             }).FirstOrDefaultAsync())!;
         }
 
-        public IQueryable<GetTeacherResponse> GetTeachersListResponse(string NationalCardNumber, string FirstName, string LastName, bool? Gender, bool? PermanentWork)
+        public IQueryable<GetTeacherResponse> GetTeachersListResponse(string FirstName, string LastName, bool? Gender, bool? PermanentWork)
         {
             var url = _helperClass.GetSchemeHost() + '/';
             var filter = _dbContext.Teachers.AsNoTracking();
-            if (!NationalCardNumber.IsNullOrEmpty())
-                filter = filter.Where(x => x.NationalCardNumber.Contains(NationalCardNumber));
             if (!FirstName.IsNullOrEmpty())
                 filter = filter.Where(x => x.FirstName.Contains(FirstName));
             if (!LastName.IsNullOrEmpty())
@@ -70,7 +67,6 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                                     Id = S.Id,
                                     FirstName = S.FirstName,
                                     LastName = S.LastName,
-                                    Salary = S.Salary,
                                     PermanentWork = S.PermanentWork,
                                     ImagePath = S.ImagePath != null ? url + S.ImagePath : null
                                 });
@@ -81,18 +77,13 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
             return _dbContext.Teachers.AsNoTracking();
         }
 
-        public bool UpdateTeacherByQuery(int PersonId, decimal? Salary = null, bool? PermanentWork = null)
+        public bool UpdateTeacherByQuery(int PersonId, bool? PermanentWork = null)
         {
-            if (Salary == null && PermanentWork == null)
+            if (PermanentWork == null)
                 return true;
             var parameters = new List<SqlParameter>();
             var query = new StringBuilder("UPDATE [dbo].[Teachers] SET ");
 
-            if (Salary != null)
-            {
-                query.Append("Salary = @Salary, ");
-                parameters.Add(new SqlParameter("@Salary", Salary));
-            }
             if (PermanentWork != null)
             {
                 query.Append("PermanentWork = @PermanentWork ");
@@ -117,11 +108,11 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> AddNewTeacherByPersonAsync(int PersonId, decimal Salary, bool PermanentWork)
+        public async Task<bool> AddNewTeacherByPersonAsync(int PersonId, bool PermanentWork)
         {
             try
             {
-                await _dbContext.Database.ExecuteSqlAsync($"EXEC AddNewTeacherBaseOnPerson {PersonId}, {Salary} ,{PermanentWork}");
+                await _dbContext.Database.ExecuteSqlAsync($"EXEC AddNewTeacherBaseOnPerson {PersonId} ,{PermanentWork}");
             }
             catch
             {

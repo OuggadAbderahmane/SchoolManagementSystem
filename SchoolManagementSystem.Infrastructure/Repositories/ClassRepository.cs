@@ -51,7 +51,14 @@ namespace SchoolManagementSystem.Infrastructure.Repositories
                 result = result.Where(x => x.levelId == LevelId);
             if (YearOfLevelId.HasValue)
                 result = result.Where(x => x.yearOfLevelId == YearOfLevelId);
-            return result.Select(x => new GetClassResponse { Id = x.Id, ClassInfo = x.yearOfLevelName + " " + x.levelName + " " + x.NameOfSpecialization });
+            if (LevelId != null)
+            {
+                if (YearOfLevelId != null)
+                    return result.Select(x => new GetClassResponse { Id = x.Id, ClassInfo = x.NameOfSpecialization != null ? " " + x.NameOfSpecialization : "" });
+                return result.Select(x => new GetClassResponse { Id = x.Id, ClassInfo = x.yearOfLevelName + " " + x.NameOfSpecialization != null ? " " + x.NameOfSpecialization : "" });
+            }
+
+            return result.Select(x => new GetClassResponse { Id = x.Id, ClassInfo = x.yearOfLevelName + " " + x.levelName + ((x.NameOfSpecialization != null) ? " " + x.NameOfSpecialization : "") });
         }
         #endregion
     }

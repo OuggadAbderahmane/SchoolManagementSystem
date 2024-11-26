@@ -7,7 +7,6 @@ namespace SchoolManagementSystem.Core.Features.Teachers.Queries.Models
 {
     public class GetTeachersPaginatedListQuery : IRequest<Response<PaginatedResult<GetTeacherResponse>>>
     {
-        public string? NationalCardNumber { get; set; }
         public int pageNumber { get; set; }
         public int pageSize { get; set; }
         public string? FirstName { get; set; }

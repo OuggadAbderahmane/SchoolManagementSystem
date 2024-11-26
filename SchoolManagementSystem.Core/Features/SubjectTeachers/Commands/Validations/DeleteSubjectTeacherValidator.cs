@@ -36,7 +36,7 @@ namespace SchoolManagementSystem.Core.Features.SubjectTeachers.Commands.Validati
         public void ApplyValidationsRules()
         {
             RuleFor(x => x.Id)
-                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotEqualsTo] + " 0");
+                    .NotEqual(0).WithMessage("{PropertyName} " + _stringLocalizer[SharedResourcesKey.NotLessThanOrEqualsTo] + " 0");
         }
         #endregion
     }

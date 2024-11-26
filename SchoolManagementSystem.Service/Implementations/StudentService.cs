@@ -28,9 +28,9 @@ namespace SchoolManagementSystem.Service.Implementations
             return _studentRepository.GetStudentByIdAsync(Id);
         }
 
-        public IQueryable<GetStudentResponse> GetStudentsListResponse(string NationalCardNumber, string FirstName, string LastName, bool? Gender, int SectionId, int GuardianId, bool? IsActive)
+        public IQueryable<GetStudentResponse> GetStudentsListResponse(string StudentNumber, string FullName, bool? Gender, int SectionId, int ClassID, int LevelId, int YearOfLevelId, int GuardianId, bool? IsActive)
         {
-            return _studentRepository.GetStudentsListResponse(NationalCardNumber, FirstName, LastName, Gender, SectionId, GuardianId, IsActive);
+            return _studentRepository.GetStudentsListResponse(StudentNumber, FullName, Gender, SectionId, ClassID, LevelId, YearOfLevelId, GuardianId, IsActive);
         }
 
         public IQueryable<Student> GetStudentsListIQueryable()
@@ -43,16 +43,9 @@ namespace SchoolManagementSystem.Service.Implementations
             return await _studentRepository.GetTableAsNoTracking().AnyAsync(D => D.Id == Id);
         }
 
-        public async Task<bool> CreateStudentAsync(int PersonId, int? SectionId = null, int? GuardianId = null, bool IsActive = true)
+        public async Task<bool> IsStudentNumberExistAsync(string StudentNumber)
         {
-            try
-            {
-                return await _studentRepository.AddNewStudentByPersonAsync(PersonId, SectionId, GuardianId, IsActive);
-            }
-            catch
-            {
-                return false;
-            }
+            return await _studentRepository.GetTableAsNoTracking().AnyAsync(D => D.StudentNumber == StudentNumber);
         }
 
         public async Task<int> CreateStudentAsync(Student student)
@@ -73,12 +66,12 @@ namespace SchoolManagementSystem.Service.Implementations
             return await _studentRepository.DeleteStudentAsync(Id);
         }
 
-        public async Task<bool> UpdateStudentAsync(int PersonId, int? SectionId = null, int? GuardianId = null, bool? IsActive = null, string? NationalCardNumber = null, string? FirstName = null, string? LastName = null, bool? Gender = null,
+        public async Task<bool> UpdateStudentAsync(int PersonId, int? SectionId = null, int? GuardianId = null, bool? IsActive = null, string? FirstName = null, string? LastName = null, bool? Gender = null,
                                          DateTime? DateOfBirth = null, string? Address = null, string? ImagePath = null)
         {
             var Transaction = _studentRepository.BeginTransaction();
 
-            if (!_studentRepository.UpdateStudentByQuery(PersonId, SectionId, GuardianId, IsActive) || !_personRepository.UpdatePersonByQuery(PersonId, NationalCardNumber, FirstName, LastName, Gender, DateOfBirth, null, null, Address, ImagePath))
+            if (!_studentRepository.UpdateStudentByQuery(PersonId, SectionId, GuardianId, IsActive) || !_personRepository.UpdatePersonByQuery(PersonId, FirstName, LastName, Gender, DateOfBirth, null, null, Address, ImagePath))
             {
                 await Transaction.RollbackAsync();
                 return false;
